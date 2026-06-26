@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Policies — Bargain Drop</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--accent:#111}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+.page-header{padding:16px;border-bottom:1px solid var(--line)}
+.page-header h1{font-size:1.1rem;font-weight:800}
+.page-header .breadcrumb{font-size:0.7rem;color:var(--muted)}
+.policy-nav{padding:8px 16px;display:flex;overflow-x:auto;gap:8px;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.policy-nav::-webkit-scrollbar{display:none}
+.policy-tab{padding:10px 18px;border-radius:20px;font-size:0.7rem;font-weight:600;background:#f5f5f5;color:var(--muted);white-space:nowrap;cursor:pointer;transition:all .15s;border:none}
+.policy-tab:hover{background:#e8e8e8}
+.policy-tab.active{background:var(--accent);color:#fff}
+.policy-content{padding:16px;max-width:720px}
+.policy-section{margin-bottom:24px}
+.policy-section h2{font-size:0.9rem;font-weight:700;margin-bottom:10px;color:var(--fg)}
+.policy-section p,.policy-section li{font-size:0.74rem;line-height:1.7;color:#555;margin-bottom:6px}
+.policy-section ul{padding-left:20px;margin-bottom:8px}
+.policy-section li{margin-bottom:4px}
+.policy-section b{color:var(--fg)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
+.bottom-nav a.active{color:var(--fg)}
+.nav-icon{width:20px;height:20px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="top-bar"><a href="profile.html">← Profile</a><div>Free Shipping $29+</div></div>
+<div class="page-header"><div class="breadcrumb"><a href="index.html">Home</a> → <a href="profile.html">Profile</a> → Policies</div><h1>Policies</h1></div>
+<div class="policy-nav">
+<button class="policy-tab active" data-section="shipping">📦 Shipping</button>
+<button class="policy-tab" data-section="returns">↩️ Returns</button>
+<button class="policy-tab" data-section="refund">💰 Refunds</button>
+<button class="policy-tab" data-section="payment">💳 Payment</button>
+<button class="policy-tab" data-section="terms">📋 Terms</button>
+<button class="policy-tab" data-section="privacy">🔒 Privacy</button>
+</div>
+<div class="policy-content" id="content">
+<div class="policy-section" id="s-shipping"><h2>📦 Shipping Policy</h2>
+<p><b>Order Processing:</b> Orders are processed within 24-48 hours of placement (excluding weekends and holidays).</p>
+<p><b>Standard Shipping:</b> 7-15 business days. Estimated delivery times are guidelines only.</p>
+<p><b>Express Shipping:</b> 3-7 business days at additional cost where available.</p>
+<p><b>Free Shipping:</b> Available on all orders over $29 USD. Applied automatically at checkout.</p>
+<p><b>Order Tracking:</b> A tracking number will be emailed within 48 hours of your order shipping.</p>
+<p><b>International Shipping:</b> We ship to most countries worldwide. Import duties and taxes are the responsibility of the buyer.</p>
+<p><b>PO Boxes & APO/FPO:</b> Delivery to PO Boxes and military addresses may take additional time.</p></div>
+<div class="policy-section" id="s-returns" style="display:none"><h2>↩️ Return Policy</h2>
+<p><b>30-Day Return Window:</b> You have 30 calendar days from the date of delivery to initiate a return.</p>
+<p><b>Eligibility Requirements:</b></p>
+<ul><li>Items must be unused and in original condition</li><li>All original packaging, tags, and accessories must be included</li><li>Proof of purchase is required</li></ul>
+<p><b>Non-Returnable Items:</b></p>
+<ul><li>Intimate apparel and swimwear (hygiene reasons)</li><li>Perishable goods and food products</li><li>Custom-made or personalized items</li><li>Gift cards and downloadable products</li></ul>
+<p><b>How to Return:</b> Contact our Customer Service team to obtain a Return Authorization (RA) number. Items returned without an RA number may be refused.</p></div>
+<div class="policy-section" id="s-refund" style="display:none"><h2>💰 Refund Policy</h2>
+<p><b>Full Refunds:</b> Issued when items are received damaged, defective, incorrect, or not as described.</p>
+<p><b>Partial Refunds:</b> May apply for items returned after 15 days, items without original packaging, or items with signs of use.</p>
+<p><b>Refund Method:</b> Refunds are credited to your original payment method only.</p>
+<p><b>Processing Time:</b> 5-10 business days after we receive and inspect the returned item.</p>
+<p><b>Shipping Costs:</b> Return shipping is free for defective, damaged, or incorrect items. For change-of-mind returns, the buyer is responsible for return shipping costs.</p></div>
+<div class="policy-section" id="s-payment" style="display:none"><h2>💳 Payment Policy</h2>
+<p><b>Accepted Methods:</b> Visa, Mastercard, American Express, Discover, PayPal, Apple Pay, and Google Pay.</p>
+<p><b>Security:</b> All payment transactions are protected with 256-bit SSL encryption and PCI-DSS compliance.</p>
+<p><b>Currency:</b> All prices are listed and charged in US Dollars (USD). Currency conversion fees may apply for international cards.</p>
+<p><b>Payment Timing:</b> Your card is charged at the time of order placement.</p>
+<p><b>Failed Payments:</b> If payment fails, we'll notify you to update your payment method. Orders with unresolved payment issues will be cancelled after 3 days.</p></div>
+<div class="policy-section" id="s-terms" style="display:none"><h2>📋 Terms & Conditions</h2>
+<p><b>1. Acceptance:</b> By accessing or using Bargain Drop, you agree to be bound by these terms.</p>
+<p><b>2. Account Responsibility:</b> You are responsible for maintaining the confidentiality of your account login credentials and for all activities under your account.</p>
+<p><b>3. Product Information:</b> We strive for accuracy but cannot guarantee that all product descriptions, images, pricing, or specifications are error-free, complete, or current.</p>
+<p><b>4. User Conduct:</b> You agree not to misuse our services, including transmitting viruses, spamming, or attempting unauthorized access.</p>
+<p><b>5. Intellectual Property:</b> All content including logo, text, graphics, and code is the property of Bargain Drop and is protected by copyright, trademark, and other IP laws.</p>
+<p><b>6. Limitation of Liability:</b> Bargain Drop shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or services.</p>
+<p><b>7. Modifications:</b> We reserve the right to update these terms at any time. Continued use of the site constitutes acceptance of any changes.</p>
+<p><b>8. Governing Law:</b> These terms shall be governed by applicable consumer protection and e-commerce laws.</p></div>
+<div class="policy-section" id="s-privacy" style="display:none"><h2>🔒 Privacy Policy</h2>
+<p><b>Information We Collect:</b> We collect information you provide (name, email, shipping address, payment details) and information automatically collected (IP address, browser type, device info, browsing behavior).</p>
+<p><b>How We Use Your Data:</b> To process orders, communicate about your account, improve our services, personalize your experience, and send promotional emails (with opt-out).</p>
+<p><b>Data Sharing:</b> We do not sell your personal information. We share data only with service providers necessary to fulfill orders (payment processors, shipping carriers).</p>
+<p><b>Cookies:</b> We use cookies for site functionality, analytics, and personalization. You can disable cookies in your browser settings.</p>
+<p><b>Data Security:</b> We implement reasonable security measures to protect your personal information. However, no online transmission is 100% secure.</p>
+<p><b>Your Rights:</b> You may request access, correction, or deletion of your personal data at any time. Contact us at privacy@bargaindrop.com.</p>
+<p><b>Children's Privacy:</b> Our site is not intended for children under 13. We do not knowingly collect data from children.</p></div>
+</div>
+<nav class="bottom-nav">
+<a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
+<a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5" fill="none"/></svg>Products</a>
+<a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
+<a href="#"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
+<a href="profile.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
+</nav>
+<script>
+document.querySelectorAll('.policy-tab').forEach(function(btn){
+btn.addEventListener('click',function(){
+document.querySelectorAll('.policy-tab').forEach(function(b){b.classList.remove('active')});
+this.classList.add('active');
+document.querySelectorAll('.policy-section').forEach(function(s){s.style.display='none'});
+document.getElementById('s-'+this.dataset.section).style.display='block';
+});
+});
+</script>
+</body>
+</html>
