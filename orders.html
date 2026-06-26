@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders — Bargain Drop</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--accent:#111;--red:#e60023;--green:#10b981;--amber:#f59e0b;--blue:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+.page-header{padding:16px}
+.page-header h1{font-size:1.1rem;font-weight:800}
+.page-header .breadcrumb{font-size:0.7rem;color:var(--muted)}
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);padding:0 8px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:12px 16px;font-size:0.75rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:var(--fg);border-bottom-color:var(--fg)}
+.content{padding:16px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .icon{font-size:4rem;margin-bottom:12px}
+.empty-state h2{font-size:1rem;margin-bottom:4px}
+.empty-state p{font-size:0.75rem}
+.order-card{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.order-card .order-header{display:flex;justify-content:space-between;font-size:0.7rem;margin-bottom:8px}
+.order-card .order-id{font-weight:700}
+.order-card .order-status{padding:2px 8px;border-radius:10px;font-size:0.62rem;font-weight:600}
+.order-status.unpaid{background:#fef2f2;color:var(--red)}
+.order-status.processing{background:#fffbeb;color:var(--amber)}
+.order-status.shipped{background:#eff6ff;color:var(--blue)}
+.order-status.review{background:#ecfdf5;color:var(--green)}
+.order-status.return{background:#faf5ff;color:#7c3aed}
+.order-card .order-items{display:flex;gap:8px;overflow-x:auto;margin-bottom:8px}
+.order-card .order-thumb{width:56px;height:56px;border-radius:8px;background:#f5f5f5;flex-shrink:0;overflow:hidden}
+.order-card .order-total{text-align:right;font-size:0.78rem;font-weight:700}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
+.bottom-nav a.active{color:var(--fg)}
+.nav-icon{width:20px;height:20px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="top-bar"><a href="profile.html">← Profile</a><div>Free Shipping $29+</div></div>
+<div class="page-header"><div class="breadcrumb"><a href="index.html">Home</a> → <a href="profile.html">Profile</a> → Orders</div><h1>My Orders</h1></div>
+<div class="tabs" id="tabs">
+<button class="tab active" data-status="unpaid">Unpaid</button>
+<button class="tab" data-status="processing">Processing</button>
+<button class="tab" data-status="shipped">Shipped</button>
+<button class="tab" data-status="review">To Review</button>
+<button class="tab" data-status="return">Returns</button>
+</div>
+<div class="content" id="content"><div class="empty-state"><div class="icon">📦</div><h2>No orders yet</h2><p>Orders will appear here once you make a purchase</p><br><a href="products.html" style="color:var(--accent);font-weight:600">Start Shopping →</a></div></div>
+<nav class="bottom-nav">
+<a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
+<a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5" fill="none"/></svg>Products</a>
+<a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
+<a href="#"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
+<a href="profile.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
+</nav>
+<script>
+(function(){
+var params=new URLSearchParams(window.location.search);
+var active=params.get('status')||'unpaid';
+document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.status===active);});
+document.getElementById('tabs').addEventListener('click',function(e){
+if(e.target.classList.contains('tab')){
+document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+e.target.classList.add('active');
+window.history.replaceState(null,'','?status='+e.target.dataset.status);
+}
+});
+})();
+</script>
+</body>
+</html>
