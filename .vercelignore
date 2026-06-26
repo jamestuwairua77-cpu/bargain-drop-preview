@@ -1,0 +1,15 @@
+all_flat.json
+all_shopify_raw.json
+all_shopify_products.json
+build_index.py
+gen_logo_designs.py
+package.json
+deploy_url.txt
+*.tar.gz
+.zip
+__pycache__
+*.pyc
+.git
+.cache
+node_modules
+tmp
