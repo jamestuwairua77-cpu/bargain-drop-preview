@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Service — Bargain Drop</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--accent:#111}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+
+.page-header{padding:16px;border-bottom:1px solid var(--line)}
+.page-header h1{font-size:1.1rem;font-weight:800}
+.page-header .breadcrumb{font-size:0.7rem;color:var(--muted)}
+
+.contact-hero{padding:24px 16px;text-align:center;background:linear-gradient(135deg,#fafafa,#f0f0f0)}
+.contact-hero .hero-icon{font-size:3rem;margin-bottom:8px}
+.contact-hero h2{font-size:1rem;font-weight:800;margin-bottom:4px}
+.contact-hero p{font-size:0.75rem;color:var(--muted);line-height:1.5}
+
+.contact-methods{padding:16px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.contact-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;text-align:center;transition:all .15s;cursor:pointer}
+.contact-card:hover{border-color:#ccc;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.contact-card .cc-icon{font-size:2rem}
+.contact-card .cc-label{font-size:0.72rem;font-weight:600}
+.contact-card .cc-detail{font-size:0.62rem;color:var(--muted)}
+
+.faq-section{padding:16px}
+.faq-section h3{font-size:0.85rem;font-weight:700;margin-bottom:10px}
+.faq-item{border:1.5px solid var(--line);border-radius:10px;margin-bottom:6px;overflow:hidden}
+.faq-q{padding:14px 16px;background:#fafafa;font-size:0.75rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background .15s}
+.faq-q:hover{background:#f0f0f0}
+.faq-q .faq-arrow{font-size:1rem;color:var(--muted);transition:transform .2s}
+.faq-q.open .faq-arrow{transform:rotate(45deg)}
+.faq-a{display:none;padding:14px 16px;font-size:0.72rem;color:#555;line-height:1.7;background:#fff}
+.faq-a.open{display:block}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
+.bottom-nav a.active{color:var(--fg)}
+.nav-icon{width:20px;height:20px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="top-bar"><a href="profile.html">← Profile</a><div>Free Shipping $29+</div></div>
+<div class="page-header"><div class="breadcrumb"><a href="index.html">Home</a> → <a href="profile.html">Profile</a> → Customer Service</div><h1>Customer Service</h1></div>
+<div class="contact-hero"><div class="hero-icon">💬</div><h2>How can we help you?</h2><p>We're here to assist with orders, returns, and any questions</p></div>
+<div class="contact-methods">
+<div class="contact-card"><div class="cc-icon">📧</div><div class="cc-label">Email Us</div><div class="cc-detail">support@bargaindrop.com<br>Usually replies in 24-48 hours</div></div>
+<div class="contact-card"><div class="cc-icon">💬</div><div class="cc-label">Live Chat</div><div class="cc-detail">Available 9AM-6PM EST<br>Get help instantly</div></div>
+<div class="contact-card"><div class="cc-icon">📞</div><div class="cc-label">Phone Support</div><div class="cc-detail">1-800-BARGAIN<br>Mon-Fri 9AM-6PM EST</div></div>
+<div class="contact-card"><div class="cc-icon">📦</div><div class="cc-label">Track Order</div><div class="cc-detail">Enter your order number<br>to get live tracking</div></div>
+</div>
+<div class="faq-section">
+<h3>Frequently Asked Questions</h3>
+<div class="faq-item" onclick="toggleFAQ(this)"><div class="faq-q">📦 How do I track my order? <span class="faq-arrow">+</span></div><div class="faq-a">Once your order ships, you'll receive a tracking number via email. You can also check your order status in the <a href="orders.html" style="color:var(--accent);font-weight:600">My Orders</a> section.</div></div>
+<div class="faq-item" onclick="toggleFAQ(this)"><div class="faq-q">↩️ What is your return policy? <span class="faq-arrow">+</span></div><div class="faq-a">We offer a 30-day return window from the date of delivery. Items must be unused and in original packaging. Check our <a href="settings.html" style="color:var(--accent);font-weight:600">Return Policy</a> for full details.</div></div>
+<div class="faq-item" onclick="toggleFAQ(this)"><div class="faq-q">🚚 How long does shipping take? <span class="faq-arrow">+</span></div><div class="faq-a"><b>Standard:</b> 7-15 business days. <b>Express:</b> 3-7 business days. Free standard shipping on orders over $29.</div></div>
+<div class="faq-item" onclick="toggleFAQ(this)"><div class="faq-q">💳 What payment methods are accepted? <span class="faq-arrow">+</span></div><div class="faq-a">We accept Visa, Mastercard, American Express, Discover, PayPal, Apple Pay, and Google Pay.</div></div>
+<div class="faq-item" onclick="toggleFAQ(this)"><div class="faq-q">🔄 Can I cancel or change my order? <span class="faq-arrow">+</span></div><div class="faq-a">Orders can be cancelled within 2 hours of placement. After that, please contact support and we'll do our best to help.</div></div>
+</div>
+<nav class="bottom-nav">
+<a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
+<a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5" fill="none"/></svg>Products</a>
+<a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
+<a href="#"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
+<a href="profile.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
+</nav>
+<script>function toggleFAQ(el){el.querySelector('.faq-q').classList.toggle('open');el.querySelector('.faq-a').classList.toggle('open')}</script>
+</body>
+</html>
