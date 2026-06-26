@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logo Designs — Bargain Drop</title>
+<style>
+:root{--bg:#111;--fg:#fff;--muted:#aaa;--line:#333;--accent:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:30px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:100}
+.top-bar h1{font-size:1rem;font-weight:800}
+.top-bar a{color:var(--accent);font-size:0.75rem}
+.header{padding:20px 16px;text-align:center}
+.header p{font-size:0.8rem;color:var(--muted)}
+.design-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:16px;max-width:1200px;margin:0 auto}
+.design-card{background:#1a1a1a;border:2px solid #333;border-radius:16px;padding:24px 16px;text-align:center;transition:all .2s;cursor:pointer}
+.design-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.design-card.selected{border-color:#22c55e;box-shadow:0 0 0 2px #22c55e}
+.design-card .badge{position:absolute;top:8px;right:8px;background:#22c55e;color:#fff;font-size:0.6rem;padding:2px 8px;border-radius:10px;display:none}
+.design-card.selected .badge{display:block}
+.design-card .num{font-size:0.7rem;color:var(--muted);margin-bottom:8px}
+.design-card .logo-preview{font-size:1.8rem;font-weight:900;margin-bottom:6px}
+.design-card .desc{font-size:0.7rem;color:var(--muted)}
+.design-card .apply-btn{margin-top:10px;padding:8px 20px;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;border:none;background:var(--accent);color:#111;transition:all .15s}
+.design-card .apply-btn:hover{opacity:.85}
+.design-card.selected .apply-btn{background:#22c55e;color:#fff}
+.note{padding:16px;text-align:center;font-size:0.7rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="top-bar"><h1>🎨 Logo Designs</h1><a href="index.html">← Back to Store</a></div>
+<div class="header"><p>Pick a design — it updates the logo on every page. <b>50 designs</b> to choose from.</p></div>
+<div class="design-grid" id="grid"></div>
+<div class="note">Selected design saves automatically to your browser.</div>
+
+<script>
+const DESIGNS = [
+{n:1,html:'<span style="color:#f59e0b">Bargain</span> <span style="color:#fff">Drop</span>',desc:'Classic gold + white'},
+{n:2,html:'<span style="color:#fff">Bargain</span><span style="color:#f59e0b">Drop</span>',desc:'White + gold'},
+{n:3,html:'<span style="color:#ef4444">Bargain</span> <span style="color:#fff">Drop</span> 🔥',desc:'Red hot deal'},
+{n:4,html:'<span style="color:#3b82f6">Bargain</span> <span style="color:#fbbf24">Drop</span> ⚡',desc:'Blue + gold lightning'},
+{n:5,html:'<span style="background:linear-gradient(90deg,#f59e0b,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Bargain Drop</span> 💎',desc:'Gradient gold-red'},
+{n:6,html:'<span style="color:#22c55e">Bargain</span> <span style="color:#fff">Drop</span> 🛒',desc:'Green money + cart'},
+{n:7,html:'<span style="font-size:2rem">🅱️</span> <span style="color:#fff">argain</span> <span style="color:#f59e0b">Drop</span>',desc:'Big B initial + gold'},
+{n:8,html:'<span style="color:#fff">BARGAIN</span> <span style="color:#f59e0b;font-size:0.7em">DROP</span>',desc:'UPPERCASE + small gold'},
+{n:9,html:'<span style="color:#a78bfa">Bargain</span> <span style="color:#fbbf24">Drop</span> ✨',desc:'Purple + gold sparkle'},
+{n:10,html:'<span style="color:#fff">Bargain Drop</span> <span style="background:#f59e0b;color:#111;padding:2px 8px;border-radius:6px;font-size:0.6em">SALE</span>',desc:'With SALE badge'},
+{n:11,html:'<span style="color:#fff;text-shadow:0 0 10px #f59e0b">Bargain</span> <span style="color:#f59e0b;text-shadow:0 0 10px #f59e0b">Drop</span>',desc:'Neon glow'},
+{n:12,html:'<span style="color:#111;background:#f59e0b;padding:4px 12px;border-radius:8px">Bargain Drop</span>',desc:'Solid gold badge'},
+{n:13,html:'<span style="font-weight:200;color:#ccc">Bargain</span> <span style="font-weight:900;color:#f59e0b">Drop</span>',desc:'Light + bold contrast'},
+{n:14,html:'<span style="color:#fff;letter-spacing:6px">BARGAIN</span> <span style="color:#f59e0b;letter-spacing:6px">DROP</span>',desc:'Wide spaced'},
+{n:15,html:'<span style="color:#f59e0b;font-style:italic">Bargain</span> <span style="color:#fff;font-style:italic">Drop</span>',desc:'Italic elegant'},
+{n:16,html:'🏷️ <span style="color:#fff">Bargain</span><span style="color:#f59e0b">Drop</span>',desc:'Tag icon prefix'},
+{n:17,html:'<span style="color:#f59e0b;font-family:serif">Bargain</span> <span style="color:#fff;font-family:serif">Drop</span>',desc:'Serif classic'},
+{n:18,html:'<span style="color:#fff">Bargain</span> <span style="color:#f59e0b">Drop</span> <span style="font-size:0.5em;color:var(--muted)">™</span>',desc:'With trademark'},
+{n:19,html:'<span style="color:#fff">Bargain</span><span style="color:#f59e0b;font-size:0.5em;vertical-align:super">DROP</span>',desc:'Superscript drop'},
+{n:20,html:'<span style="color:#fff">B</span><span style="color:#f59e0b">argain</span> <span style="color:#fff">D</span><span style="color:#f59e0b">rop</span>',desc:'First letter highlight'},
+{n:21,html:'<span style="color:#ef4444">BARGAIN</span> <span style="color:#fff">DROP</span> 💥',desc:'Red BLAST'},
+{n:22,html:'<span style="color:#fbbf24">Bargain</span> <span style="color:#f59e0b">Drop</span> <span style="color:#fcd34d;font-size:0.6em">★</span>',desc:'Gold gradient + star'},
+{n:23,html:'<span style="background:#f59e0b;color:#111;padding:6px 14px;border-radius:20px">Bargain Drop ⬇️</span>',desc:'Pill badge + arrow'},
+{n:24,html:'<span style="color:#fff;border:2px solid #f59e0b;padding:4px 12px;border-radius:8px">Bargain Drop</span>',desc:'Outline button style'},
+{n:25,html:'⬇️ <span style="color:#f59e0b;font-weight:900">Bargain Drop</span>',desc:'Arrow down + bold gold'},
+{n:26,html:'<span style="color:#fff">Bargain</span><span style="color:#f59e0b">↓Drop</span>',desc:'Arrow merge'},
+{n:27,html:'💰 <span style="color:#fff">Bargain</span> <span style="color:#22c55e">Drop</span>',desc:'Money bag + green'},
+{n:28,html:'<span style="color:#f59e0b">B</span><span style="color:#fff">ARGAIN</span> <span style="color:#f59e0b">D</span><span style="color:#fff">ROP</span>',desc:'BD initials + all caps'},
+{n:29,html:'<span style="color:#fff">❝Bargain❞</span> <span style="color:#f59e0b">Drop</span>',desc:'Quoted bargain'},
+{n:30,html:'<span style="color:#f59e0b">Bargain</span> <span style="color:#fff;font-size:0.5em;vertical-align:middle">by</span> <span style="color:#f59e0b">Drop</span>',desc:'Bargain by Drop'},
+{n:31,html:'<span style="color:#fff;text-decoration:line-through;text-decoration-color:#f59e0b">Bargain</span> <span style="color:#f59e0b">Drop</span>',desc:'Strikethrough bargain'},
+{n:32,html:'<span style="color:#fff">Bargain</span><span style="font-size:0.5em;color:#f59e0b">▼</span><span style="color:#fff">Drop</span>',desc:'Triangle divider'},
+{n:33,html:'<span style="color:#f59e0b"><b>Bargain</b></span> <span style="color:#ccc;font-weight:300">Drop</span>',desc:'Bold + light'},
+{n:34,html:'<span style="color:#f59e0b">Bargain Drop</span> <span style="font-size:1.5em">💧</span>',desc:'Gold + water drop emoji'},
+{n:35,html:'<span style="color:#fff;background:linear-gradient(135deg,#f59e0b,#ef4444);padding:4px 14px;border-radius:8px">Bargain Drop</span>',desc:'Fire gradient background'},
+{n:36,html:'🔻 <span style="color:#f59e0b">Bargain Drop</span>',desc:'Red triangle + gold'},
+{n:37,html:'<span style="color:#fff">Bargain</span> <span style="color:#f59e0b;transform:rotate(-5deg);display:inline-block">Drop</span>',desc:'Drop tilted'},
+{n:38,html:'<span style="color:#fff;font-family:monospace">Bargain</span> <span style="color:#f59e0b;font-family:monospace">Drop</span>',desc:'Monospace tech'},
+{n:39,html:'📦 <span style="color:#f59e0b">Bargain Drop</span>',desc:'Package + gold'},
+{n:40,html:'<span style="color:#f59e0b">✦ Bargain Drop ✦</span>',desc:'Stars around'},
+{n:41,html:'<span style="color:#fff">Bargain</span> <span style="color:#f59e0b;border-bottom:2px dashed #f59e0b">Drop</span>',desc:'Das underline'},
+{n:42,html:'<span style="color:#f59e0b;font-size:0.8em;vertical-align:super;font-weight:700">BARGAIN</span><span style="color:#fff;font-size:1.2em;vertical-align:sub;font-weight:700">DROP</span>',desc:'Superscript/subscript'},
+{n:43,html:'<span style="color:#fff;background:#f59e0b;padding:2px 10px;border-radius:4px;margin-right:4px">B</span><span style="color:#f59e0b">argain Drop</span>',desc:'Initial badge'},
+{n:44,html:'<span style="color:#fff">Bargain</span><span style="color:#f59e0b;font-size:1.3em;vertical-align:middle">⬇</span><span style="color:#fff">Drop</span>',desc:'Big down arrow'},
+{n:45,html:'<span style="color:#f59e0b">Bargain</span> <span style="color:#fff;font-size:0.6em;opacity:0.7">the</span> <span style="color:#f59e0b">Drop</span>',desc:'Bargain the Drop'},
+{n:46,html:'<span style="color:#fff">Bargain</span> <span style="color:#f59e0b;font-size:1.4em">✧</span> <span style="color:#fff">Drop</span>',desc:'Diamond divider'},
+{n:47,html:'<span style="color:#f59e0b">BARGΔIN</span> <span style="color:#fff">DROP</span>',desc:'Delta A stylized'},
+{n:48,html:'<span style="color:#fff">Bargain Drop</span> <span style="color:#f59e0b;font-size:0.5em;display:block;letter-spacing:3px">PREMIUM DEALS</span>',desc:'With subtitle'},
+{n:49,html:'<span style="color:#fff">Bargain</span><span style="color:#ef4444;font-size:0.6em;animation:pulse 1s infinite">●</span><span style="color:#f59e0b">Drop</span>',desc:'Live dot indicator'},
+{n:50,html:'<span style="background:repeating-linear-gradient(45deg,#f59e0b,#f59e0b 2px,#111 2px,#111 4px);color:#111;padding:4px 12px;border-radius:6px">Bargain Drop</span>',desc:'Striped gold background'},
+];
+
+(function(){
+var sel = localStorage.getItem('bd_logo') || '34';
+var grid = document.getElementById('grid');
+DESIGNS.forEach(function(d){
+var card = document.createElement('div');
+card.className = 'design-card' + (d.n==sel ? ' selected' : '');
+card.style.position = 'relative';
+card.innerHTML = '<div class="badge">✓ Selected</div><div class="num">Design #' + d.n + '</div><div class="logo-preview">' + d.html + '</div><div class="desc">' + d.desc + '</div><button class="apply-btn" onclick="select(' + d.n + ')">' + (d.n==sel ? 'Selected' : 'Apply') + '</button>';
+grid.appendChild(card);
+});
+})();
+
+function select(n){
+localStorage.setItem('bd_logo', n);
+location.reload();
+}
+</script>
+</body>
+</html>
