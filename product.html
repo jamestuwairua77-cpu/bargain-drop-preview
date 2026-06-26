@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Product — Bargain Drop</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--accent:#111;--gold:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+
+.image-gallery{position:relative;aspect-ratio:1;background:#f5f5f5;overflow:hidden}
+.image-gallery img{width:100%;height:100%;object-fit:contain}
+.image-gallery .no-image{display:flex;align-items:center;justify-content:center;height:100%;font-size:5rem;color:#ccc}
+
+.product-info{padding:16px}
+.product-info .vendor{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.product-info h1{font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:12px}
+.price-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.price-row .current{font-size:1.4rem;font-weight:800;color:var(--red)}
+.price-row .compare{font-size:0.85rem;color:var(--muted);text-decoration:line-through}
+.price-row .discount{background:#fef2f2;color:var(--red);padding:3px 8px;border-radius:6px;font-size:0.65rem;font-weight:700}
+
+.detail-section{padding:0 16px 16px}
+.detail-section h3{font-size:0.8rem;font-weight:700;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.desc-list{font-size:0.74rem;line-height:1.7;color:#555}
+.desc-list li{margin-bottom:4px}
+.desc-list b{color:var(--fg)}
+
+.buy-bar{position:fixed;bottom:56px;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid var(--line);display:flex;gap:8px;z-index:50}
+.buy-bar .btn{flex:1;padding:14px;border:none;border-radius:12px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-buy{background:var(--accent);color:#fff}
+.btn-buy:hover{opacity:.9}
+.btn-cart{background:var(--gold);color:#111}
+.btn-cart:hover{opacity:.9}
+.btn-wish{background:#f5f5f5;color:var(--fg);min-width:48px;flex:0!important;font-size:1.3rem}
+
+.loading{display:flex;align-items:center;justify-content:center;padding:80px 20px;color:var(--muted);flex-direction:column;gap:12px}
+.spinner{width:32px;height:32px;border:3px solid #e5e5e5;border-top-color:#111;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(min-width:768px){.buy-bar{max-width:720px;left:50%;transform:translateX(-50%);border-radius:16px 16px 0 0}}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="top-bar"><a href="javascript:history.back()">← Back</a><div>Free Shipping $29+</div></div>
+<div id="loading" class="loading"><div class="spinner"></div><p>Loading product...</p></div>
+<div id="content" style="display:none">
+<div class="image-gallery" id="gallery"></div>
+<div class="product-info"><div class="vendor" id="vendor"></div><h1 id="title"></h1><div class="price-row"><span class="current" id="price"></span><span class="compare" id="compare-price"></span><span class="discount" id="discount-badge"></span></div></div>
+<div class="detail-section"><h3>Description</h3><ul class="desc-list" id="desc"></ul></div>
+<div class="buy-bar"><button class="btn btn-cart" onclick="addCart()">Add to Cart</button><button class="btn btn-buy" onclick="buyNow()">Buy Now</button></div>
+</div>
+<nav class="bottom-nav"><a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a><a href="#">Wishlist</a><a href="profile.html">Me</a></nav>
+<script>
+async function load(){
+var params=new URLSearchParams(window.location.search);
+var id=params.get('id');
+if(!id){document.getElementById('loading').innerHTML='<h2>Error</h2><p>No product specified</p>';return}
+try{var r=await fetch('categories-data.json');var data=await r.json();var prod=null;var prodCat='';for(var c in data){var cat=data[c];var found=(cat.products||[]).find(function(p){return p.id==id});if(found){prod=found;prodCat=c;break}}if(!prod){throw new Error('Product not found')}
+document.getElementById('loading').style.display='none';document.getElementById('content').style.display='block';document.title=prod.title+' — Bargain Drop';document.getElementById('vendor').textContent=prod.vendor||'';document.getElementById('title').textContent=prod.title||'';document.getElementById('price').textContent='$'+(prod.price||0).toFixed(2);if(prod.compare_at_price&&prod.compare_at_price>prod.price){document.getElementById('compare-price').textContent='$'+Number(prod.compare_at_price).toFixed(2);var pct=Math.round((1-prod.price/prod.compare_at_price)*100);document.getElementById('discount-badge').textContent='-'+pct+'%'}
+var img=prod.image||prod.images?.[0];document.getElementById('gallery').innerHTML=img?'<img src="'+img+'" alt="" onerror="this.parentElement.innerHTML=\\'<div class=no-image>🖼️</div>\\'">':'<div class=no-image>🖼️</div>';var desc=prod.body_html||prod.description||'';var items=desc.split(/\n|<br>|<br\/>/).filter(Boolean);var html='';items.forEach(function(line){var clean=line.replace(/<[^>]*>/g,'').trim();if(clean){if(clean.startsWith('**')||clean.match(/^[A-Z][\w\s]+:/))html+='<li><b>'+clean.replace(/^\*{1,2}|\*{1,2}$/g,'').trim()+'</b></li>';else html+='<li>'+clean+'</li>'}});document.getElementById('desc').innerHTML=html||'<li>No description available</li>'}catch(e){document.getElementById('loading').innerHTML='<h2>Error</h2><p>'+e.message+'</p><br><a href=products.html>← Back to Products</a>'}
+}
+load();
+function addCart(){alert('Added to cart!')}
+function buyNow(){alert('Proceeding to checkout...')}
+</script>
+</body>
+</html>
