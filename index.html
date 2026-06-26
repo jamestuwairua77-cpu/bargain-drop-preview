@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bargain Drop — Preview Site</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--accent:#111;--red:#e60023;--gold:#f7931e;--blue:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+
+/* Top bar */
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+
+/* Summer Mega Sale Banner */
+.sale-banner{position:relative;background:linear-gradient(135deg,#ff4d4d,#ff6b35,#ff8c00);color:#fff;overflow:hidden;height:38px;display:flex;align-items:center}
+.sale-marquee{white-space:nowrap;animation:scroll-left 20s linear infinite;font-size:0.78rem;font-weight:700;letter-spacing:0.5px;padding:0 20px}
+@keyframes scroll-left{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.sale-marquee span{margin:0 24px}
+
+/* Header / Logo */
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line)}
+.logo{font-size:1.5rem;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:4px}
+.logo .bd-bargain{color:#111}
+.logo .bd-drop{color:var(--red)}
+.logo .bd-icon{width:32px;height:32px;margin-right:4px}
+.header-actions{display:flex;align-items:center;gap:16px}
+.header-icon{position:relative;cursor:pointer;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.header-icon svg{width:22px;height:22px;stroke:var(--fg);stroke-width:1.8;fill:none}
+.cart-badge{position:absolute;top:-6px;right:-8px;background:var(--red);color:#fff;font-size:0.55rem;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+/* Search Bar */
+.search-bar{padding:10px 16px;background:#fff}
+.search-bar input{width:100%;padding:12px 16px 12px 40px;border:2px solid var(--line);border-radius:24px;font-size:0.82rem;outline:none;background:#f8f8f8 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" stroke="%23999" stroke-width="2" fill="none"/><line x1="15.5" y1="15.5" x2="21" y2="21" stroke="%23999" stroke-width="2" stroke-linecap="round"/></svg>') 14px center no-repeat;transition:all .2s}
+.search-bar input:focus{border-color:var(--fg);background-color:#fff}
+
+/* Category Slider */
+.cat-slider-section{padding:8px 0;background:#fff;border-bottom:1px solid var(--line)}
+.cat-slider-section h3{font-size:0.82rem;font-weight:700;padding:0 16px 8px;display:flex;align-items:center;gap:6px}
+.cat-slider{display:flex;overflow-x:auto;scroll-behavior:smooth;padding:0 12px;gap:8px;scrollbar-width:none;-ms-overflow-style:none}
+.cat-slider::-webkit-scrollbar{display:none}
+.cat-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 14px;border-radius:14px;cursor:pointer;transition:all .15s;min-width:80px;text-align:center;border:2px solid transparent;background:#f9f9f9}
+.cat-chip:hover,.cat-chip.active{background:#111;color:#fff;border-color:#111}
+.cat-chip .chip-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:#e8e8e8;overflow:hidden;flex-shrink:0}
+.cat-chip .chip-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.cat-chip.active .chip-icon,.cat-chip:hover .chip-icon{background:#333}
+.cat-chip .chip-label{font-size:0.62rem;font-weight:600;line-height:1.2;max-width:80px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* Product grid */
+.product-section{padding:12px 16px}
+.product-section h3{font-size:0.85rem;font-weight:700;margin-bottom:10px}
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.product-card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line);transition:0.15s;cursor:pointer}
+.product-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.product-card .prod-img{aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.product-card .prod-img img{width:100%;height:100%;object-fit:cover}
+.product-card .prod-img .no-img{font-size:3rem;color:#ccc}
+.product-card .prod-info{padding:8px 10px 10px}
+.product-card .prod-title{font-size:0.72rem;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:4px}
+.product-card .prod-price-row{display:flex;align-items:center;gap:6px}
+.product-card .prod-price{font-size:0.85rem;font-weight:800;color:var(--red)}
+.product-card .prod-compare{font-size:0.65rem;color:var(--muted);text-decoration:line-through}
+
+/* Bottom Nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
+.bottom-nav a:hover,.bottom-nav a.active{color:var(--fg)}
+.nav-svg{width:20px;height:20px;flex-shrink:0}
+
+/* Loading */
+.loading{text-align:center;padding:60px 20px;color:var(--muted)}
+
+@media(min-width:768px){.product-grid{grid-template-columns:repeat(4,1fr);max-width:960px;margin:0 auto}.cat-slider{justify-content:center}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>Free Shipping $29+</div>
+  <div><a href="sign-in.html">Sign In</a> | <a href="register.html">Register</a></div>
+</div>
+
+<div class="sale-banner">
+  <div class="sale-marquee">
+    <span>🔥 SUMMER MEGA SALE</span><span>Up to 70% OFF</span><span>Free Shipping over $29</span><span>New Arrivals Daily</span>
+    <span>🔥 SUMMER MEGA SALE</span><span>Up to 70% OFF</span><span>Free Shipping over $29</span><span>New Arrivals Daily</span>
+  </div>
+</div>
+
+<div class="header">
+  <div class="logo">
+    <div class="bd-icon"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#e60023"/><text x="16" y="22" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">BD</text></svg></div>
+    <span class="bd-bargain">Bargain</span><span class="bd-drop">Drop</span>
+  </div>
+  <div class="header-actions">
+    <div class="header-icon" onclick="document.querySelector('.search-bar').scrollIntoView({behavior:'smooth'})">
+      <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21" stroke-linecap="round"/></svg>
+    </div>
+    <a href="logo-selector.html" class="header-icon" title="Logo Designer">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </a>
+    <div class="header-icon" id="cart-icon" onclick="alert('Cart coming soon!')">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-badge" id="cart-count">0</span>
+    </div>
+    <a href="profile.html" class="header-icon">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </a>
+  </div>
+</div>
+
+<div class="search-bar">
+  <input type="text" placeholder="Search products, categories, brands..." id="search-input" oninput="handleSearch()">
+</div>
+
+<div class="cat-slider-section">
+  <h3>Shop by Category</h3>
+  <div class="cat-slider" id="cat-slider"></div>
+</div>
+
+<div class="product-section">
+  <h3>🔥 Trending Now</h3>
+  <div class="product-grid" id="product-grid">
+    <div class="loading"><p>Loading products...</p></div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="/" class="active">
+    <svg class="nav-svg" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke="#111" stroke-width="2" fill="none"/></svg>Home</a>
+  <a href="products.html">
+    <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#999" stroke-width="1.5" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#999" stroke-width="1.5" fill="none"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#999" stroke-width="1.5" fill="none"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#999" stroke-width="1.5" fill="none"/></svg>Products</a>
+  <a href="categories.html">
+    <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#999" stroke-width="1.5" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#999" stroke-width="1.5" fill="none"/></svg>Categories</a>
+  <a href="#">
+    <svg class="nav-svg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#999" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
+  <a href="profile.html">
+    <svg class="nav-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#999" stroke-width="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="#999" stroke-width="2" fill="none"/></svg>Me</a>
+</nav>
+
+<script>
+async function init(){
+  try{
+    const resp = await fetch('categories-data.json');
+    const data = await resp.json();
+    
+    // Render category slider
+    const slider = document.getElementById('cat-slider');
+    const catKeys = Object.keys(data);
+    catKeys.forEach(cat => {
+      const info = data[cat];
+      const imgHtml = info.image ? '<img src="'+info.image+'" alt="">' : '<span>'+info.emoji+'</span>';
+      const chip = document.createElement('a');
+      chip.className = 'cat-chip';
+      chip.href = 'category.html?cat=' + encodeURIComponent(cat);
+      chip.innerHTML = '<div class="chip-icon">'+imgHtml+'</div><span class="chip-label">'+cat+'</span>';
+      slider.appendChild(chip);
+    });
+    
+    if(catKeys.length === 0){
+      slider.innerHTML = '<div style="padding:20px;color:var(--muted)">No categories yet</div>';
+    }
+    
+    // Render all products
+    const pGrid = document.getElementById('product-grid');
+    pGrid.innerHTML = '';
+    let allProds = [];
+    catKeys.forEach(cat => {
+      const info = data[cat];
+      (info.products || []).forEach(p => {
+        allProds.push(p);
+      });
+    });
+    
+    if(allProds.length === 0){
+      pGrid.innerHTML = '<div class="loading"><p>No products yet</p></div>';
+    } else {
+      allProds.slice(0, 20).forEach(p => {
+        const imgHtml = p.image ? '<img src="'+p.image+'" alt="" loading="lazy">' : '<span class="no-img">📦</span>';
+        const card = document.createElement('a');
+        card.className = 'product-card';
+        card.href = 'product.html?id=' + p.id;
+        card.innerHTML = '<div class="prod-img">'+imgHtml+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">$'+(p.price||0).toFixed(2)+'</span><span class="prod-compare">$'+(p.compare_at_price||0).toFixed(2)+'</span></div></div>';
+        pGrid.appendChild(card);
+      });
+    }
+  }catch(e){
+    document.getElementById('product-grid').innerHTML = '<div class="loading"><p>Error loading products: '+e.message+'</p></div>';
+  }
+}
+
+function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function handleSearch(){
+  var q = document.getElementById('search-input').value.trim().toLowerCase();
+  if(q.length > 0){
+    window.location.href = 'products.html?search=' + encodeURIComponent(q);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') handleSearch();
+});
+
+init();
+</script>
+</body>
+</html>
