@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Subcategory — Bargain Drop</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+
+.page-header{padding:16px;border-bottom:1px solid var(--line)}
+.page-header h1{font-size:1.1rem;font-weight:800}
+.page-header .breadcrumb{font-size:0.7rem;color:var(--muted);margin-bottom:4px}
+.page-header .breadcrumb a{color:var(--muted)}
+.page-header .count{font-size:0.72rem;color:var(--muted);margin-top:4px}
+
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:16px}
+.product-card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line);transition:.15s}
+.product-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.product-card .prod-img{aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.product-card .prod-img img{width:100%;height:100%;object-fit:cover}
+.product-card .prod-img .no-img{font-size:3rem;color:#ccc}
+.product-card .prod-info{padding:8px 10px 10px}
+.product-card .prod-title{font-size:.72rem;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:4px}
+.product-card .prod-price-row{display:flex;align-items:center;gap:6px}
+.product-card .prod-price{font-size:.85rem;font-weight:800;color:var(--red)}
+.product-card .prod-compare{font-size:.65rem;color:var(--muted);text-decoration:line-through}
+
+.loading{display:flex;align-items:center;justify-content:center;padding:60px 20px;color:var(--muted);flex-direction:column;gap:12px}
+.spinner{width:32px;height:32px;border:3px solid #e5e5e5;border-top-color:#111;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:.6rem;color:var(--muted);text-decoration:none}
+@media(min-width:768px){.product-grid{grid-template-columns:repeat(4,1fr);max-width:960px;margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="top-bar"><a href="javascript:history.back()">← Back</a><div>Free Shipping $29+</div></div>
+<div id="loading" class="loading"><div class="spinner"></div><p>Loading...</p></div>
+<div id="content" style="display:none">
+<div class="page-header"><div class="breadcrumb"><a href="index.html">Home</a> → <a href="categories.html">Categories</a> → <a id="cat-link" href="#"></a></div><h1 id="title"></h1><p class="count" id="count"></p></div>
+<div class="product-grid" id="grid"></div>
+</div>
+<nav class="bottom-nav">
+<a href="index.html">Home</a><a href="categories.html">Categories</a><a href="products.html">Products</a><a href="#">Wishlist</a><a href="profile.html">Me</a>
+</nav>
+<script>
+async function load(){
+var p=new URLSearchParams(location.search);
+var handle=p.get('handle');
+if(!handle){document.getElementById('loading').innerHTML='<h2></h2><p>No subcategory</p>';return}
+try{var r=await fetch('categories-data.json');var data=await r.json();var found=null;var catName='';
+for(var c in data){var cat=data[c];var sub=(cat.subcategories||[]).find(function(s){return s.handle===handle});if(sub){found=sub;catName=c;break}}
+if(!found)throw new Error('Not found');
+document.getElementById('loading').style.display='none';document.getElementById('content').style.display='block';
+document.title=found.title+' — Bargain Drop';
+document.getElementById('title').textContent=found.title;
+document.getElementById('cat-link').textContent=catName;
+document.getElementById('cat-link').href='category.html?cat='+encodeURIComponent(catName);
+document.getElementById('count').textContent=found.product_count+' products';
+var grid=document.getElementById('grid');
+if(!found.products||found.products.length===0){grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);grid-column:1/-1"><h2></h2><p>No products</p></div>';return}
+found.products.forEach(function(prod){
+var c=document.createElement('a');c.className='product-card';c.href='product.html?id='+prod.id;
+c.innerHTML='<div class="prod-img">'+(prod.image?'<img src="'+prod.image+'" alt="" loading="lazy">':'<span class="no-img"></span>')+'</div><div class="prod-info"><div class="prod-title">'+esc(prod.title)+'</div><div class="prod-price-row"><span class="prod-price">$'+(prod.price||0).toFixed(2)+'</span><span class="prod-compare">$'+(prod.compare_at_price||0).toFixed(2)+'</span></div></div>';
+grid.appendChild(c);
+})}catch(e){document.getElementById('loading').innerHTML='<h2></h2><p>'+e.message+'</p><br><a href=categories.html>← Back</a>'}
+}
+function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+load();
+</script>
+</body>
+</html>
