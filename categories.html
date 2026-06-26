@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Categories — Bargain Drop</title>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--gold:#f59e0b;--red:#e60023}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:0.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+
+.page-header{padding:16px;text-align:center;border-bottom:1px solid var(--line)}
+.page-header h1{font-size:1.3rem;font-weight:800}
+.page-header p{font-size:0.75rem;color:var(--muted);margin-top:4px}
+
+.category-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:16px}
+.category-card{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:18px 12px;text-align:center;transition:all .15s}
+.category-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:#ddd}
+.category-card .cat-icon{font-size:2.2rem;margin-bottom:8px}
+.category-card .cat-name{font-size:0.75rem;font-weight:700;margin-bottom:2px}
+.category-card .cat-count{font-size:0.65rem;color:var(--muted)}
+.category-card .cat-sub{font-size:0.62rem;color:var(--muted);margin-top:3px}
+
+.loading{display:flex;align-items:center;justify-content:center;padding:60px 20px;color:var(--muted);flex-direction:column;gap:12px}
+.spinner{width:32px;height:32px;border:3px solid #e5e5e5;border-top-color:#111;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
+.bottom-nav a:hover,.bottom-nav a.active{color:var(--fg)}
+.nav-emoji{font-size:1.3rem}
+
+@media(min-width:768px){.category-grid{grid-template-columns:repeat(4,1fr);max-width:960px;margin:0 auto}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html">← Home</a>
+  <div> Free $29+</div>
+</div>
+
+<div class="page-header">
+  <h1>All Categories</h1>
+  <p>Browse by product category</p>
+</div>
+
+<div id="loading" class="loading">
+  <div class="spinner"></div>
+  <p>Loading categories...</p>
+</div>
+
+<div class="category-grid" id="cat-grid" style="display:none"></div>
+
+<nav class="bottom-nav">
+  <a href="index.html"><span class="nav-emoji"></span>Home</a>
+  <a href="categories.html" class="active"><span class="nav-emoji"></span>Categories</a>
+  <a href="products.html"><span class="nav-emoji"></span>Products</a>
+  <a href="#"><span class="nav-emoji"></span>Wishlist</a>
+  <a href="profile.html"><span class="nav-emoji"></span>Me</a>
+</nav>
+
+<script>
+async function load(){
+  try{
+    const resp = await fetch('categories-data.json');
+    if(!resp.ok) throw new Error('Data not found');
+    const data = await resp.json();
+    const cats = Object.keys(data);
+    if(cats.length===0) throw new Error('No categories available');
+    document.getElementById('loading').style.display='none';
+    const grid = document.getElementById('cat-grid');
+    grid.style.display='grid';
+    cats.forEach(function(name){
+      var d = data[name];
+      var card = document.createElement('a');
+      card.className='category-card';
+      card.href='category.html?cat=' + encodeURIComponent(name);
+      card.innerHTML = '<div class="cat-icon">' + (d.emoji||'') + '</div><div class="cat-name">' + escapeHtml(name) + '</div><div class="cat-count">' + (d.total_products||0) + ' products</div><div class="cat-sub">' + ((d.subcategories||[]).length) + ' subcategories</div>';
+      grid.appendChild(card);
+    });
+  }catch(e){
+    document.getElementById('loading').innerHTML='<div style="text-align:center;padding:60px"><h2></h2><p>Failed to load categories</p><br><a href="index.html">← Back to Home</a></div>';
+  }
+}
+function escapeHtml(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+load();
+</script>
+</body>
+</html>
