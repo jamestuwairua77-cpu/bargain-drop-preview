@@ -15,14 +15,16 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
     
-    // Use the app-specific payment method configuration
-    // This config has: card, apple_pay, google_pay, link all enabled
+    // Use app-specific payment method config (card, apple_pay, google_pay, link, afterpay, zip)
     params.append('payment_method_configuration', 'pmc_1TndqIJ3f0xAyevcWi4d8EuD');
     
-    // Also explicitly allow card + google_pay
+    // Explicitly enable all available methods
     params.append('payment_method_types[]', 'card');
     params.append('payment_method_types[]', 'google_pay');
+    params.append('payment_method_types[]', 'apple_pay');
     params.append('payment_method_types[]', 'link');
+    params.append('payment_method_types[]', 'afterpay_clearpay');
+    params.append('payment_method_types[]', 'zip');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
