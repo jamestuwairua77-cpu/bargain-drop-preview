@@ -151,7 +151,8 @@ async function init(){
     const catKeys = Object.keys(data);
     catKeys.forEach(cat => {
       const info = data[cat];
-      const imgHtml = info.image ? '<img src="'+info.image+'" alt="">' : '<span>'+info.emoji+'</span>';
+      const catEmoji = info.emoji || '📦';
+      const imgHtml = info.image ? '<img src="'+info.image+'" alt="">' : '<span>'+catEmoji+'</span>';
       const chip = document.createElement('a');
       chip.className = 'cat-chip';
       chip.href = 'category.html?cat=' + encodeURIComponent(cat);
