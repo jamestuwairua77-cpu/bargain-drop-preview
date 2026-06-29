@@ -130,10 +130,10 @@ async function payWithShopPay(){
   saveOrder(oid,s.email,s.fname,s.lname,'shop pay');
 
   try{
-    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-shopay',payment_method:'shop_pay'},payment_method:'card'})});
+    var resp=await fetch(API_BASE+'/api/shopify-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,shipping_address:{first_name:s.fname,last_name:s.lname,address1:s.addr,city:s.city,province:s.state,country:'AU',zip:s.zip,phone:s.phone},payment_method:'shop_pay',success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html'})});
     var data=await resp.json();
     if(data.url){window.location.href=data.url}
-    else{showError(data.error?data.error.message||'Shop Pay service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
+    else{showError(data.error?data.error.message||'Shop Pay unavailable — try Stripe');btn.classList.remove('loading');setBtnsDisabled(false)}
   }catch(e){finishDemo(oid,s,'shop pay')}
 }
 
