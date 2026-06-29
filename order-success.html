@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Order Confirmed — Bargain Drop</title>
+<style>:root{--bg:#fff;--fg:#111;--muted:#777;--green:#10b981}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}.card{text-align:center;max-width:380px}.check{width:64px;height:64px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}.check svg{width:32px;height:32px;stroke:#fff;stroke-width:3;fill:none}.card h1{font-size:1.2rem;font-weight:800;margin-bottom:6px}.card p{font-size:.75rem;color:var(--muted);margin-bottom:6px;line-height:1.5}.card .oid{font-weight:700;font-size:.85rem;margin-bottom:20px}.card a{display:inline-block;padding:12px 32px;background:var(--fg);color:#fff;border-radius:10px;font-size:.8rem;font-weight:700;text-decoration:none;margin:4px}</style></head><body>
+<div class="card">
+  <div class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+  <h1>Payment Confirmed!</h1>
+  <p>Your order has been placed and payment processed via Stripe.</p>
+  <div class="oid" id="oid"></div>
+  <a href="profile.html">View My Orders</a><br><br>
+  <a href="/" style="background:none;color:var(--muted);font-size:.7rem;text-decoration:underline">← Continue Shopping</a>
+</div>
+<script>
+var p=new URLSearchParams(location.search);
+var id=p.get('id')||p.get('oid')||'';
+if(id)document.getElementById('oid').textContent='Order #'+id;
+// Mark order as paid in localStorage
+if(id){
+  var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');
+  var order=orders.find(function(o){return o.id===id});
+  if(order){order.status='paid';order.payment='stripe';localStorage.setItem('bd_orders',JSON.stringify(orders))}
+}
+</script></body></html>
