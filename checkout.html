@@ -7,7 +7,7 @@
 <style>:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981;--shopay:#5a31f4}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f8f8;color:var(--fg);padding-bottom:80px}.header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}.logo{display:flex;align-items:center;gap:6px;text-decoration:none}.logo-text{font-size:1.15rem;font-weight:900}.logo-text .bd-b{background:linear-gradient(135deg,#e60023,#ff4757);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.logo-text .bd-d{color:#111}.logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#e60023,#ff6b81);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:900;flex-shrink:0}.back-link{display:flex;align-items:center;gap:4px;color:#2563eb;font-size:.75rem;font-weight:600;text-decoration:none;padding:14px 14px 0}.checkout-wrap{padding:16px;max-width:700px;margin:0 auto}.section-title{font-size:.82rem;font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}.form-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px;margin-bottom:12px}.form-row{display:flex;gap:10px;margin-bottom:12px}.form-group{flex:1;margin-bottom:12px}.form-group label{display:block;font-size:.65rem;font-weight:700;margin-bottom:4px;color:var(--muted)}.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.72rem;outline:none}.summary-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px}.summary-row{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:8px;color:var(--muted)}.summary-row.total{font-size:.9rem;font-weight:800;color:var(--fg);border-top:1px solid var(--line);padding-top:12px;margin-top:8px;margin-bottom:0}
 .pay-btns{display:flex;flex-direction:column;gap:10px;margin-top:14px}
 .place-order-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;color:#fff;border:none;border-radius:12px;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .15s}.place-order-btn:active{opacity:.85}.place-order-btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-stripe{background:#635bff}.btn-shopay{background:var(--shopay)}.btn-paypal{background:#0070ba}
+.btn-stripe{background:#635bff}.btn-shopay{background:var(--shopay)}.btn-paypal{background:#0070ba}.btn-gpay{background:#000}
 .pay-or{display:flex;align-items:center;gap:10px;font-size:.65rem;color:var(--muted)}.pay-or::before,.pay-or::after{content:'';flex:1;height:1px;background:var(--line)}
 .spinner{display:none;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}.place-order-btn.loading .spinner{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
 .pay-badges{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}.pay-badge{font-size:.6rem;color:var(--muted);display:flex;align-items:center;gap:4px}.pay-badge svg{width:28px;height:auto}
@@ -36,11 +36,14 @@
 <button class="place-order-btn btn-shopay" id="pay-shopay" onclick="payWithShopPay()"><span class="spinner"></span><svg width="18" height="12" viewBox="0 0 80 24" fill="none"><path d="M73 10.5c0 3-2.5 5.5-5.5 5.5" stroke="#fff" stroke-width="1.5"/><circle cx="73" cy="10.5" r="4" stroke="#fff" stroke-width="1.5"/><text x="10" y="17" font-size="14" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">SHOP</text><text x="54" y="17" font-size="14" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">PAY</text></svg> Pay with Shop Pay</button>
 <div class="pay-or">or</div>
 <button class="place-order-btn btn-paypal" id="pay-paypal" onclick="payWithPayPal()"><span class="spinner"></span><svg width="18" height="14" viewBox="0 0 24 24"><path fill="#fff" d="M7.076 20.069H4.885c-.352 0-.63-.272-.57-.62l1.504-9.559c.042-.27.279-.47.556-.47h3.072c2.767 0 4.666 1.28 5.288 3.71.04.163.074.326.102.49.34 2.235-.063 3.776-1.347 4.846-1.411 1.17-3.518 1.603-5.414 1.603z"/><path fill="#fff" d="M10.935 14.696c-.404 2.547.055 4.64 1.04 5.502.255.224.57.347.912.347h2.426c.354 0 .634-.277.572-.62l-.02-.096c-.49-2.415-1.54-4.593-3.218-5.6-.501-.302-1.09-.47-1.712-.47v.937"/></svg> Pay with PayPal</button>
+<div class="pay-or">or</div>
+<button class="place-order-btn btn-gpay" id="pay-gpay" onclick="payWithGPay()"><span class="spinner"></span><svg width="18" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Pay with Google Pay</button>
 </div>
 <div class="pay-badges">
 <div class="pay-badge"><svg viewBox="0 0 60 25" fill="none"><path fill="#635BFF" d="M55 12.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2v5c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-5z" opacity=".8"/><rect x="1" y="1" width="58" height="23" rx="4" stroke="#bbb" stroke-width="1.5"/></svg>Stripe</div>
 <div class="pay-badge" style="font-weight:700;color:var(--shopay)">◉ Shop Pay</div>
 <div class="pay-badge" style="font-weight:700;color:#0070ba">℗ PayPal</div>
+<div class="pay-badge" style="font-weight:700;color:#000">G Pay</div>
 <div class="pay-badge">🔒 SSL Encrypted</div>
 </div>
 </div>
@@ -148,6 +151,21 @@ async function payWithPayPal(){
     if(data.url){window.location.href=data.url}
     else{showError(data.error?data.error.message||'PayPal service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
   }catch(e){finishDemo(oid,s,'paypal')}
+}
+
+async function payWithGPay(){
+  if(cart.length===0){alert('Your cart is empty');return}
+  var s=getShippingInfo();if(!validateShip(s))return;
+  var btn=document.getElementById('pay-gpay');
+  btn.classList.add('loading');setBtnsDisabled(true);
+  var oid='BD-GP'+Date.now().toString(36).toUpperCase();
+  saveOrder(oid,s.email,s.fname,s.lname,'google pay');
+  try{
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-gpay',payment_method:'google_pay'}})});
+    var data=await resp.json();
+    if(data.url){window.location.href=data.url}
+    else{showError(data.error?data.error.message||'Google Pay service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
+  }catch(e){finishDemo(oid,s,'google pay')}
 }
 function finishDemo(oid,s,method){
   localStorage.setItem('bd_cart','[]');
