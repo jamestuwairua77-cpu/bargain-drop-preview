@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Checkout — Bargain Drop</title>
-<script src="https://js.stripe.com/v3/"></script>
 <style>:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f8f8;color:var(--fg);padding-bottom:80px}.header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}.logo{display:flex;align-items:center;gap:6px;text-decoration:none}.logo-text{font-size:1.15rem;font-weight:900}.logo-text .bd-b{background:linear-gradient(135deg,#e60023,#ff4757);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.logo-text .bd-d{color:#111}.logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#e60023,#ff6b81);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:900;flex-shrink:0}.back-link{display:flex;align-items:center;gap:4px;color:#2563eb;font-size:.75rem;font-weight:600;text-decoration:none;padding:14px 14px 0}.checkout-wrap{padding:16px;max-width:700px;margin:0 auto}.section-title{font-size:.82rem;font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}.form-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px;margin-bottom:12px}.form-row{display:flex;gap:10px;margin-bottom:12px}.form-group{flex:1;margin-bottom:12px}.form-group label{display:block;font-size:.65rem;font-weight:700;margin-bottom:4px;color:var(--muted)}.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.72rem;outline:none}.summary-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px}.summary-row{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:8px;color:var(--muted)}.summary-row.total{font-size:.9rem;font-weight:800;color:var(--fg);border-top:1px solid var(--line);padding-top:12px;margin-top:8px;margin-bottom:0}
 .place-order-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#635bff;color:#fff;border:none;border-radius:12px;font-size:.82rem;font-weight:800;cursor:pointer;margin-top:14px;transition:all .15s}.place-order-btn:active{opacity:.85}.place-order-btn:disabled{background:#999;cursor:not-allowed}.spinner{display:none;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}.place-order-btn.loading .spinner{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
 .stripe-badge{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.62rem;color:var(--muted)}.stripe-badge svg{width:40px;height:auto}#stripe-error{display:none;color:var(--red);font-size:.7rem;text-align:center;margin-top:10px;padding:8px 12px;background:#fef2f2;border-radius:8px}
@@ -52,63 +51,34 @@ function showError(msg){
   setTimeout(function(){el.style.display='none'},6000);
 }
 
+var API_BASE = window.location.origin;
+
 async function payWithStripe(){
   if(cart.length===0){alert('Your cart is empty');return}
   var fname=document.getElementById('fname').value.trim(),lname=document.getElementById('lname').value.trim(),email=document.getElementById('email').value.trim(),addr=document.getElementById('address').value.trim(),city=document.getElementById('city').value.trim(),state=document.getElementById('state').value.trim(),zip=document.getElementById('zip').value.trim(),phone=document.getElementById('phone').value.trim();
   if(!fname||!lname||!email||!addr){alert('Please fill in all shipping fields');return}
-
   var btn=document.getElementById('pay-btn');
   btn.classList.add('loading');btn.disabled=true;
 
   var oid='BD-'+Date.now().toString(36).toUpperCase();
   var order={id:oid,status:'pending',count:cart.length,total:total,date:new Date().toISOString(),items:cart.slice(),email:email,name:fname+' '+lname};
   var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');
-  orders.push(order);
-  localStorage.setItem('bd_orders',JSON.stringify(orders));
+  orders.push(order);localStorage.setItem('bd_orders',JSON.stringify(orders));
 
-  // Build Checkout Session
-  var params=new URLSearchParams();
-  params.append('mode','payment');
-  params.append('success_url',window.location.origin+'/order-success.html?id='+oid);
-  params.append('cancel_url',window.location.origin+'/checkout.html');
-  params.append('customer_email',email);
-  params.append('client_reference_id',oid);
-  params.append('metadata[order_id]',oid);
-  params.append('metadata[source]','bargain-drop-v10');
-  params.append('automatic_payment_methods[enabled]','true');
-  params.append('shipping_address_collection[allowed_countries][]','US');
-  params.append('shipping_address_collection[allowed_countries][]','GB');
-  params.append('shipping_address_collection[allowed_countries][]','AU');
-  params.append('shipping_address_collection[allowed_countries][]','CA');
-
-  for(var i=0;i<cart.length;i++){
-    var item=cart[i];
-    params.append('line_items['+i+'][price_data][currency]','usd');
-    params.append('line_items['+i+'][price_data][product_data][name]',(item.title||'Product').substring(0,200));
-    if(item.image)params.append('line_items['+i+'][price_data][product_data][images][]',item.image);
-    params.append('line_items['+i+'][price_data][unit_amount]',Math.round((item.price||0)*100));
-    params.append('line_items['+i+'][quantity]',item.qty||1);
-  }
-
-  if(shipping>0){
-    params.append('shipping_options[0][shipping_rate_data][display_name]','Standard Shipping');
-    params.append('shipping_options[0][shipping_rate_data][type]','fixed_amount');
-    params.append('shipping_options[0][shipping_rate_data][fixed_amount][amount]',Math.round(shipping*100));
-    params.append('shipping_options[0][shipping_rate_data][fixed_amount][currency]','usd');
-    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]','business_day');
-    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]','5');
-    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]','business_day');
-    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]','14');
-  }
+  var line_items=cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}});
+  var shipping_options=shipping>0?[{shipping_rate_data:{display_name:'Standard Shipping',type:'fixed_amount',fixed_amount:{amount:Math.round(shipping*100),currency:'usd'}}}]:[];
 
   try{
-    var resp=await fetch('https://api.stripe.com/v1/checkout/sessions',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()});
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({line_items:line_items,customer_email:email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10'},shipping_options:shipping_options})
+    });
     var data=await resp.json();
-    if(data.url){window.location.href=data.url}else{showError(data.error?data.error.message:'Payment service unavailable — try again later');btn.classList.remove('loading');btn.disabled=false}
+    if(data.url){window.location.href=data.url}
+    else{showError(data.error?data.error.message||'Payment service error':'Payment unavailable — try again');btn.classList.remove('loading');btn.disabled=false}
   }catch(e){
-    // Fallback: demo mode
-    localStorage.setItem('bd_cart','[]');
-    order.status='paid';order.payment='stripe (demo)';
+    // Demo fallback
+    localStorage.setItem('bd_cart','[]');order.status='paid (demo)';order.payment='stripe demo';
     var orders2=JSON.parse(localStorage.getItem('bd_orders')||'[]'),idx=orders2.findIndex(function(o){return o.id===oid});
     if(idx>=0)orders2[idx]=order;else orders2.push(order);
     localStorage.setItem('bd_orders',JSON.stringify(orders2));
@@ -116,8 +86,7 @@ async function payWithStripe(){
     if(!users[email])users[email]={name:fname+' '+lname,address:addr,city:city,state:state,zip:zip,phone:phone,created:new Date().toISOString()};
     localStorage.setItem('bd_users',JSON.stringify(users));
     localStorage.setItem('bd_user',JSON.stringify({email:email,name:fname+' '+lname}));
-    alert('Order #'+oid+' placed! (Demo mode — Stripe API unreachable)');
-    window.location.href='profile.html';
+    alert('Order #'+oid+' placed! (Demo mode)');location.href='profile.html';
   }
 }
 </script></body></html>
