@@ -6,9 +6,8 @@
 <title>Checkout — Bargain Drop</title>
 <script src="https://js.stripe.com/v3/"></script>
 <style>:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f8f8;color:var(--fg);padding-bottom:80px}.header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}.logo{display:flex;align-items:center;gap:6px;text-decoration:none}.logo-text{font-size:1.15rem;font-weight:900}.logo-text .bd-b{background:linear-gradient(135deg,#e60023,#ff4757);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.logo-text .bd-d{color:#111}.logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#e60023,#ff6b81);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:900;flex-shrink:0}.back-link{display:flex;align-items:center;gap:4px;color:#2563eb;font-size:.75rem;font-weight:600;text-decoration:none;padding:14px 14px 0}.checkout-wrap{padding:16px;max-width:700px;margin:0 auto}.section-title{font-size:.82rem;font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}.form-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px;margin-bottom:12px}.form-row{display:flex;gap:10px;margin-bottom:12px}.form-group{flex:1;margin-bottom:12px}.form-group label{display:block;font-size:.65rem;font-weight:700;margin-bottom:4px;color:var(--muted)}.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.72rem;outline:none}.summary-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px}.summary-row{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:8px;color:var(--muted)}.summary-row.total{font-size:.9rem;font-weight:800;color:var(--fg);border-top:1px solid var(--line);padding-top:12px;margin-top:8px;margin-bottom:0}
-.place-order-btn{display:block;width:100%;padding:14px;background:#635bff;color:#fff;border:none;border-radius:12px;font-size:.82rem;font-weight:800;cursor:pointer;margin-top:14px;transition:all .15s}.place-order-btn:active{opacity:.85}.place-order-btn:disabled{background:#999;cursor:not-allowed}.place-order-btn .spinner{display:none;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px}.place-order-btn.loading .spinner{display:inline-block}.place-order-btn.loading .btn-text{display:none}@keyframes spin{to{transform:rotate(360deg)}}
-.stripe-badge{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.62rem;color:var(--muted)}.stripe-badge svg{width:40px;height:auto}
-#stripe-error{display:none;color:var(--red);font-size:.7rem;text-align:center;margin-top:10px;padding:8px 12px;background:#fef2f2;border-radius:8px}
+.place-order-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#635bff;color:#fff;border:none;border-radius:12px;font-size:.82rem;font-weight:800;cursor:pointer;margin-top:14px;transition:all .15s}.place-order-btn:active{opacity:.85}.place-order-btn:disabled{background:#999;cursor:not-allowed}.spinner{display:none;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}.place-order-btn.loading .spinner{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
+.stripe-badge{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.62rem;color:var(--muted)}.stripe-badge svg{width:40px;height:auto}#stripe-error{display:none;color:var(--red);font-size:.7rem;text-align:center;margin-top:10px;padding:8px 12px;background:#fef2f2;border-radius:8px}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0 env(safe-area-inset-bottom,0)}.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:.58rem;color:var(--muted);text-decoration:none}.nav-icon{width:20px;height:20px}
 </style></head><body>
 <div class="header"><a href="/" class="logo"><div class="logo-icon">BD</div><span class="logo-text"><span class="bd-b">BARGAIN</span><span class="bd-d">DROP</span></span></a></div>
@@ -22,19 +21,14 @@
 <div class="form-row"><div class="form-group"><label>City</label><input type="text" id="city" placeholder="New York"></div><div class="form-group"><label>State</label><input type="text" id="state" placeholder="NY"></div><div class="form-group"><label>ZIP</label><input type="text" id="zip" placeholder="10001"></div></div>
 <div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="+1 (555) 000-0000"></div>
 </div>
-
 <div class="section-title">💳 Payment — Stripe</div>
 <div class="summary-card" id="summary">
 <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">$0.00</span></div>
 <div class="summary-row"><span>Shipping</span><span id="summary-shipping">$5.99</span></div>
 <div class="summary-row total"><span>Total</span><span id="summary-total">$0.00</span></div>
 <div id="stripe-error"></div>
-<button class="place-order-btn" id="pay-btn" onclick="payWithStripe()">
-  <span class="spinner"></span> <span class="btn-text">Pay with Stripe</span>
-</button>
-<div class="stripe-badge">
-  <svg viewBox="0 0 60 25" fill="none"><path fill="#635BFF" d="M55 12.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2v5c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-5z" opacity=".8"/><rect x="1" y="1" width="58" height="23" rx="4" stroke="#bbb" stroke-width="1.5"/><path d="M10 8.5v8M10 8.5h2.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H10" stroke="#bbb" stroke-width="1.2"/><path d="M20 8.5l3 5.5 3.5-5.5M40 8.5v8M40 8.5h2.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H40" stroke="#bbb" stroke-width="1.2"/></svg>
-</div>
+<button class="place-order-btn" id="pay-btn" onclick="payWithStripe()"><span class="spinner"></span> Pay with Stripe</button>
+<div class="stripe-badge"><svg viewBox="0 0 60 25" fill="none"><path fill="#635BFF" d="M55 12.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2v5c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-5z" opacity=".8"/><rect x="1" y="1" width="58" height="23" rx="4" stroke="#bbb" stroke-width="1.5"/><path d="M10 8.5v8M10 8.5h2.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H10" stroke="#bbb" stroke-width="1.2"/><path d="M20 8.5l3 5.5 3.5-5.5M40 8.5v8M40 8.5h2.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H40" stroke="#bbb" stroke-width="1.2"/></svg> Secured by Stripe</div>
 </div>
 </div>
 <nav class="bottom-nav">
@@ -43,9 +37,7 @@
 <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Shop</a>
 <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
-
 <script>
-// === Cart data ===
 var cart=JSON.parse(localStorage.getItem('bd_cart')||'[]');
 var subtotal=cart.reduce(function(s,i){return s+(i.price||0)*(i.qty||1)},0);
 var shipping=subtotal>29?0:5.99;
@@ -54,126 +46,78 @@ document.getElementById('summary-subtotal').textContent='$'+subtotal.toFixed(2);
 document.getElementById('summary-shipping').textContent=shipping===0?'FREE':'$'+shipping.toFixed(2);
 document.getElementById('summary-total').textContent='$'+total.toFixed(2);
 
-// === Stripe Integration ===
-// Uses the Stripe Checkout Session flow — the safest & simplest for static sites
-// The backend endpoint creates a Checkout Session and returns the URL
-
-var STRIPE_API='https://api.stripe.com/v1/checkout/sessions';
-
 function showError(msg){
   var el=document.getElementById('stripe-error');
-  el.textContent=msg;
-  el.style.display='block';
+  el.textContent=msg;el.style.display='block';
   setTimeout(function(){el.style.display='none'},6000);
-}
-
-function setLoading(loading){
-  var btn=document.getElementById('pay-btn');
-  if(loading){btn.classList.add('loading');btn.disabled=true}
-  else{btn.classList.remove('loading');btn.disabled=false}
 }
 
 async function payWithStripe(){
   if(cart.length===0){alert('Your cart is empty');return}
-  var fname=document.getElementById('fname').value.trim();
-  var lname=document.getElementById('lname').value.trim();
-  var email=document.getElementById('email').value.trim();
-  var addr=document.getElementById('address').value.trim();
-  var city=document.getElementById('city').value.trim();
-  var state=document.getElementById('state').value.trim();
-  var zip=document.getElementById('zip').value.trim();
-  var phone=document.getElementById('phone').value.trim();
-
+  var fname=document.getElementById('fname').value.trim(),lname=document.getElementById('lname').value.trim(),email=document.getElementById('email').value.trim(),addr=document.getElementById('address').value.trim(),city=document.getElementById('city').value.trim(),state=document.getElementById('state').value.trim(),zip=document.getElementById('zip').value.trim(),phone=document.getElementById('phone').value.trim();
   if(!fname||!lname||!email||!addr){alert('Please fill in all shipping fields');return}
 
-  setLoading(true);
+  var btn=document.getElementById('pay-btn');
+  btn.classList.add('loading');btn.disabled=true;
 
-  // Build line items from cart
-  var line_items=cart.map(function(item){
-    return {
-      price_data:{
-        currency:'usd',
-        product_data:{name:item.title||'Product',images:item.image?[item.image]:[]},
-        unit_amount:Math.round((item.price||0)*100)
-      },
-      quantity:item.qty||1
-    };
-  });
-
-  // Save order to localStorage before redirect
   var oid='BD-'+Date.now().toString(36).toUpperCase();
-  var order={id:oid,status:'pending',count:cart.length,total:total,date:new Date().toISOString(),items:cart,email:email,name:fname+' '+lname};
+  var order={id:oid,status:'pending',count:cart.length,total:total,date:new Date().toISOString(),items:cart.slice(),email:email,name:fname+' '+lname};
   var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');
   orders.push(order);
   localStorage.setItem('bd_orders',JSON.stringify(orders));
 
-  try {
-    // Create Stripe Checkout Session via our API proxy
-    var params=new URLSearchParams();
-    params.append('payment_method_types[]','card');
-    params.append('mode','payment');
-    params.append('success_url',window.location.origin+'/order-success.html?oid='+oid+'&email='+encodeURIComponent(email));
-    params.append('cancel_url',window.location.origin+'/checkout.html');
-    params.append('customer_email',email);
-    params.append('client_reference_id',oid);
-    params.append('metadata[order_id]',oid);
-    params.append('metadata[source]','bargain-drop-v10');
-    
-    line_items.forEach(function(item,i){
-      params.append('line_items['+i+'][price_data][currency]',item.price_data.currency);
-      params.append('line_items['+i+'][price_data][product_data][name]',item.price_data.product_data.name);
-      if(item.price_data.product_data.images&&item.price_data.product_data.images[0])
-        params.append('line_items['+i+'][price_data][product_data][images][]',item.price_data.product_data.images[0]);
-      params.append('line_items['+i+'][price_data][unit_amount]',item.price_data.unit_amount);
-      params.append('line_items['+i+'][quantity]',item.quantity);
-    });
+  // Build Checkout Session
+  var params=new URLSearchParams();
+  params.append('mode','payment');
+  params.append('success_url',window.location.origin+'/order-success.html?id='+oid);
+  params.append('cancel_url',window.location.origin+'/checkout.html');
+  params.append('customer_email',email);
+  params.append('client_reference_id',oid);
+  params.append('metadata[order_id]',oid);
+  params.append('metadata[source]','bargain-drop-v10');
+  params.append('automatic_payment_methods[enabled]','true');
+  params.append('shipping_address_collection[allowed_countries][]','US');
+  params.append('shipping_address_collection[allowed_countries][]','GB');
+  params.append('shipping_address_collection[allowed_countries][]','AU');
+  params.append('shipping_address_collection[allowed_countries][]','CA');
 
-    if(shipping>0){
-      params.append('shipping_options[0][shipping_rate_data][display_name]','Standard Shipping');
-      params.append('shipping_options[0][shipping_rate_data][type]','fixed_amount');
-      params.append('shipping_options[0][shipping_rate_data][fixed_amount][amount]',Math.round(shipping*100));
-      params.append('shipping_options[0][shipping_rate_data][fixed_amount][currency]','usd');
-    }
+  for(var i=0;i<cart.length;i++){
+    var item=cart[i];
+    params.append('line_items['+i+'][price_data][currency]','usd');
+    params.append('line_items['+i+'][price_data][product_data][name]',(item.title||'Product').substring(0,200));
+    if(item.image)params.append('line_items['+i+'][price_data][product_data][images][]',item.image);
+    params.append('line_items['+i+'][price_data][unit_amount]',Math.round((item.price||0)*100));
+    params.append('line_items['+i+'][quantity]',item.qty||1);
+  }
 
-    var resp=await fetch(STRIPE_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:params.toString()
-    });
+  if(shipping>0){
+    params.append('shipping_options[0][shipping_rate_data][display_name]','Standard Shipping');
+    params.append('shipping_options[0][shipping_rate_data][type]','fixed_amount');
+    params.append('shipping_options[0][shipping_rate_data][fixed_amount][amount]',Math.round(shipping*100));
+    params.append('shipping_options[0][shipping_rate_data][fixed_amount][currency]','usd');
+    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]','business_day');
+    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]','5');
+    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]','business_day');
+    params.append('shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]','14');
+  }
 
+  try{
+    var resp=await fetch('https://api.stripe.com/v1/checkout/sessions',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()});
     var data=await resp.json();
-    
-    if(data.url){
-      // Save user info
-      var users=JSON.parse(localStorage.getItem('bd_users')||'{}');
-      if(!users[email])users[email]={name:fname+' '+lname,address:addr,city:city,state:state,zip:zip,phone:phone,created:new Date().toISOString()};
-      localStorage.setItem('bd_users',JSON.stringify(users));
-      localStorage.setItem('bd_user',JSON.stringify({email:email,name:fname+' '+lname}));
-      localStorage.setItem('bd_cart','[]');
-      // Redirect to Stripe Checkout
-      window.location.href=data.url;
-    }else if(data.error){
-      showError('Payment error: '+(data.error.message||'Something went wrong'));
-      setLoading(false);
-    }
+    if(data.url){window.location.href=data.url}else{showError(data.error?data.error.message:'Payment service unavailable — try again later');btn.classList.remove('loading');btn.disabled=false}
   }catch(e){
-    // If Stripe API fails (no auth/CORS), fall back to demo mode
-    console.log('Stripe API unavailable, using demo mode:',e.message);
+    // Fallback: demo mode
     localStorage.setItem('bd_cart','[]');
-    order.status='paid';
-    order.payment='stripe';
-    var orders2=JSON.parse(localStorage.getItem('bd_orders')||'[]');
-    var idx=orders2.findIndex(function(o){return o.id===oid});
-    if(idx>=0)orders2[idx]=order;
-    else orders2.push(order);
+    order.status='paid';order.payment='stripe (demo)';
+    var orders2=JSON.parse(localStorage.getItem('bd_orders')||'[]'),idx=orders2.findIndex(function(o){return o.id===oid});
+    if(idx>=0)orders2[idx]=order;else orders2.push(order);
     localStorage.setItem('bd_orders',JSON.stringify(orders2));
-    
     var users=JSON.parse(localStorage.getItem('bd_users')||'{}');
     if(!users[email])users[email]={name:fname+' '+lname,address:addr,city:city,state:state,zip:zip,phone:phone,created:new Date().toISOString()};
     localStorage.setItem('bd_users',JSON.stringify(users));
     localStorage.setItem('bd_user',JSON.stringify({email:email,name:fname+' '+lname}));
-    
-    alert('Order #'+oid+' placed! (Demo mode)');location.href='profile.html';
+    alert('Order #'+oid+' placed! (Demo mode — Stripe API unreachable)');
+    window.location.href='profile.html';
   }
 }
 </script></body></html>
