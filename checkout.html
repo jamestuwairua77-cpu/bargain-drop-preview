@@ -113,7 +113,7 @@ async function payWithStripe(){
   var shipping_options=shipping>0?[{shipping_rate_data:{display_name:'Standard Shipping',type:'fixed_amount',fixed_amount:{amount:Math.round(shipping*100),currency:'usd'}}}]:[];
 
   try{
-    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:line_items,customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10'},shipping_options:shipping_options})});
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:line_items,customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10'},payment_method:'card',shipping_options:shipping_options})});
     var data=await resp.json();
     if(data.url){window.location.href=data.url}
     else{showError(data.error?data.error.message||'Payment service error':'Payment unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
@@ -130,7 +130,7 @@ async function payWithShopPay(){
   saveOrder(oid,s.email,s.fname,s.lname,'shop pay');
 
   try{
-    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-shopay',payment_method:'shop_pay'}})});
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-shopay',payment_method:'shop_pay'},payment_method:'card'})});
     var data=await resp.json();
     if(data.url){window.location.href=data.url}
     else{showError(data.error?data.error.message||'Shop Pay service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
@@ -146,7 +146,7 @@ async function payWithPayPal(){
   var oid='BD-PP'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'paypal');
   try{
-    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-paypal',payment_method:'paypal'}})});
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-paypal',payment_method:'paypal'},payment_method:'paypal'})});
     var data=await resp.json();
     if(data.url){window.location.href=data.url}
     else{showError(data.error?data.error.message||'PayPal service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
@@ -161,7 +161,7 @@ async function payWithGPay(){
   var oid='BD-GP'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'google pay');
   try{
-    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-gpay',payment_method:'google_pay'}})});
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-gpay',payment_method:'google_pay'},payment_method:'google_pay'})});
     var data=await resp.json();
     if(data.url){window.location.href=data.url}
     else{showError(data.error?data.error.message||'Google Pay service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
