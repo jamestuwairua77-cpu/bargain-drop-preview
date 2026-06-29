@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bargain Drop — Logo Designer</title>
+<style>
+:root{--bg:#111;--fg:#fff;--muted:#aaa;--line:#333}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#1a1a1a;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+.top-bar h1{font-size:0.95rem;font-weight:800}
+.top-bar a{color:var(--muted);font-size:0.7rem}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:16px;padding-bottom:60px}
+.card{background:#1a1a1a;border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;border:2px solid transparent;transition:all .2s;cursor:pointer}
+.card:hover{border-color:#555;transform:translateY(-2px)}
+.card.selected{border-color:#e60023}
+.card-num{font-size:0.6rem;color:var(--muted);font-weight:600}
+.logo-preview{font-size:1.5rem;font-weight:900;text-align:center;line-height:1.2}
+.bargain{background:linear-gradient(135deg,#e60023,#ff4757);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-gold{background:linear-gradient(135deg,#f59e0b,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-blue{background:linear-gradient(135deg,#3b82f6,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-green{background:linear-gradient(135deg,#10b981,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-purple{background:linear-gradient(135deg,#8b5cf6,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-teal{background:linear-gradient(135deg,#14b8a6,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-pink{background:linear-gradient(135deg,#ec4899,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bargain-orange{background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.drop-black{color:#fff}
+.drop-gray{color:var(--muted)}
+.drop-red{color:#e60023}
+.drop-gold{color:#f59e0b}
+.drop-blue{color:#3b82f6}
+.drop-green{color:#10b981}
+.logo-badge{font-size:0.55rem;padding:2px 8px;border-radius:10px;font-weight:600}
+.apply-btn{padding:8px 20px;border-radius:20px;font-size:0.7rem;font-weight:700;border:none;cursor:pointer;transition:all .15s;background:#e60023;color:#fff}
+.apply-btn:hover{opacity:.9}
+.emoji{font-size:1.2rem}
+@media(min-width:768px){.grid{grid-template-columns:repeat(4,1fr);max-width:960px;margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>🎨 Bargain Drop Logo Designer</h1>
+  <a href="index.html">← Back to Store</a>
+</div>
+<div class="grid" id="grid"></div>
+<script>
+var logos = [
+  {bargain:'bargain', drop:'drop-gray', emoji:'💎', name:'Red/Gray + Gem'},
+  {bargain:'bargain', drop:'drop-black', emoji:'⚡', name:'Red/White + Bolt'},
+  {bargain:'bargain', drop:'drop-red', emoji:'🔥', name:'Red/Red + Fire'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'💎', name:'Gold/White + Gem'},
+  {bargain:'bargain-gold', drop:'drop-gold', emoji:'⭐', name:'Gold/Gold + Star'},
+  {bargain:'bargain-blue', drop:'drop-black', emoji:'💠', name:'Blue/White'},
+  {bargain:'bargain-green', drop:'drop-black', emoji:'🍀', name:'Green/White'},
+  {bargain:'bargain-purple', drop:'drop-black', emoji:'💜', name:'Purple/White'},
+  {bargain:'bargain', drop:'drop-black', emoji:'🛒', name:'Red/White + Cart'},
+  {bargain:'bargain', drop:'drop-black', emoji:'🏷️', name:'Red/White + Tag'},
+  {bargain:'bargain-teal', drop:'drop-black', emoji:'💎', name:'Teal/White + Gem'},
+  {bargain:'bargain-pink', drop:'drop-black', emoji:'✨', name:'Pink/White + Sparkle'},
+  {bargain:'bargain-orange', drop:'drop-black', emoji:'⚡', name:'Orange/White + Bolt'},
+  {bargain:'bargain', drop:'drop-blue', emoji:'💎', name:'Red/Blue + Gem'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'💎', name:'Gold White Gem'},
+  {bargain:'bargain', drop:'drop-black', emoji:'', name:'Red/White Clean'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'⚡', name:'Gold/White + Bolt'},
+  {bargain:'bargain-green', drop:'drop-green', emoji:'💚', name:'Green/Green'},
+  {bargain:'bargain', drop:'drop-black', emoji:'💰', name:'Red/White + Money'},
+  {bargain:'bargain-purple', drop:'drop-black', emoji:'🔮', name:'Purple/White + Crystal'},
+  {bargain:'bargain-teal', drop:'drop-black', emoji:'🌊', name:'Teal/White + Wave'},
+  {bargain:'bargain-blue', drop:'drop-blue', emoji:'💎', name:'Blue/Blue + Gem'},
+  {bargain:'bargain-pink', drop:'drop-black', emoji:'🎀', name:'Pink/White + Ribbon'},
+  {bargain:'bargain-orange', drop:'drop-orange', emoji:'🔥', name:'Orange/Orange + Fire'},
+  {bargain:'bargain', drop:'drop-gold', emoji:'💎', name:'Red/Gold + Gem'},
+  {bargain:'bargain', drop:'drop-black', emoji:'🎯', name:'Red/White + Target'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'🎯', name:'Gold/White + Target'},
+  {bargain:'bargain-blue', drop:'drop-black', emoji:'🛒', name:'Blue/White + Cart'},
+  {bargain:'bargain-green', drop:'drop-black', emoji:'🛒', name:'Green/White + Cart'},
+  {bargain:'bargain', drop:'drop-black', emoji:'📦', name:'Red/White + Box'},
+  {bargain:'bargain-purple', drop:'drop-black', emoji:'🛍️', name:'Purple/White + Bag'},
+  {bargain:'bargain', drop:'drop-black', emoji:'🌟', name:'Red/White + Glow'},
+  {bargain:'bargain', drop:'drop-black', emoji:'🚀', name:'Red/White + Rocket'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'💎👑', name:'Gold White Gem Crown'},
+  {bargain:'bargain', drop:'drop-black', emoji:'💎🔥', name:'Red White Gem Fire'},
+  {bargain:'bargain-blue', drop:'drop-black', emoji:'💎⚡', name:'Blue White Gem Bolt'},
+  {bargain:'bargain-pink', drop:'drop-black', emoji:'💎✨', name:'Pink White Gem Spark'},
+  {bargain:'bargain-teal', drop:'drop-black', emoji:'💎🌟', name:'Teal White Gem Glow'},
+  {bargain:'bargain', drop:'drop-black', emoji:'💎🛒', name:'Red White Gem Cart'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'⚡🔥', name:'Gold White Bolt Fire'},
+  {bargain:'bargain', drop:'drop-black', emoji:'💎💰', name:'Red White Gem Money'},
+  {bargain:'bargain-purple', drop:'drop-black', emoji:'💎🔮', name:'Purple White Gem Crystal'},
+  {bargain:'bargain-green', drop:'drop-black', emoji:'💎🍀', name:'Green White Gem Clover'},
+  {bargain:'bargain-orange', drop:'drop-black', emoji:'💎🔥', name:'Orange White Gem Fire'},
+  {bargain:'bargain', drop:'drop-black', emoji:'💎🏷️', name:'Red White Gem Tag'},
+  {bargain:'bargain', drop:'drop-black', emoji:'💎🎯', name:'Red White Gem Target'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'💎🛒', name:'Gold White Gem Cart'},
+  {bargain:'bargain-blue', drop:'drop-black', emoji:'💎🛍️', name:'Blue White Gem Bag'},
+  {bargain:'bargain', drop:'drop-black', emoji:'🔥⚡', name:'Red/White Fire Bolt'},
+  {bargain:'bargain-gold', drop:'drop-black', emoji:'🔥⚡', name:'Gold/White Fire Bolt'}
+];
+function buildHTML(){
+  var g=document.getElementById('grid');
+  logos.forEach(function(l,i){
+    var n=i+1;
+    var em=l.emoji?' <span class="emoji">'+l.emoji+'</span>':'';
+    g.innerHTML+='<div class="card" id="card-'+i+'" onclick="select('+i+')"><div class="card-num">Design #'+n+'</div><div class="logo-preview"><span class="'+l.bargain+'">BARGAIN</span><span class="'+l.drop+'">DROP</span>'+em+'</div><div class="logo-badge">'+l.name+'</div><button class="apply-btn" onclick="event.stopPropagation();apply('+i+')">Apply</button></div>';
+  });
+  var s=parseInt(localStorage.getItem('bd_logo_design')||'-1');
+  if(s>=0){var c=document.getElementById('card-'+s);if(c)c.classList.add('selected')}
+}
+function select(i){
+  document.querySelectorAll('.card').forEach(function(c){c.classList.remove('selected')});
+  document.getElementById('card-'+i).classList.add('selected');
+}
+function apply(i){
+  localStorage.setItem('bd_logo_design',i);
+  select(i);
+  alert('Design #'+(i+1)+' applied! Return to the store to see it.');
+}
+buildHTML();
+</script>
+</body>
+</html>
