@@ -4,9 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Checkout — Bargain Drop</title>
-<style>:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f8f8;color:var(--fg);padding-bottom:80px}.header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}.logo{display:flex;align-items:center;gap:6px;text-decoration:none}.logo-text{font-size:1.15rem;font-weight:900}.logo-text .bd-b{background:linear-gradient(135deg,#e60023,#ff4757);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.logo-text .bd-d{color:#111}.logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#e60023,#ff6b81);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:900;flex-shrink:0}.back-link{display:flex;align-items:center;gap:4px;color:#2563eb;font-size:.75rem;font-weight:600;text-decoration:none;padding:14px 14px 0}.checkout-wrap{padding:16px;max-width:700px;margin:0 auto}.section-title{font-size:.82rem;font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}.form-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px;margin-bottom:12px}.form-row{display:flex;gap:10px;margin-bottom:12px}.form-group{flex:1;margin-bottom:12px}.form-group label{display:block;font-size:.65rem;font-weight:700;margin-bottom:4px;color:var(--muted)}.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.72rem;outline:none}.summary-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px}.summary-row{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:8px;color:var(--muted)}.summary-row.total{font-size:.9rem;font-weight:800;color:var(--fg);border-top:1px solid var(--line);padding-top:12px;margin-top:8px;margin-bottom:0}
-.place-order-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#635bff;color:#fff;border:none;border-radius:12px;font-size:.82rem;font-weight:800;cursor:pointer;margin-top:14px;transition:all .15s}.place-order-btn:active{opacity:.85}.place-order-btn:disabled{background:#999;cursor:not-allowed}.spinner{display:none;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}.place-order-btn.loading .spinner{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
-.stripe-badge{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.62rem;color:var(--muted)}.stripe-badge svg{width:40px;height:auto}#stripe-error{display:none;color:var(--red);font-size:.7rem;text-align:center;margin-top:10px;padding:8px 12px;background:#fef2f2;border-radius:8px}
+<style>:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981;--shopay:#5a31f4}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f8f8;color:var(--fg);padding-bottom:80px}.header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}.logo{display:flex;align-items:center;gap:6px;text-decoration:none}.logo-text{font-size:1.15rem;font-weight:900}.logo-text .bd-b{background:linear-gradient(135deg,#e60023,#ff4757);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.logo-text .bd-d{color:#111}.logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#e60023,#ff6b81);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:900;flex-shrink:0}.back-link{display:flex;align-items:center;gap:4px;color:#2563eb;font-size:.75rem;font-weight:600;text-decoration:none;padding:14px 14px 0}.checkout-wrap{padding:16px;max-width:700px;margin:0 auto}.section-title{font-size:.82rem;font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}.form-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px;margin-bottom:12px}.form-row{display:flex;gap:10px;margin-bottom:12px}.form-group{flex:1;margin-bottom:12px}.form-group label{display:block;font-size:.65rem;font-weight:700;margin-bottom:4px;color:var(--muted)}.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.72rem;outline:none}.summary-card{background:#fff;border-radius:14px;border:1.5px solid var(--line);padding:18px}.summary-row{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:8px;color:var(--muted)}.summary-row.total{font-size:.9rem;font-weight:800;color:var(--fg);border-top:1px solid var(--line);padding-top:12px;margin-top:8px;margin-bottom:0}
+.pay-btns{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.place-order-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;color:#fff;border:none;border-radius:12px;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .15s}.place-order-btn:active{opacity:.85}.place-order-btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-stripe{background:#635bff}.btn-shopay{background:var(--shopay)}
+.pay-or{display:flex;align-items:center;gap:10px;font-size:.65rem;color:var(--muted)}.pay-or::before,.pay-or::after{content:'';flex:1;height:1px;background:var(--line)}
+.spinner{display:none;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}.place-order-btn.loading .spinner{display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
+.pay-badges{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}.pay-badge{font-size:.6rem;color:var(--muted);display:flex;align-items:center;gap:4px}.pay-badge svg{width:28px;height:auto}
+#stripe-error{display:none;color:var(--red);font-size:.7rem;text-align:center;margin-top:10px;padding:8px 12px;background:#fef2f2;border-radius:8px}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0 env(safe-area-inset-bottom,0)}.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:.58rem;color:var(--muted);text-decoration:none}.nav-icon{width:20px;height:20px}
 </style></head><body>
 <div class="header"><a href="/" class="logo"><div class="logo-icon">BD</div><span class="logo-text"><span class="bd-b">BARGAIN</span><span class="bd-d">DROP</span></span></a></div>
@@ -20,14 +25,21 @@
 <div class="form-row"><div class="form-group"><label>City</label><input type="text" id="city" placeholder="New York"></div><div class="form-group"><label>State</label><input type="text" id="state" placeholder="NY"></div><div class="form-group"><label>ZIP</label><input type="text" id="zip" placeholder="10001"></div></div>
 <div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="+1 (555) 000-0000"></div>
 </div>
-<div class="section-title">💳 Payment — Stripe</div>
+<div class="section-title">💳 Payment</div>
 <div class="summary-card" id="summary">
 <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">$0.00</span></div>
 <div class="summary-row"><span>Shipping</span><span id="summary-shipping">$5.99</span></div>
 <div class="summary-row total"><span>Total</span><span id="summary-total">$0.00</span></div>
 <div id="stripe-error"></div>
-<button class="place-order-btn" id="pay-btn" onclick="payWithStripe()"><span class="spinner"></span> Pay with Stripe</button>
-<div class="stripe-badge"><svg viewBox="0 0 60 25" fill="none"><path fill="#635BFF" d="M55 12.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2v5c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-5z" opacity=".8"/><rect x="1" y="1" width="58" height="23" rx="4" stroke="#bbb" stroke-width="1.5"/><path d="M10 8.5v8M10 8.5h2.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H10" stroke="#bbb" stroke-width="1.2"/><path d="M20 8.5l3 5.5 3.5-5.5M40 8.5v8M40 8.5h2.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H40" stroke="#bbb" stroke-width="1.2"/></svg> Secured by Stripe</div>
+<div class="pay-btns">
+<button class="place-order-btn btn-stripe" id="pay-stripe" onclick="payWithStripe()"><span class="spinner"></span> Pay with Stripe</button>
+<button class="place-order-btn btn-shopay" id="pay-shopay" onclick="payWithShopPay()"><span class="spinner"></span><svg width="18" height="12" viewBox="0 0 80 24" fill="none"><path d="M73 10.5c0 3-2.5 5.5-5.5 5.5" stroke="#fff" stroke-width="1.5"/><circle cx="73" cy="10.5" r="4" stroke="#fff" stroke-width="1.5"/><text x="10" y="17" font-size="14" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">SHOP</text><text x="54" y="17" font-size="14" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">PAY</text></svg> Pay with Shop Pay</button>
+</div>
+<div class="pay-badges">
+<div class="pay-badge"><svg viewBox="0 0 60 25" fill="none"><path fill="#635BFF" d="M55 12.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2v5c0 1.1-.9 2-2 2h-2c-1.1 0-2-.9-2-2v-5z" opacity=".8"/><rect x="1" y="1" width="58" height="23" rx="4" stroke="#bbb" stroke-width="1.5"/></svg>Stripe</div>
+<div class="pay-badge" style="font-weight:700;color:var(--shopay)">◉ Shop Pay</div>
+<div class="pay-badge">🔒 SSL Encrypted</div>
+</div>
 </div>
 </div>
 <nav class="bottom-nav">
@@ -51,42 +63,83 @@ function showError(msg){
   setTimeout(function(){el.style.display='none'},6000);
 }
 
+function getShippingInfo(){
+  return {
+    fname:document.getElementById('fname').value.trim(),
+    lname:document.getElementById('lname').value.trim(),
+    email:document.getElementById('email').value.trim(),
+    addr:document.getElementById('address').value.trim(),
+    city:document.getElementById('city').value.trim(),
+    state:document.getElementById('state').value.trim(),
+    zip:document.getElementById('zip').value.trim(),
+    phone:document.getElementById('phone').value.trim()
+  };
+}
+
+function validateShip(s){
+  if(!s.fname||!s.lname||!s.email||!s.addr){alert('Please fill in all shipping fields');return false}
+  return true;
+}
+
+function saveOrder(oid,email,fname,lname,method){
+  var order={id:oid,status:'pending',count:cart.length,total:total,date:new Date().toISOString(),items:cart.slice(),email:email,name:fname+' '+lname,payment:method};
+  var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');orders.push(order);
+  localStorage.setItem('bd_orders',JSON.stringify(orders));return order;
+}
+
+function setBtnsDisabled(d){
+  document.getElementById('pay-stripe').disabled=d;
+  document.getElementById('pay-shopay').disabled=d;
+}
+
 var API_BASE = window.location.origin;
 
 async function payWithStripe(){
   if(cart.length===0){alert('Your cart is empty');return}
-  var fname=document.getElementById('fname').value.trim(),lname=document.getElementById('lname').value.trim(),email=document.getElementById('email').value.trim(),addr=document.getElementById('address').value.trim(),city=document.getElementById('city').value.trim(),state=document.getElementById('state').value.trim(),zip=document.getElementById('zip').value.trim(),phone=document.getElementById('phone').value.trim();
-  if(!fname||!lname||!email||!addr){alert('Please fill in all shipping fields');return}
-  var btn=document.getElementById('pay-btn');
-  btn.classList.add('loading');btn.disabled=true;
+  var s=getShippingInfo();if(!validateShip(s))return;
+  var btn=document.getElementById('pay-stripe');
+  btn.classList.add('loading');setBtnsDisabled(true);
 
   var oid='BD-'+Date.now().toString(36).toUpperCase();
-  var order={id:oid,status:'pending',count:cart.length,total:total,date:new Date().toISOString(),items:cart.slice(),email:email,name:fname+' '+lname};
-  var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');
-  orders.push(order);localStorage.setItem('bd_orders',JSON.stringify(orders));
+  saveOrder(oid,s.email,s.fname,s.lname,'stripe');
 
   var line_items=cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}});
   var shipping_options=shipping>0?[{shipping_rate_data:{display_name:'Standard Shipping',type:'fixed_amount',fixed_amount:{amount:Math.round(shipping*100),currency:'usd'}}}]:[];
 
   try{
-    var resp=await fetch(API_BASE+'/api/create-checkout-session',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({line_items:line_items,customer_email:email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10'},shipping_options:shipping_options})
-    });
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:line_items,customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10'},shipping_options:shipping_options})});
     var data=await resp.json();
     if(data.url){window.location.href=data.url}
-    else{showError(data.error?data.error.message||'Payment service error':'Payment unavailable — try again');btn.classList.remove('loading');btn.disabled=false}
-  }catch(e){
-    // Demo fallback
-    localStorage.setItem('bd_cart','[]');order.status='paid (demo)';order.payment='stripe demo';
-    var orders2=JSON.parse(localStorage.getItem('bd_orders')||'[]'),idx=orders2.findIndex(function(o){return o.id===oid});
-    if(idx>=0)orders2[idx]=order;else orders2.push(order);
-    localStorage.setItem('bd_orders',JSON.stringify(orders2));
-    var users=JSON.parse(localStorage.getItem('bd_users')||'{}');
-    if(!users[email])users[email]={name:fname+' '+lname,address:addr,city:city,state:state,zip:zip,phone:phone,created:new Date().toISOString()};
-    localStorage.setItem('bd_users',JSON.stringify(users));
-    localStorage.setItem('bd_user',JSON.stringify({email:email,name:fname+' '+lname}));
-    alert('Order #'+oid+' placed! (Demo mode)');location.href='profile.html';
-  }
+    else{showError(data.error?data.error.message||'Payment service error':'Payment unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
+  }catch(e){finishDemo(oid,s,'stripe')}
+}
+
+async function payWithShopPay(){
+  if(cart.length===0){alert('Your cart is empty');return}
+  var s=getShippingInfo();if(!validateShip(s))return;
+  var btn=document.getElementById('pay-shopay');
+  btn.classList.add('loading');setBtnsDisabled(true);
+
+  var oid='BD-SP'+Date.now().toString(36).toUpperCase();
+  saveOrder(oid,s.email,s.fname,s.lname,'shop pay');
+
+  try{
+    var resp=await fetch(API_BASE+'/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_items:cart.map(function(item){return{price_data:{currency:'usd',product_data:{name:(item.title||'Product').substring(0,200),images:item.image?[item.image]:[]},unit_amount:Math.round((item.price||0)*100)},quantity:item.qty||1}}),customer_email:s.email,success_url:API_BASE+'/order-success.html?id='+oid,cancel_url:API_BASE+'/checkout.html',metadata:{order_id:oid,source:'bargain-drop-v10-shopay',payment_method:'shop_pay'}})});
+    var data=await resp.json();
+    if(data.url){window.location.href=data.url}
+    else{showError(data.error?data.error.message||'Shop Pay service unavailable');btn.classList.remove('loading');setBtnsDisabled(false)}
+  }catch(e){finishDemo(oid,s,'shop pay')}
+}
+
+function finishDemo(oid,s,method){
+  localStorage.setItem('bd_cart','[]');
+  var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]'),idx=orders.findIndex(function(o){return o.id===oid});
+  if(idx>=0){orders[idx].status='paid (demo)';orders[idx].payment=method+' demo';localStorage.setItem('bd_orders',JSON.stringify(orders))}
+  var users=JSON.parse(localStorage.getItem('bd_users')||'{}');
+  if(!users[s.email])users[s.email]={name:s.fname+' '+s.lname,address:s.addr,city:s.city,state:s.state,zip:s.zip,phone:s.phone,created:new Date().toISOString()};
+  localStorage.setItem('bd_users',JSON.stringify(users));
+  localStorage.setItem('bd_user',JSON.stringify({email:s.email,name:s.fname+' '+s.lname}));
+  alert('Order #'+oid+' placed via '+method+'! (Demo mode)');
+  location.href='profile.html';
 }
 </script></body></html>
