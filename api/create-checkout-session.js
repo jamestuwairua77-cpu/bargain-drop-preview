@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
-  const { line_items, customer_email, success_url, cancel_url, metadata, shipping_options } = req.body;
+  const { line_items, customer_email, success_url, cancel_url, metadata, payment_method } = req.body;
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY || '';
 
   if (!STRIPE_KEY) {
@@ -15,10 +15,19 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
     
-    // Stripe API version might not support automatic_payment_methods
-    // Use payment_method_types instead
-    params.append('payment_method_types[]', 'card');
-    params.append('payment_method_types[]', 'link');
+    // Enable all payment methods Stripe supports
+    const payment_method_types = ['card'];
+    
+    if (payment_method === 'paypal') {
+      payment_method_types.push('paypal');
+    } else if (payment_method === 'google_pay') {
+      payment_method_types.push('card'); // GPay processes as card token
+    } else {
+      // Default: enable all supported methods
+      payment_method_types.push('paypal');
+    }
+    
+    payment_method_types.forEach(t => params.append('payment_method_types[]', t));
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
@@ -36,6 +45,8 @@ export default async function handler(req, res) {
       params.append(`line_items[${i}][quantity]`, item.quantity);
     });
 
+    // Add shipping options if any
+    const shipping_options = req.body.shipping_options;
     if (shipping_options && shipping_options.length > 0) {
       shipping_options.forEach((opt, i) => {
         if (opt.shipping_rate_data) {
