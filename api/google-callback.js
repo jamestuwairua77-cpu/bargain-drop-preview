@@ -1,17 +1,53 @@
 export default async function handler(req, res) {
-  const { code, state } = req.query;
-  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '489382559871-t7hh34fgbr23vkifi1u8kd9s7dolrv20.apps.googleusercontent.com';
+  const GOOGLE_CLIENT_ID = '489382559871-t7hh34fgbr23vkifi1u8kd9s7dolrv20.apps.googleusercontent.com';
   const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
   const REDIRECT_URI = 'https://bargain-drop-preview-v10.vercel.app/api/google-callback';
 
-  console.log('Google callback hit - code present:', !!code);
-
-  if (!code) {
-    return res.status(400).json({ error: 'Missing authorization code' });
+  // Google Identity Services sends credential (ID token) via POST
+  if (req.method === 'POST') {
+    const { credential } = req.body;
+    if (!credential) return res.status(400).json({ error: 'No credential' });
+    
+    try {
+      const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+          assertion: credential,
+          client_id: GOOGLE_CLIENT_ID
+        }).toString()
+      });
+      const tokens = await tokenRes.json();
+      
+      if (tokens.access_token) {
+        const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: 'Bearer ' + tokens.access_token }
+        });
+        const user = await userRes.json();
+        const payload = { email: user.email, name: user.name, picture: user.picture, email_verified: user.email_verified };
+        const encoded = encodeURIComponent(JSON.stringify(payload));
+        return res.redirect(302, 'https://bargain-drop-preview-v10.vercel.app/profile.html#google-auth=' + encoded);
+      }
+      
+      // Try parsing credential as JWT directly
+      const parts = credential.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+        const user = { email: payload.email, name: payload.name, picture: payload.picture, email_verified: payload.email_verified };
+        const encoded = encodeURIComponent(JSON.stringify(user));
+        return res.redirect(302, 'https://bargain-drop-preview-v10.vercel.app/profile.html#google-auth=' + encoded);
+      }
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
   }
 
+  // Traditional OAuth code flow (GET)
+  const { code, state } = req.query;
+  if (!code) return res.status(400).json({ error: 'Missing authorization code' });
+
   try {
-    // Exchange code for tokens using URLSearchParams
     const params = new URLSearchParams();
     params.append('code', code);
     params.append('client_id', GOOGLE_CLIENT_ID);
@@ -19,44 +55,34 @@ export default async function handler(req, res) {
     params.append('redirect_uri', REDIRECT_URI);
     params.append('grant_type', 'authorization_code');
 
-    console.log('Exchanging code for token...');
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params.toString()
     });
     const tokens = await tokenRes.json();
-    console.log('Token response:', JSON.stringify({ has_access_token: !!tokens.access_token, error: tokens.error || null }));
 
     if (!tokens.access_token) {
       return res.status(400).json({ error: 'Token exchange failed', detail: tokens });
     }
 
-    // Get user info
     const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: { Authorization: 'Bearer ' + tokens.access_token }
     });
     const user = await userRes.json();
-    console.log('User info:', user.email);
 
-    // Build profile payload
     const payload = {
       email: user.email,
       name: user.name,
       picture: user.picture,
       email_verified: user.email_verified,
-      sub: user.sub,
-      access_token: tokens.access_token,
-      id_token: tokens.id_token
+      sub: user.sub
     };
 
-    // Redirect back with token in URL fragment
     const encoded = encodeURIComponent(JSON.stringify(payload));
     const redirectTo = state || 'https://bargain-drop-preview-v10.vercel.app/profile.html';
-    res.writeHead(302, { Location: redirectTo + '#google-auth=' + encoded });
-    res.end();
+    return res.redirect(302, redirectTo + '#google-auth=' + encoded);
   } catch (e) {
-    console.error('Google callback error:', e.message);
-    res.status(500).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 }
