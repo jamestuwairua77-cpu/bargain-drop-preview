@@ -1,7 +1,1 @@
-{
-  "version": 2,
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "installCommand": "",
-  "framework": null
-}
+{"functions": {"api/create-checkout-session.js": {"memory": 128, "maxDuration": 10}}}
