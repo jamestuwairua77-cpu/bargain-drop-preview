@@ -15,19 +15,14 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
     
-    // Enable all payment methods Stripe supports
-    const payment_method_types = ['card'];
+    // Use the app-specific payment method configuration
+    // This config has: card, apple_pay, google_pay, link all enabled
+    params.append('payment_method_configuration', 'pmc_1TndqIJ3f0xAyevcWi4d8EuD');
     
-    if (payment_method === 'paypal') {
-      payment_method_types.push('paypal');
-    } else if (payment_method === 'google_pay') {
-      payment_method_types.push('card'); // GPay processes as card token
-    } else {
-      // Default: enable all supported methods
-      payment_method_types.push('paypal');
-    }
-    
-    payment_method_types.forEach(t => params.append('payment_method_types[]', t));
+    // Also explicitly allow card + google_pay
+    params.append('payment_method_types[]', 'card');
+    params.append('payment_method_types[]', 'google_pay');
+    params.append('payment_method_types[]', 'link');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
@@ -45,7 +40,6 @@ export default async function handler(req, res) {
       params.append(`line_items[${i}][quantity]`, item.quantity);
     });
 
-    // Add shipping options if any
     const shipping_options = req.body.shipping_options;
     if (shipping_options && shipping_options.length > 0) {
       shipping_options.forEach((opt, i) => {
@@ -72,9 +66,11 @@ export default async function handler(req, res) {
     if (data.url) {
       res.status(200).json({ url: data.url });
     } else {
+      console.error('Stripe error:', JSON.stringify(data));
       res.status(400).json({ error: data.error || data || 'Stripe error' });
     }
   } catch (e) {
+    console.error('Server error:', e.message);
     res.status(500).json({ error: e.message });
   }
 }
