@@ -1,149 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Create Account — Bargain Drop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Register — Bargain Drop v10</title>
 <style>
-:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981}
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f8f8;color:var(--fg);min-height:100vh;display:flex;flex-direction:column}
-.auth-container{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 20px;max-width:420px;margin:0 auto;width:100%}
-.logo-area{text-align:center;margin-bottom:32px}
-.logo-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e60023,#ff6b81);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:.85rem;font-weight:900;letter-spacing:1px;text-decoration:none}
-.logo-text{font-size:1rem;font-weight:700;color:#555;margin-top:8px}
-.logo-text strong{color:var(--fg)}
-.auth-card{background:#fff;border-radius:16px;padding:28px 24px;border:1px solid var(--line)}
-.auth-title{font-size:1.2rem;font-weight:800;margin-bottom:20px;text-align:center}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:.72rem;font-weight:600;margin-bottom:4px;color:var(--muted)}
-.form-group input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:.85rem;outline:none;transition:border .15s;background:#fafafa}
-.form-group input:focus{border-color:var(--fg);background:#fff}
-.error-msg{color:var(--red);font-size:.72rem;margin-bottom:12px;text-align:center;min-height:20px}
-.success-msg{color:var(--green);font-size:.72rem;margin-bottom:12px;text-align:center;min-height:20px}
-.submit-btn{width:100%;padding:13px;background:var(--fg);color:#fff;border:none;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;margin-bottom:10px;transition:opacity .15s}
-.submit-btn:hover{opacity:.9}
-.submit-btn:disabled{opacity:.5;cursor:default}
-.terms-text{text-align:center;font-size:.65rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
-.terms-text a{color:var(--fg);text-decoration:underline}
-.divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--muted);font-size:.68rem}
-.divider::before,.divider::after{content:"";flex:1;border-top:1px solid var(--line)}
-.g-btn{width:100%;padding:12px 14px;border:1.5px solid #dadce0;border-radius:10px;background:#fff;font-size:.78rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s;color:#3c4043}
-.g-btn:hover{background:#f8f9fa;border-color:#c4c7cc;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.g-btn:disabled{opacity:.6;cursor:default}
-.g-btn .spinner{width:16px;height:16px;border:2px solid #dadce0;border-top-color:#4285F4;border-radius:50%;animation:spin .6s linear infinite;display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-.signin-link{text-align:center;margin-top:16px;font-size:.72rem;color:var(--muted)}
-.signin-link a{color:var(--fg);font-weight:600;text-decoration:none}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.auth-card{width:100%;max-width:360px;padding:30px 24px;border:1px solid var(--line);border-radius:16px;text-align:center}
+.auth-card h1{font-size:1.2rem;font-weight:800;margin-bottom:20px}
+.auth-card input{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;font-size:.82rem;margin-bottom:12px;outline:none}
+.auth-card input:focus{border-color:var(--fg)}
+.auth-card button{width:100%;padding:12px;background:var(--fg);color:#fff;border:none;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;margin-top:8px}
+.auth-card a{font-size:.7rem;color:var(--muted);text-decoration:underline}
 </style>
 </head>
 <body>
-<div class="auth-container">
-<div class="logo-area">
-  <a href="/" style="text-decoration:none"><div class="logo-icon">BD</div></a>
-  <div class="logo-text"><strong>BARGAIN</strong> DROP</div>
-</div>
 <div class="auth-card">
-  <div class="auth-title">Create Account</div>
-  <div class="error-msg" id="err"></div>
-  <div class="success-msg" id="suc"></div>
-  <div class="form-group"><label>Full Name</label><input type="text" id="name" placeholder="Your full name" autocomplete="name"></div>
-  <div class="form-group"><label>Email Address</label><input type="email" id="email" placeholder="you@example.com" autocomplete="email"></div>
-  <div class="form-group"><label>Password</label><input type="password" id="pass" placeholder="At least 6 characters" autocomplete="new-password"></div>
-  <div class="form-group"><label>Confirm Password</label><input type="password" id="confirm" placeholder="Re-enter password" autocomplete="new-password"></div>
-  <button class="submit-btn" id="sbtn" onclick="doRegister()">Create Account</button>
-  <div class="terms-text">By creating an account, you agree to our <a href="info/terms.html">Terms</a> and <a href="info/privacy.html">Privacy Policy</a>.</div>
-  <div class="divider">or sign up with</div>
-  <button class="g-btn" id="gbtn" onclick="doGoogleSignUp()">
-    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.95 16.46 0 20.12 0 24c0 3.88.95 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-    <span>Sign up with Google</span>
-    <div class="spinner" id="spin"></div>
-  </button>
+  <h1>Register</h1>
+  <input type="text" placeholder="Full Name">
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Password">
+  <button onclick="alert('Coming soon!')">Register</button>
+  <p style="margin-top:12px"><a href="sign-in.html">Already have an account? Sign In</a></p>
+  <p style="margin-top:8px"><a href="/">← Back to Home</a></p>
 </div>
-<div class="signin-link">Already have an account? <a href="signin.html">Sign in</a></div>
-</div>
-
-<script src="https://accounts.google.com/gsi/client" onload="initGSI()"></script>
-<script>
-var GOOGLE_CLIENT_ID = "489382559871-k5kco2bgi1e5pmv4rcidm39qrnlm07r7.apps.googleusercontent.com";
-var gsiReady = false;
-
-function err(msg){document.getElementById("err").textContent=msg||"";document.getElementById("suc").textContent=""}
-function ok(msg){document.getElementById("suc").textContent=msg||"";document.getElementById("err").textContent=""}
-function load(on){
-  document.getElementById("gbtn").disabled=on;
-  document.getElementById("sbtn").disabled=on;
-  document.getElementById("spin").style.display=on?"inline-block":"none";
-}
-
-function saveUser(name,email,photo,provider){
-  localStorage.setItem("bd_user",JSON.stringify({name:name,email:email,photo:photo||"",provider:provider,signedInAt:new Date().toISOString()}));
-  ok("Account created! Redirecting...");
-  setTimeout(function(){location.href="index.html"},600);
-}
-
-function parseJwt(token){
-  var base64Url=token.split(".")[1];
-  return JSON.parse(atob(base64Url.replace(/-/g,"+").replace(/_/g,"/")));
-}
-
-function initGSI(){
-  try {
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: function(response){
-        try {
-          var payload = parseJwt(response.credential);
-          console.log("Google signed up:", payload.email);
-          saveUser(payload.name, payload.email, payload.picture, "google");
-        } catch(e) {
-          err("Failed to process Google sign-up. Try email registration.");
-          load(false);
-        }
-      },
-      auto_select: false,
-      cancel_on_tap_outside: false
-    });
-    gsiReady = true;
-    console.log("Google Identity Services ready");
-  } catch(e) {
-    console.warn("GSI init failed:", e.message);
-  }
-}
-
-if (typeof google !== 'undefined' && google.accounts) { initGSI(); }
-
-window.doGoogleSignUp = function(){
-  if (!gsiReady) { err("Google Sign-Up is loading. Try again shortly."); return; }
-  load(true); err("");
-  try {
-    google.accounts.id.prompt(function(notification){
-      if (notification.isNotDisplayed()) {
-        err("Google Sign-Up unavailable. Please register with email or check domain authorization.");
-        load(false);
-      } else if (notification.isSkippedMoment()) {
-        err("Sign-up skipped. Please try again.");
-        load(false);
-      }
-    });
-  } catch(e) {
-    err("Google Sign-Up error: " + e.message);
-    load(false);
-  }
-};
-
-window.doRegister = function(){
-  var n = document.getElementById("name").value.trim();
-  var e = document.getElementById("email").value.trim();
-  var p = document.getElementById("pass").value;
-  var c = document.getElementById("confirm").value;
-  if (!n || !e || !p || !c) { err("Please fill in all fields"); return; }
-  if (p.length < 6) { err("Password must be at least 6 characters"); return; }
-  if (p !== c) { err("Passwords do not match"); return; }
-  document.getElementById("sbtn").disabled = true;
-  document.getElementById("sbtn").textContent = "Creating...";
-  saveUser(n, e, "", "email");
-};
-</script>
 </body>
 </html>
