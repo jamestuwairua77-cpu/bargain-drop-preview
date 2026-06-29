@@ -14,6 +14,7 @@
   <a href="/" style="background:none;color:var(--muted);font-size:.7rem;text-decoration:underline">← Continue Shopping</a>
 </div>
 <script>
+window.API_BASE="https://bargain-drop-preview-v10.vercel.app";
 var p=new URLSearchParams(location.search);
 var id=p.get('id')||p.get('oid')||'';
 if(id)document.getElementById('oid').textContent='Order #'+id;
@@ -23,4 +24,41 @@ if(id){
   var order=orders.find(function(o){return o.id===id});
   if(order){order.status='paid';order.payment='stripe';localStorage.setItem('bd_orders',JSON.stringify(orders))}
 }
-</script></body></html>
+</script>
+    <!-- CJ Dropshipping Auto-Sync -->
+    <div style="text-align:center;margin-top:20px">
+      <button id="cj-sync-btn" style="background:#ff6b00;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:16px;cursor:pointer;display:none" onclick="syncToCJ()">🔄 Sync Order to CJ Dropshipping</button>
+      <div id="cj-status" style="margin-top:10px"></div>
+    </div>
+    <script>
+window.API_BASE="https://bargain-drop-preview-v10.vercel.app";
+    (async function(){
+      var oid=new URLSearchParams(location.search).get('id')||'';
+      var ord=JSON.parse(localStorage.getItem('order_'+oid)||'null');
+      var btn=document.getElementById('cj-sync-btn');
+      if(ord){btn.style.display='inline-block'}
+      
+      window.syncToCJ=async function(){
+        if(!ord)return;
+        btn.disabled=true;btn.textContent='⏳ Syncing to CJ...';
+        var st=document.getElementById('cj-status');
+        try{
+          var resp=await fetch(window.API_BASE||'https://bargain-drop-preview-v10.vercel.app','/api/cj-order',{
+            method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+              line_items:ord.items||[],customer_email:ord.email,
+              shipping_address:{first_name:ord.fname,last_name:ord.lname,city:ord.city,state:ord.state,zip:ord.zip,addr:ord.addr,country:'Australia',country_code:'AU',phone:ord.phone},
+              payment_method:ord.method
+            })
+          });
+          var d=await resp.json();
+          if(d.success){btn.textContent='✅ Sent to CJ! Order #'+d.order_number;btn.style.background='#28a745';st.innerHTML='CJ Order ID: '+d.cj_order_id+(d.cj_pay_url?'<br><a href="'+d.cj_pay_url+'" target="_blank" style="color:#ff6b00">Complete payment on CJ</a>':'')}
+          else{btn.textContent='❌ Sync failed';st.textContent=d.error||'Unknown error';btn.style.background='#dc3545'}
+        }catch(e){btn.textContent='❌ Network error';st.textContent=e.message}
+      }
+      // Auto-sync
+      if(ord){setTimeout(function(){syncToCJ()},500)}
+    })();
+    </script>
+    
+</body></html>
