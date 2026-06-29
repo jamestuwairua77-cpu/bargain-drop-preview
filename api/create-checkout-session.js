@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
@@ -15,7 +14,11 @@ export default async function handler(req, res) {
     params.append('success_url', success_url);
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
-    params.append('automatic_payment_methods[enabled]', 'true');
+    
+    // Stripe API version might not support automatic_payment_methods
+    // Use payment_method_types instead
+    params.append('payment_method_types[]', 'card');
+    params.append('payment_method_types[]', 'link');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
@@ -33,7 +36,7 @@ export default async function handler(req, res) {
       params.append(`line_items[${i}][quantity]`, item.quantity);
     });
 
-    if (shipping_options) {
+    if (shipping_options && shipping_options.length > 0) {
       shipping_options.forEach((opt, i) => {
         if (opt.shipping_rate_data) {
           params.append(`shipping_options[${i}][shipping_rate_data][display_name]`, opt.shipping_rate_data.display_name);
@@ -58,7 +61,7 @@ export default async function handler(req, res) {
     if (data.url) {
       res.status(200).json({ url: data.url });
     } else {
-      res.status(400).json({ error: data.error || 'Stripe error' });
+      res.status(400).json({ error: data.error || data || 'Stripe error' });
     }
   } catch (e) {
     res.status(500).json({ error: e.message });
