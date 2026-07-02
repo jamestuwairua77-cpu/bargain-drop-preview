@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Profile Information — Bargain Drop</title>
+<link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+<div class="top-bar"><a href="profile.html">← Back</a><div>Free Shipping $29+</div></div>
+<div class="page-header">
+  <div class="breadcrumb"><a href="profile.html">My Account</a> 〾 Profile Information</div>
+  <h1>Profile Information</h1>
+  <p class="subtitle">Name, phone, birthday &amp; more</p>
+</div>
+<div class="section">
+  <div class="card-list" id="profile-form-card">
+    <!-- filled by JS -->
+  </div>
+</div>
+<div class="section">
+  <a href="profile.html" class="btn btn-secondary btn-block">← Back to Profile</a>
+</div>
+<nav class="bottom-nav">
+  <a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2"/></svg>Home</a>
+  <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/></svg>Products</a>
+  <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
+  <a href="wishlist.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5"/></svg>Wishlist</a>
+  <a href="profile.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#111" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="#111" stroke-width="2"/></svg>Me</a>
+</nav>
+<script src="js/account.js"></script>
+<script>
+(function(){
+  var user = BD.requireAuth(); if (!user) return;
+  var p = BD.profile.get();
+  
+  function renderForm(){
+    var card = document.getElementById('profile-form-card');
+    var html = '<div class="list-row" style="flex-direction:column;align-items:stretch;gap:14px;padding:20px">';
+    html += '<div class="form-group"><label>Name</label><input type="text" id="field-name" value="' + (BD.escape(p.name) || '') + '"></div>';
+    html += '<div class="form-group"><label>Email</label><input type="email" value="' + (BD.escape(p.email) || '') + '" disabled><span class="hint">Email cannot be changed</span></div>';
+    html += '<div class="form-group"><label>Phone</label><input type="tel" id="field-phone" value="' + (BD.escape(p.phone) || '') + '" placeholder="+1 234 567 890"></div>';
+    html += '<div class="form-group"><label>Date of Birth</label><input type="date" id="field-dob" value="' + (BD.escape(p.dob) || '') + '"></div>';
+    html += '<div class="form-group"><label>Gender</label><select id="field-gender"><option value="" ' + (p.gender || 'selected') + '>Hello world This is a test sentence</option><option value="male" ' + (p.gender === 'male' ? 'selected' : '') + '>Male</option><option value="female" ' + (p.gender === 'female' ? 'selected' : '') + '>Female</option><option value="other" ' + (p.gender === 'other' ? 'selected' : '') + '>Other</option></select></div>';
+    html += '<button class="btn btn-primary btn-block" onclick="saveProfile()">Save Changes</button>';
+    html += '</div>';
+    card.innerHTML = html;
+  }
+  
+  window.saveProfile = function(){
+    var data = {
+      name: document.getElementById('field-name').value,
+      phone: document.getElementById('field-phone').value,
+      dob: document.getElementById('field-dob').value,
+      gender: document.getElementById('field-gender').value
+    };
+    BD.profile.save(data);
+    var toast = document.getElementById('toast');
+    if (toast) { toast.textContent = 'Profile updated!'; toast.className.add('show'); setTimeout(function(){ toast.className.remove('show'); }, 2000); }
+    setTimeout(function(){ location.href = 'profile.html'; }, 600);
+  };
+  
+  renderForm();
+})();
+</script>
+<div class="toast" id="toast"></div>
+</body>
+</html>
