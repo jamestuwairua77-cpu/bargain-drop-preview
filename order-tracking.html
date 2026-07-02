@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Order Tracking — Bargain Drop</title>
+<link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+<div class="top-bar"><a href="profile.html">← Back</a><div>Free Shipping $29+</div></div>
+<div class="page-header">
+  <div class="breadcrumb"><a href="profile.html">My Account</a> ‒> Order Tracking</div>
+  <h1>Track Order</h1>
+  <p class="subtitle">See where your package is</p>
+</div>
+<div class="section">
+  <div class="card-list" id="tracking-list"></div>
+  <div class="empty-state" id="empty-state">
+    <div class="icon">📪</div>
+    <h2>No active tracking</h2>
+    <p>Once your order ships, you'll see tracking info here.</p>
+  </div>
+</div>
+<div class="section">
+  <a href="orders.html" class="btn btn-secondary btn-block">← Back to Orders</a>
+</div>
+<nav class="bottom-nav">
+  <a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2"/></svg>Home</a>
+  <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/></svg>Products</a>
+  <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
+  <a href="wishlist.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5"/></svg>Wishlist</a>
+  <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2"/></svg>Me</a>
+</nav>
+<script src="js/account.js"></script>
+<script>
+(unction(){
+  var user = BD.requireAuth(); if (!user) return;
+  var orders = BD.orders.list().filter(function(o){ return o.tracking && o.status !=='cancelled' && o.status !=='delivered' });
+  var list = document.getElementById('tracking-list');
+  var empty = document.getElementById('empty-state');
+  if (orders.length === 0) { list.style.display='none'; empty.style.display='block'; return; }
+  empty.style.display='none';
+  orders.forEach(function(o){
+    var row = document.createElement('a');
+    row.className = 'list-row';
+    row.href = o.tracking.url || '#'; row.target='_blank';
+    row.innerHTML = '<div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z" stroke="#333" stroke-width="1.8"/><circle cx="12" cy="10" r="3" stroke="#333" stroke-width="1.5"/></svg></div>'+
+      '<div class="mi-info"><div class="mi-label">Order #'+o.id+'</div><div class="mi-desc">'+(o.tracking.carrier||'Tracking')+' '+(o.tracking.number||'')+'</div></div>'+
+      '<span class="mi-arrow">→</span>';
+    list.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
