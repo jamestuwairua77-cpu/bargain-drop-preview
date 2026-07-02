@@ -1,1 +1,1 @@
-{"functions": {"api/create-checkout-session.js": {"memory": 128, "maxDuration": 10}}}
+{"rewrites": [{"source": "/-/product-data.json", "destination": "api/product-data"}], "functions": {"api/create-checkout-session.js": {"memory": 128, "maxDuration": 10}}}
