@@ -1,0 +1,32 @@
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>Comm Prefs — Bargain Drop</title><link rel="stylesheet" href="css/account.css"></head><body><div class="top-bar"><a href="profile.html">← Back</a><div>Free Shipping $29+</div></div><div class="page-header"><div class="breadcrumb"><a href="profile.html">My Account</a> →> Communication Preferences</div><h1>Communication Preferences</h1></div><div class="section"><div class="section-title">Email</div><div class="card-list" id="email-prefs"></div></div><div class="section"><div class="section-title">SMS</div><div class="card-list" id="sms-prefs"></div></div><div class="section"><div class="section-title">Push Notifications</div><div class="card-list" id="push-prefs"></div></div><div class="section"><button class="btn btn-primary btn-block" onclick="savePrefs()">Save Preferences</button></div><div class="toast" id="toast"></div><nav class="bottom-nav"><a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2"/></svg>Home</a><a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/></svg>Products</a><a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a><a href="wishlist.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5"/></svg>Wishlist</a><a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2"/></svg>Me</a></nav><script src="js/account.js"></script><script>
+"use strict";
+var prefs;
+(function(){
+  var user = BD.requireAuth(); if (!user) return;
+  prefs = BD.prefs.get();
+  var emails = [{k:'emailOrders',l:'Order Updates',d:'Receive confirmation, shipping and delivery updates'},{k:'emailPromos',l:'Promotions & Deals',d:'Exclusive discounts and promo offers'},{k:'emailNewsletter',l:'Newsletter',d:'Company news, new arrivals and more'},{k:'emailPriceDrops',l:'Price Drops',d:'Alerts when items in your wishlist drop in price'}];
+  var sms = [{k:'smsOrders',l:'Order Updates',d:'Get order updates via SMS'},{k:'smsPromos',l:'Promos',d:'Promotional offers via SMS'}];
+  var push = [{k:'pushOrders',l:'Order Updates',d:'Prop notifications for orders'},{k:'pushPromos',l:'Promos',d:'Prop notifications for deals'}];
+  function render(arr,containerId,groupName){
+    var cont = document.getElementById(containerId);
+    cont.innerHTML = arr.map(function(p){
+      var checked = prefs[p.k] ? 'checked' : '';
+      return '<div class="list-row"><div class="mi-info"><div class="mi-label">'+p.l+'</div><div class="mi-desc">'+p.d+'</div></div><label class="toggle"><input type="checkbox" data-k="'+p.k+'" '+checked+'><span class="slider"></span></label></div>';
+    }).join('');
+  }
+  render(emails,'email-prefs');
+  render(sms,'sms-prefs');
+  render(push,'push-prefs');
+})();
+function savePrefs(){
+  var patch = {};
+  document.querySelectorAll('[data-k]:checkbox').forEach(function(cb){
+    patch[cb.dataset.k] = cb.checked;
+  });
+  BD.prefs.save(Object.assign({},prefs,patch));
+  var t = document.getElementById('toast');
+  t.textContent = 'Preferences saved!';
+  t.className = 'toast show';
+  setTimeout(function(){ t.className = 'toast'; }, 2000);
+}
+</script></body></html>
