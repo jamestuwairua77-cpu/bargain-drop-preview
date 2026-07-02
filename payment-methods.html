@@ -7,9 +7,9 @@
 <link rel="stylesheet" href="css/account.css">
 </head>
 <body>
-<div class="top-bar"><a href="profile.html">← Back</a><div>Free Shipping $29+</div></div>
+<div class="top-bar"><a href="profile.html">&lsaquo; Back</a><div>Free Shipping $29+</div></div>
 <div class="page-header">
-  <div class="breadcrumb"><a href="profile.html">My Account</a> 〺 Payment Methods</div>
+  <div class="breadcrumb"><a href="profile.html">My Account</a> &rsaquo; Payment Methods</div>
   <h1>Saved Payment Methods</h1>
   <p class="subtitle">Cards, Shop Pay &amp; more</p>
 </div>
@@ -58,7 +58,7 @@
       html += '<div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#333" stroke-width="1.8"/><line x1="2" y1="10" x2="22" y2="10" stroke="#333" stroke-width="1.5"/></svg></div>';
       html += '<div class="mi-info"><div class="mi-label">' + BD.escape(p.brand || 'Card') + ' ending in ' + BD.escape((p.last4 || '****').slice(-4)) + '</div><div class="mi-desc">Expires ' + BD.escape(p.expiry || '--') + '</div></div>';
       if (p.isDefault) html += '<span class="status-pill default">Default</span>';
-      html += '<span class="mi-arrow">→</span>';
+      html += '<span class="mi-arrow">&rarr;</span>';
       html += '</div>';
     });
     list.innerHTML = html;
