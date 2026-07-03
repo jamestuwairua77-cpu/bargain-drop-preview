@@ -1,13 +1,116 @@
-function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function hideLoad(){var o=document.getElementById('loading-overlay');if(o)o.style.display='none'}
-function showError(m){document.getElementById('product-title').textContent=m||'Error';hideLoad();}
-function money(n){return 'AU$'+(Number(n)||0).toFixed(2)}
-function audToCart(){if(!product)return;var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');c.push({id:product.id,title:product.title,price:product.price,image:product.image||(product.images||[])[0]||'',pty:qty});localStorage.setItem('bd_cart',JSON.stringify(c));alert('Added to cart!')}
-function changeQty(d){qty=Math.max(1,qty+d);document.getElementById('qty-value').textContent=qty}
+// product fix v2 - correction for broken esc() and loadProduct
+function esc(t){return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function hideLoad(){var o=document.getElementById("loading-overlay");if(o)o.style.display="none"}
+function showError(m){document.getElementById("product-title").textContent=m||"Error";hideLoad()}
+function money(n){return "AU$'+(Number(n)||0).toFixed(2)}
 
-var product=null,qty=1,pid=(new URLSearchParams(location.search)).get('id');
+function updateCartCount(){
+  var c=JSON.parse(localStorage.getItem("bd_cart")||"[]");
+  var el=document.getElementById("cart-badge");
+  if(el){var n=c.reduce(function(s,i){return s+(i.qty||1)},0);el.textContent=n;el.style.display=n?"":"none"}
+}
 
-if(!pid){document.getElementById('product-title').textContent='No product id';hideLoad()}else{(function(){var x=new XMLHttpRequest();x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json',true);x.timeout=30000;x.onload=function(){if(x.status===200){try{var d=JSON.parse(x.responseText);for(var c in d){for(var i=0;i<d[c].products.length;i++){if(String(d[c].products[i].id)===pid){product=d[c].products[i];break}}if(product)break}}catch(e){}}
-if(product){try{document.getElementById('product-title').textContent=product.title;document.getElementById('product-price').textContent=money(product.price);if(product.compare_at_price&&product.compare_at_price>product.price){document.getElementById('product-original').textContent=money(product.compare_at_price);document.getElementById('product-original').style.display='';var disc=Math.round((1-product.price/product.compare_at_price)*100);document.getElementById('product-discount').textContent='-'+disc+'%';document.getElementById('product-discount').style.display='';document.getElementById('savings').style.display='';document.getElementById('savings-text').textContent='You save '+money(product.compare_at_price-product.price);document.getElementById('gallery-badge').textContent='Sale';document.getElementById('gallery-badge').style.display=''}
-var imgs=product.images||[product.image];if(imgs.length>0){document.getElementById('product-img').src=imgs[0]}
-var desc=product.body_html||'Nescription available.';document.getElementById('product-desc').innerHTML=desc}catch(e){}hideLoad()}else{showError('Product not found')}}};x.onerror=function(){showError('Failed to load')};x.send()})()}
+function addToCart(){
+  if(!product)return;
+  var c=JSON.parse(localStorage.getItem("bd_cart")||"[]");
+  c.push({id:product.id,title:product.title,price:product.price,image:product.image||(product.images||[])[0]||"",qty:qty});
+  localStorage.setItem("bd_cart",JSON.stringify(c));
+  updateCartCount();
+  alert("Added "+qty+" to cart!")
+}
+
+function buyNow(){addToCart();location.href="checkout.html"}
+
+function toggleWishlist(){var b=document.getElementById("wishlist-btn");if(b)b.classList.toggle("wishlisted")}
+
+function shareProduct(){
+  if(navigator.share){navigator.share({title:product?product.title:"",url:location.href})}
+  else{navigator.clipboard.writeText(location.href);alert("Link copied!")}
+}
+
+function changeQty(d){
+  qty=Math.max(1,qty+d);
+  document.getElementById("qty-value").textContent=qty;
+  document.getElementById("qty-minus").disabled=qty<=1;
+  document.getElementById("qty-plus").disabled=qty>=99
+}
+
+function loadMoreReviews(){reviewsShownCount+=5;renderReviews()}
+
+function scrollToReviews(){document.getElementById("reviews-section").scrollIntoView({behavior:"smooth"})}
+
+function showProduct(){
+  if(!product)return;
+  var p=product;
+  document.getElementById("product-title").textContent=p.title;
+  document.getElementById("product-price").textContent=money(p.price);
+  var imgs=p.images||[p.image];
+  if(imgs.length>0){
+    allImages=imgs;
+    document.getElementById("product-img").src=imgs[0];
+    var t=document.getElementById("prod-thumbs");
+    t.innerHTML="";
+    if(imgs.length>1){
+      imgs.forEach(function(src,i){
+        var ii=document.createElement("img");
+        ii.src=src;
+        ii.className=i===0?"active":"";
+        ii.onclick=function(){
+          currentImgIdx=i;
+          document.getElementById("product-img").src=src;
+          this.parentNode.querySelectorAll("img").forEach(function(x){x.classList.remove("active")});
+          this.classList.add("active")
+        };
+        t.appendChild(ii)
+      });
+      document.getElementById("gallery-count").textContent="1/"+imgs.length;
+      document.getElementById("gallery-count").style.display=""
+    }
+  }
+  if(p.compare_at_price&&p.compare_at_price>p.price){
+    var d=Math.round((1-p.price/p.compare_at_price)*100);
+    document.getElementById("product-original").textContent=money(p.compare_at_price);
+    document.getElementById("product-discount").textContent="-"+d+"%";
+    document.getElementById("product-original").style.display="";
+    document.getElementById("product-discount").style.display="";
+    document.getElementById("savings").style.display="";
+    document.getElementById("savings-text").textContent="You save "+money(p.compare_at_price-p.price);
+    document.getElementById("gallery-badge").textContent=p.title;
+    document.getElementById("gallery-badge").style.display=""
+  }
+  document.getElementById("product-desc").innerHTML=p.body_html||"No description available.";
+  hideLoad();
+  updateCartCount()
+}
+
+// Override loadProduct
+var origOnload=window.onload;
+window.onload=function(){
+  if(!pid){showError("No product ID");return}
+  var cached=localStorage.getItem("bd_product_"+pid);
+  if(cached){try{product=JSON.parse(cached);showProduct();return}catch(e){}}
+  document.getElementById("loading-text").textContent="Loading product...";
+  var x=new XMLHttpRequest();
+  x.open("GET","https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json",true);
+  x.timeout=30000;
+  x.onload=function(){
+    if(x.status===200){
+      try{
+        var d=JSON.parse(x.responseText);
+        for(var c in d){
+          var items=d[c].products||[];
+          for(var i=0;i<items.length;i++){
+            if(String(items[i].id)===String(pid)){product=items[i];break}
+          }
+          if(product)break
+        }
+        if(product){
+          localStorage.setItem("bd_product_"+pid,JSON.stringify(product));
+          showProduct()
+        }else{showError("Product not found")}
+      }catch(e){showError("Failed to load product")}
+    }else{showError("Failed to load product")}
+  };
+  x.onerror=function(){showError("Failed to load product")};
+  x.send()
+};
