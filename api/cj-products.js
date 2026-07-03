@@ -27,14 +27,15 @@ export default async function handler(req, res) {
       if (kw) url += '&' + new URLSearchParams({ keyWord: kw }).toString();
       const data = await fetch(url, { headers: {'CJ-Access-Token': t } }).then(r=>r.json());
       if (data.code !== 200) return res.status(400).json({ error: data.message });
-      result = { success: true, page: pg, size: sz,
+      res.status(200).json({
+        success: true, page: pg, size: sz,
         total: data.data?.totalRecords || 0,
         products: (data.data?.content[0]?.productList || []).map(p => ({
           pid: p.id, name: p.nameEn || '', sku: p.sku,
           price: p.sellPrice, category: p.categoryId,
           image: p.bigImage || ''
         }))
-      };
+      });
     } else if (act === 'variant') {
       const pid = req.query.pid; if (!pid) return res.status(400).json({ error: 'pid required' });
       const data = await fetch('https://developers.cjdropshipping.com/api2.0/v1/product/variant/query?pid=' + pid, { headers: {'CJ-Access-Token': t } }).then(r=>r.json());
@@ -45,9 +46,6 @@ export default async function handler(req, res) {
             price: v.variantSellPrice, sku: v.variantSku
           })) });
       } else res.status(400).json({ error: data.message });
-    } else res.status(400).json({
-      error: 'Use action: categories, search, variant',
-      example: '/api/cj-products?action=search&keyword=medicine+box&page=1&size=5'
-    });
+    } else res.status(400).json({ error: 'Use action: categories, search, variant' });
   } catch (e) { res.status(500).json({ success: false, error: e.message }); }
 }
