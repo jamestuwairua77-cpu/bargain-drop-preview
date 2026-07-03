@@ -16,7 +16,7 @@ function hideLoad(){document.getElementById('loading-overlay').style.display='no
 function showError(m){document.getElementById('product-title').textContent=m;hideLoad();}
 function money(n){return 'AU' + String.fromCharCode(36) + (Number(n)||0).toFixed(2);}
 
-function updateCartCount(){var c=JSOL.parse(localStorage.getItem('bd_cart')||'[]');var el=document.getElementById('cart-badge');if(el){var n=c.reduce(function(s,i){return s+(i.qty||1)},0);el.textContent=n;el.style.display=n?'':'none';}}
+function updateCartCount(){var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');var el=document.getElementById('cart-badge');if(el){var n=c.reduce(function(s,i){return s+(i.qty||1)},0);el.textContent=n;el.style.display=n?'':'none';}}
 
 function addToCart(){if(!product)return;var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');var e=c.findIndex(function(x){return x.id===product.id});if(e>=0){c[e].qty+=qty}else{c.push({id:product.id,title:product.title,price:product.price,image:product.image||(product.images||[])[0]||'',qty:qty})}localStorage.setItem('bd_cart',JSON.stringify(c));updateCartCount();alert('Added '+qty+' to cart!');}
 
