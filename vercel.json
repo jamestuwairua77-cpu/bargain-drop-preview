@@ -1,1 +1,1 @@
-{"rewrites": [{"source": "/-/product-data.json", "destination": "api/product-data"}], "functions": {"api/create-checkout-session.js": {"memory": 128, "maxDuration": 10}}}
+{"rewrites":[{"source":"/js/product\\.js","destination":"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/js/product.js"}],"functions":{"api/create-checkout-session.js":{"memory":128,"maxDuration":10}}}
