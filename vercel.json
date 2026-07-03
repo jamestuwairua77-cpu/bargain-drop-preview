@@ -1,1 +1,1 @@
-{"rewrites":[{"source":"/js/product\\.js","destination":"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/js/product.js"}],"functions":{"api/create-checkout-session.js":{"memory":128,"maxDuration":10}}}
+{"rewrites":[{"source":"/js/product\\.js","destination":"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/js/product.js"}],"functions":{"api/create-checkout-session.js":{"memory":128,"maxDuration":10,"maxDuration":10},"api/cj-order.js":{"memory":128,"maxDuration":30},"api/cj-webhook.js":{"memory":128,"maxDuration":5}}}
