@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch('https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json');
+    const response = await fetch('categories-data.json');
     if (!response.ok) {
       return res.status(502).json({ error: 'Failed to fetch product data' });
     }
