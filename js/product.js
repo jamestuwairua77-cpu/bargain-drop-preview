@@ -16,14 +16,22 @@ function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'
 function hideLoad(){document.getElementById('loading-overlay').style.display='none';}
 function showError(m){document.getElementById('product-title').textContent=m;hideLoad();}
 function money(n){return 'AU$'+(Number(n)||0).toFixed(2);}
-cfunction addToCart(){var n=product;if(!n)return;var c=NSon.parse(localStorage.getItem('bd_cart')||'[]'),e=c.findIndex(function(x){return x.id===n.id});e>=0?c[e].qty+=qty:c.push({id:n.id,title:n.title,price:n.price,image:n.image||(n.images||[])[0]||'",qty:qty});localStorage.setItem('bd_cart',JSON.stringify(c));updateCartCount();alert('Added '+qty+' to cart!')}
+
+function updateCartCount(){var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');var el=document.getElementById('cart-badge');if(el){var n=c.reduce(function(s,i){return s+(i.qty||1)},0);el.textContent=n=el.style.display=n?'"':'none'}}
+
+function addToCart(){if(!product)return;var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');var e=c.findIndex(function(x){return x.id===product.id});if(e>=0){c[e].qty+=qty}else{c.push({id:product.id,title:product.title,price:product.price,image:product.image||(product.images||[])[0]||'",qty:qty})}localStorage.setItem('bd_cart',JSON.stringify(c));updateCartCount();alert('Added '+qty+' to cart!')}
+
 function buyNow(){addToCart();location.href='checkout.html'}
-function toggleWishlist(){var b=document.getElementById('wishlist-btn');if(!b)return;b.classList.toggle('wishlisted')}
-function shareProduct(){if(navigator.share){navigator.share({title:product?v.product.title:'',url:location.href})}else{navigator.clipboard.writeText(location.href);alert('Link copied!')}}
+
+function toggleWishlist(){var b=document.getElementById('wishlist-btn');if(b)b.classList.toggle('wishlisted')}
+
+function shareProduct(){if(navigator.share){navigator.share({title:product?product.title:'',url:location.href})}else{navigator.clipboard.writeText(location.href);alert('Link copied!')}}
+
 function changeQty(d){qty=Math.max(1,qty+d);document.getElementById('qty-value').textContent=qty;document.getElementById('qty-minus').disabled=qty<=1;document.getElementById('qty-plus').disabled=qty>=99}
+
 function loadMoreReviews(){reviewsShownCount+=5;renderReviews()}
+
 function scrollToReviews(){document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})}
-function updateCartCount(){var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');var el=document.getElementById('cart-badge');if(el){var n=c.reduce(function(s,i){return s+(i.qty||1)},0);el.textContent=n;el.style.display=n?'':'none'}}
 
 function showProduct(){if(!product)return;
 var p=product;
@@ -33,9 +41,9 @@ var imgs=p.images||[p.image];
 if(imgs.length>0){allImages=imgs;
 document.getElementById('product-img').src=imgs[0];
 var t=document.getElementById('prod-thumbs');t.innerHTML='';
-ifds.length>1){imgs.forEach(function(src,i){
-var i=document.createElement('img');ii.src=src;ii.className=i===0?'active':'';ii.onclick=function(){currentImgIdx=i;document.getElementById('product-img').src=src;this.parentNode.querySelectorAll('img').forEach(function(){this.classList.remove('active')});this.classList.add('active')};t.appendChild(ii)});
-document.getElementById('gallery-count').textContent='1/'+imgs.length;document.getElementById('gallery-count').style.display=''}}
+if(imgs.length>1){imgs.forEach(function(src,i){
+var ii=document.createElement('img');ii.src=src;ii.className=i===0?'active':'';ii.onclick=function(){currentImgIdx=i;document.getElementById('product-img').src=src;this.parentNode.querySelectorAll('img').forEach(function(x){x.classList.remove('active')});this.classList.add('active')};t.appendChild(ii)});
+document.getElementById('gallery-count').textContent='1/'+imgs.length;document.getElementById('gallery-count').style.display=''}}}
 if(p.compare_at_price&&p.compare_at_price>p.price){
 var d=Math.round((1-p.price/p.compare_at_price)*100);
 document.getElementById('product-original').textContent=money(p.compare_at_price);
@@ -44,17 +52,17 @@ document.getElementById('product-original').style.display='';
 document.getElementById('product-discount').style.display='';
 document.getElementById('savings').style.display='';
 document.getElementById('savings-text').textContent='You save '+money(p.compare_at_price-p.price);
-document.getElementById('gallery-badge').textContent='-'+d+'%;
+document.getElementById('gallery-badge').textContent='-'+d+'%';
 document.getElementById('gallery-badge').style.display=''}
-if(p.body_html){document.getElementById('product-desc').innerHTML=p.body_html}else{document.getElementById('product-desc').textContent='No description available.'}
-hideLoad();updateCartCount()}
+document.getElementById('product-desc').innerHTML=p.body_html||'No description available.';hideLoad();updateCartCount()}
 
-fuction loadProduct(){if(!pid){showError('No product ID');return}
+function loadProduct(){if(!pid){showError('No product ID');return}
 var cached=localStorage.getItem('bd_product_'+pid);
 if(cached){try{product=JSON.parse(cached);showProduct();return}catch(e){}}
 document.getElementById('loading-text').textContent='Loading product...';
 var x=new XMLHttpRequest();x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json',true);x.timeout=30000;
 x.onload=function(){if(x.status===200){try{var d=JSON.parse(x.responseText);for(var c in d){var items=d[c].products||[];for(var i=0;i<items.length;i++){if(String(items[i].id)===String(pid)){product=items[i];break}}if(product)break}
-if(product){localStorage.setItem('bd_product_'+pid,JSON.stringify(product));showProduct()}else{showError('Product not found')}}catch(e){slowError('Failed to load product')}}else{slowError('Failed to load product')}};x.onerror=function(){slowError('Failed to load product')};x.send()}
+if(product){localStorage.setItem('bd_product_'+pid,JSON.stringify(product));showProduct()}else{showError('Product not found')}}catch(e){showError('Failed to load product')}}else{showError('Failed to load product')}};
+x.onerror=function(){showError('Failed to load product')};x.send()}
 
 window.onload=loadProduct;
