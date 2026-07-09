@@ -74,5 +74,26 @@ grid.appendChild(c);
 function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 load();
 </script>
+
+<script>
+(function(){
+  var pic = localStorage.getItem('bd_user_pic');
+  if (!pic) return;
+  var links = document.querySelectorAll('a[href="profile.html"]');
+  links.forEach(function(a){
+    var svg = a.querySelector('svg');
+    if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
+    // Check if this SVG has the person icon (circle + body path)
+    var svgText = svg.outerHTML || svg.innerHTML || '';
+    if (svgText.indexOf('M20 21v-2') === -1) return;
+    svg.style.display = 'none';
+    var img = document.createElement('img');
+    img.src = pic;
+    img.alt = 'Profile';
+    img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
+    a.insertBefore(img, svg);
+  });
+})();
+</script>
 </body>
 </html>
