@@ -91,9 +91,13 @@
 
   // Get user's selected currency code
   BD.getCurrency = function () {
+    // Try session-based key first, then fall back to guest key
     var s = (typeof BD.getSession === 'function') ? BD.getSession() : null;
-    var email = (s && s.email) ? s.email.toLowerCase() : 'guest';
-    return localStorage.getItem('bd_currency_' + email) || 'AUD';
+    if (s && s.email) {
+      var val = localStorage.getItem('bd_currency_' + s.email.toLowerCase());
+      if (val) return val;
+    }
+    return localStorage.getItem('bd_currency_guest') || 'AUD';
   };
 
   // Set user's selected currency
