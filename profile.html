@@ -8,7 +8,7 @@
   <script src="profile-pic.js"></script>
 </head>
 <body>
-<div class="top-bar"><a href="/">← Home</a><div>Free Shipping $29+</div></div>
+<div class="top-bar"><a href="/">← Home</a><div>Free Shipping <span id="free-ship-amt">A$41+</span></div></div>
 
 <!-- Avatar / greeting -->
 <div class="avatar-header">
@@ -96,6 +96,11 @@
       <span class="mi-value" id="payments-count">0 methods</span>
       <span class="mi-arrow">→</span>
     </a>
+    <div class="list-row" id="currency-row" style="cursor:default">
+      <div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#333" stroke-width="1.8"/><path d="M12 6v12M9 9h6M9 12h6M9 15h4" stroke="#333" stroke-width="1.5"/></svg></div>
+      <div class="mi-info"><div class="mi-label">Currency</div><div class="mi-desc" id="currency-desc">Australian Dollar (A$)</div></div>
+      <div class="mi-value" id="currency-select-container"></div>
+    </div>
     <a href="wishlist.html" class="list-row">
       <div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#333" stroke-width="1.5"/></svg></div>
       <div class="mi-info"><div class="mi-label">Wishlist</div><div class="mi-desc">Items you've saved</div></div>
@@ -167,6 +172,7 @@
 </nav>
 
 <script src="js/account.js"></script>
+<script src="js/currency.js"></script>
 <script>
 (function () {
   // Handle Google auth callback hash
@@ -220,6 +226,15 @@
   document.getElementById('addresses-count').textContent = BD.addresses.list().length + ' saved';
   document.getElementById('payments-count').textContent = BD.payments.list().length + ' methods';
   document.getElementById('wishlist-count').textContent = BD.wishlist.list().length + ' items';
+  
+  // Initialize currency selector
+  BD.initCurrency().then(function () {
+    BD.renderCurrencySelector('currency-select-container', function (newCode) {
+      location.reload();
+    });
+    var info = BD.getCurrencyInfo();
+    document.getElementById('currency-desc').textContent = info.name + ' (' + info.symbol + ')';
+  });
 })();
 
 function handleLogout() {

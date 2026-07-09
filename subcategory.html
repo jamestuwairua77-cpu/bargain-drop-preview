@@ -73,9 +73,10 @@ grid.appendChild(c);
 })}catch(e){document.getElementById('loading').innerHTML='<h2></h2><p>'+e.message+'</p><br><a href=categories.html>← Back</a>'}
 }
 function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-load();
+BD.initCurrency().then(function(){ load(); });
 </script>
 
 
+<script src="js/currency.js"></script>
 </body>
 </html>
