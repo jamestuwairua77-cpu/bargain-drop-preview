@@ -45,32 +45,31 @@
   // Initialize — returns a Promise
   BD.initCurrency = function () {
     return new Promise(function (resolve) {
-      // 1. Load rates from cache or fetch fresh
       var cachedRates = localStorage.getItem(RATES_KEY);
       var cachedTS = localStorage.getItem(RATES_TS_KEY);
       var now = Date.now();
 
       function applyRates(rates) {
         BD._rates = rates;
-        // Update rate in currency defs
         Object.keys(BD.currencyDefs).forEach(function (code) {
           if (rates[code] !== undefined) {
             BD.currencyDefs[code].rate = rates[code];
           }
         });
-        resolve();
       }
 
+      // 1. Apply cached or fallback rates IMMEDIATELY
       if (cachedRates && cachedTS && (now - parseInt(cachedTS, 10)) < CACHE_MS) {
-        try {
-          var rates = JSON.parse(cachedRates);
-          applyRates(rates);
-          return;
-        } catch (e) { /* fall through to fetch */ }
+        try { applyRates(JSON.parse(cachedRates)); }
+        catch (e) { applyRates(FALLBACK_RATES); }
+      } else {
+        applyRates(FALLBACK_RATES);
       }
 
-      // 2. Fetch live rates from ExchangeRate-API (free — no key needed)
-      // Base: AUD → all others
+      // 2. Resolve NOW — don't block page rendering
+      resolve();
+
+      // 3. Fetch fresh rates in background
       fetch('https://open.er-api.com/v6/latest/AUD')
         .then(function (r) { return r.json(); })
         .then(function (data) {
@@ -81,18 +80,12 @@
                 live[code] = data.rates[code];
               }
             });
-            // Cache in localStorage
             localStorage.setItem(RATES_KEY, JSON.stringify(live));
-            localStorage.setItem(RATES_TS_KEY, String(now));
+            localStorage.setItem(RATES_TS_KEY, String(Date.now()));
             applyRates(live);
-          } else {
-            applyRates(FALLBACK_RATES);
           }
         })
-        .catch(function () {
-          // API failed — use fallback rates
-          applyRates(FALLBACK_RATES);
-        });
+        .catch(function () { /* silent */ });
     });
   };
 
