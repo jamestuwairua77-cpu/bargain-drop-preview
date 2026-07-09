@@ -71,6 +71,7 @@ a{color:inherit;text-decoration:none}
 </nav>
 <script>function toggleFAQ(el){el.querySelector('.faq-q').classList.toggle('open');el.querySelector('.faq-a').classList.toggle('open')}</script>
 
+
 <script>
 (function(){
   var pic = localStorage.getItem('bd_user_pic');
@@ -79,7 +80,6 @@ a{color:inherit;text-decoration:none}
   links.forEach(function(a){
     var svg = a.querySelector('svg');
     if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
-    // Check if this SVG has the person icon (circle + body path)
     var svgText = svg.outerHTML || svg.innerHTML || '';
     if (svgText.indexOf('M20 21v-2') === -1) return;
     svg.style.display = 'none';
@@ -87,6 +87,7 @@ a{color:inherit;text-decoration:none}
     img.src = pic;
     img.alt = 'Profile';
     img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
+    img.onerror = function(){ svg.style.display=''; img.remove(); };
     a.insertBefore(img, svg);
   });
 })();

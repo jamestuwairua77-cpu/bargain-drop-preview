@@ -179,6 +179,7 @@ function finishDemo(oid,s,method){
   location.href='profile.html';
 }
 </script>
+
 <script>
 (function(){
   var pic = localStorage.getItem('bd_user_pic');
@@ -187,7 +188,6 @@ function finishDemo(oid,s,method){
   links.forEach(function(a){
     var svg = a.querySelector('svg');
     if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
-    // Check if this SVG has the person icon (circle + body path)
     var svgText = svg.outerHTML || svg.innerHTML || '';
     if (svgText.indexOf('M20 21v-2') === -1) return;
     svg.style.display = 'none';
@@ -195,6 +195,7 @@ function finishDemo(oid,s,method){
     img.src = pic;
     img.alt = 'Profile';
     img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
+    img.onerror = function(){ svg.style.display=''; img.remove(); };
     a.insertBefore(img, svg);
   });
 })();

@@ -42,44 +42,6 @@
   <a href="profile.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#111" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="#111" stroke-width="2"/></svg>Me</a>
 </nav>
 <script src="js/account.js"></script>
-<script>
-(function(){
-  var user = BD.requireAuth(); if (!user) return;
-  renderPayments();
-  function renderPayments(){
-    var pays = BD.payments.list();
-    var list = document.getElementById('payment-list');
-    var empty = document.getElementById('empty-state');
-    if (pays.length === 0) { list.style.display='none'; empty.style.display='block'; return; }
-    empty.style.display='none';
-    var html = '';
-    pays.forEach(function(p){
-      html += '<div class="list-row">';
-      html += '<div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#333" stroke-width="1.8"/><line x1="2" y1="10" x2="22" y2="10" stroke="#333" stroke-width="1.5"/></svg></div>';
-      html += '<div class="mi-info"><div class="mi-label">' + BD.escape(p.brand || 'Card') + ' ending in ' + BD.escape((p.last4 || '****').slice(-4)) + '</div><div class="mi-desc">Expires ' + BD.escape(p.expiry || '--') + '</div></div>';
-      if (p.isDefault) html += '<span class="status-pill default">Default</span>';
-      html += '<span class="mi-arrow">&rarr;</span>';
-      html += '</div>';
-    });
-    list.innerHTML = html;
-  }
-  window.addPayment = function(){
-    var p = {
-      id: BD.uid('pay'),
-      brand: 'Visa',
-      last4: (document.getElementById('field-number').value || '4242').slice(-4),
-      expiry: document.getElementById('field-expiry').value || '12/26',
-      holder: document.getElementById('field-holder').value
-    };
-    if (!p.holder) return alert('Name on card is required.');
-    BD.payments.add(p);
-    renderPayments();
-    ['field-number','field-holder','field-expiry','field-cvv'].forEach(function(id){ document.getElementById(id).value = ''; });
-    var t = document.getElementById('toast'); if (t) { t.textContent = 'Card saved!'; t.className += ' show'; setTimeout(function(){ t.className = t.className.replace(' show',''); }, 2000); }
-  };
-})();
-</script>
-<div class="toast" id="toast"></div>
 
 <script>
 (function(){
@@ -89,7 +51,6 @@
   links.forEach(function(a){
     var svg = a.querySelector('svg');
     if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
-    // Check if this SVG has the person icon (circle + body path)
     var svgText = svg.outerHTML || svg.innerHTML || '';
     if (svgText.indexOf('M20 21v-2') === -1) return;
     svg.style.display = 'none';
@@ -97,6 +58,7 @@
     img.src = pic;
     img.alt = 'Profile';
     img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
+    img.onerror = function(){ svg.style.display=''; img.remove(); };
     a.insertBefore(img, svg);
   });
 })();
