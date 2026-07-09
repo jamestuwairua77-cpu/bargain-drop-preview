@@ -219,7 +219,7 @@
     try {
       return new Intl.NumberFormat(undefined, { style: 'currency', currency: c }).format(Number(amount) || 0);
     } catch (e) {
-      return '$' + (Number(amount) || 0).toFixed(2);
+      return (typeof BD !== 'undefined' && BD.formatMoneyCompact) ? BD.formatMoneyCompact(amount || 0) : '$' + (Number(amount) || 0).toFixed(2);
     }
   };
 

@@ -69,7 +69,7 @@ var grid=document.getElementById('grid');
 if(!found.products||found.products.length===0){grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);grid-column:1/-1"><h2></h2><p>No products</p></div>';return}
 found.products.forEach(function(prod){
 var c=document.createElement('a');c.className='product-card';c.href='product.html?id='+prod.id;
-c.innerHTML='<div class="prod-img">'+(prod.image?'<img src="'+prod.image+'" alt="" loading="lazy">':'<span class="no-img"></span>')+'</div><div class="prod-info"><div class="prod-title">'+esc(prod.title)+'</div><div class="prod-price-row"><span class="prod-price">$'+(prod.price||0).toFixed(2)+'</span><span class="prod-compare">$'+(prod.compare_at_price||0).toFixed(2)+'</span></div></div>';
+c.innerHTML='<div class="prod-img">'+(prod.image?'<img src="'+prod.image+'" alt="" loading="lazy">':'<span class="no-img"></span>')+'</div><div class="prod-info"><div class="prod-title">'+esc(prod.title)+'</div><div class="prod-price-row"><span class="prod-price">'+BD.formatMoneyCompact(prod.price||0)+'</span><span class="prod-compare">'+BD.formatMoneyCompact(prod.compare_at_price||0)+'</span></div></div>';
 grid.appendChild(c);
 })}catch(e){document.getElementById('loading').innerHTML='<h2></h2><p>'+e.message+'</p><br><a href=categories.html>← Back</a>'}
 }
