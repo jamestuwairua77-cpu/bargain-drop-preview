@@ -56,7 +56,7 @@ async function load(){
 var p=new URLSearchParams(location.search);
 var handle=p.get('handle');
 if(!handle){document.getElementById('loading').innerHTML='<h2></h2><p>No subcategory</p>';return}
-try{var r=await fetch('categories-data.json?v=3');var data=await r.json();var found=null;var catName='';
+try{var r=await fetch('https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@6aa8315/categories-data.json?v=3');var data=await r.json();var found=null;var catName='';
 for(var c in data){var cat=data[c];var sub=(cat.subcategories||[]).find(function(s){return s.handle===handle});if(sub){found=sub;catName=c;break}}
 if(!found)throw new Error('Not found');
 document.getElementById('loading').style.display='none';document.getElementById('content').style.display='block';
