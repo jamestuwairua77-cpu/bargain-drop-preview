@@ -43,7 +43,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 <div id="g_id_onload" 
      data-client_id="489382559871-t7hh34fgbr23vkifi1u8kd9s7dolrv20.apps.googleusercontent.com"
      data-auto_select="false"
-     data-login_uri="https://bargain-drop-preview-v10.vercel.app/api/google-callback"
+     data-login_uri="https://bargain-drop.online/api/google-callback"
      data-cancel_on_tap_outside="false">
 </div>
 
@@ -97,7 +97,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 </div>
 
 <script>
-var API_BASE = 'https://bargain-drop-preview-v10.vercel.app';
+var API_BASE = 'https://bargain-drop.online';  // uses canonical domain for API calls
 var GOOGLE_CLIENT_ID = '489382559871-t7hh34fgbr23vkifi1u8kd9s7dolrv20.apps.googleusercontent.com';
 
 // Check for Google auth callback
@@ -201,12 +201,12 @@ function handleGoogleSignIn(){
   // Use Google's OAuth 2.0 redirect flow directly
   var authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
     'client_id=' + encodeURIComponent('489382559871-t7hh34fgbr23vkifi1u8kd9s7dolrv20.apps.googleusercontent.com') +
-    '&redirect_uri=' + encodeURIComponent('https://bargain-drop-preview-v10.vercel.app/api/google-callback') +
+    '&redirect_uri=' + encodeURIComponent('https://bargain-drop.online/api/google-callback') +
     '&response_type=code' +
     '&scope=' + encodeURIComponent('openid email profile') +
     '&access_type=offline' +
     '&prompt=select_account' +
-    '&state=' + encodeURIComponent('https://bargain-drop-preview-v10.vercel.app/profile.html');
+    '&state=' + encodeURIComponent('https://bargain-drop.online/profile.html');
   
   window.location.href = authUrl;
 }

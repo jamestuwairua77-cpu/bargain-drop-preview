@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   const GOOGLE_CLIENT_ID = '489382559871-t7hh34fgbr23vkifi1u8kd9s7dolrv20.apps.googleusercontent.com';
   const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
-  const REDIRECT_URI = 'https://bargain-drop-preview-v10.vercel.app/api/google-callback';
+  const REDIRECT_URI = (req.headers['x-forwarded-proto'] || 'https') + '://' + (req.headers.host || 'bargain-drop.online') + '/api/google-callback';
 
   // Google Identity Services sends credential (ID token) via POST
   if (req.method === 'POST') {
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         const user = await userRes.json();
         const payload = { email: user.email, name: user.name, picture: user.picture, email_verified: user.email_verified };
         const encoded = encodeURIComponent(JSON.stringify(payload));
-        return res.redirect(302, 'https://bargain-drop-preview-v10.vercel.app/profile.html#google-auth=' + encoded);
+        return res.redirect(302, 'https://bargain-drop.online/profile.html#google-auth=' + encoded);
       }
       
       // Try parsing credential as JWT directly
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
         const user = { email: payload.email, name: payload.name, picture: payload.picture, email_verified: payload.email_verified };
         const encoded = encodeURIComponent(JSON.stringify(user));
-        return res.redirect(302, 'https://bargain-drop-preview-v10.vercel.app/profile.html#google-auth=' + encoded);
+        return res.redirect(302, 'https://bargain-drop.online/profile.html#google-auth=' + encoded);
       }
     } catch (e) {
       return res.status(500).json({ error: e.message });
@@ -80,7 +80,7 @@ export default async function handler(req, res) {
     };
 
     const encoded = encodeURIComponent(JSON.stringify(payload));
-    const redirectTo = state || 'https://bargain-drop-preview-v10.vercel.app/profile.html';
+    const redirectTo = state || 'https://bargain-drop.online/profile.html';
     return res.redirect(302, redirectTo + '#google-auth=' + encoded);
   } catch (e) {
     return res.status(500).json({ error: e.message });

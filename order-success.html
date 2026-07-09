@@ -14,7 +14,7 @@
   <a href="/" style="background:none;color:var(--muted);font-size:.7rem;text-decoration:underline">← Continue Shopping</a>
 </div>
 <script>
-window.API_BASE="https://bargain-drop-preview-v10.vercel.app";
+window.API_BASE="https://bargain-drop.online";
 var p=new URLSearchParams(location.search);
 var id=p.get('id')||p.get('oid')||'';
 if(id)document.getElementById('oid').textContent='Order #'+id;
@@ -31,7 +31,7 @@ if(id){
       <div id="cj-status" style="margin-top:10px"></div>
     </div>
     <script>
-window.API_BASE="https://bargain-drop-preview-v10.vercel.app";
+window.API_BASE="https://bargain-drop.online";
     (async function(){
       var oid=new URLSearchParams(location.search).get('id')||'';
       var ord=JSON.parse(localStorage.getItem('order_'+oid)||'null');
@@ -43,7 +43,7 @@ window.API_BASE="https://bargain-drop-preview-v10.vercel.app";
         btn.disabled=true;btn.textContent='⏳ Syncing to CJ...';
         var st=document.getElementById('cj-status');
         try{
-          var resp=await fetch(window.API_BASE||'https://bargain-drop-preview-v10.vercel.app','/api/cj-order',{
+          var resp=await fetch(window.API_BASE||'https://bargain-drop.online','/api/cj-order',{
             method:'POST',headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
               line_items:ord.items||[],customer_email:ord.email,
