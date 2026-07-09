@@ -152,7 +152,7 @@
       emailOrders: true, emailPromos: true, emailNewsletter: false, emailPriceDrops: true,
       smsOrders: false, smsPromos: false,
       pushOrders: true, pushPromos: false,
-      language: 'en', currency: 'USD'
+      language: 'en', currency: 'AUD'
     },
     get: function () { return Object.assign({}, BD.prefs.defaults, BD.read('prefs', {})); },
     save: function (p) { BD.write('prefs', p); }
@@ -215,7 +215,7 @@
   };
 
   BD.fmtMoney = function (amount, currency) {
-    var c = currency || 'USD';
+    var c = currency || 'AUD';
     try {
       return new Intl.NumberFormat(undefined, { style: 'currency', currency: c }).format(Number(amount) || 0);
     } catch (e) {
@@ -242,7 +242,7 @@
         status: 'shipped',
         placedAt: new Date(now - 86400000 * 3).toISOString(),
         total: 45.98,
-        currency: 'USD',
+        currency: 'AUD',
         tracking: { carrier: 'USPS', number: '9400111899223197428347', url: 'https://tools.usps.com/go/TrackConfirmAction' },
         items: [
           { id: 'p1', name: 'Wireless Earbuds Pro', qty: 1, price: 29.99, img: '' },
@@ -255,7 +255,7 @@
         status: 'review',
         placedAt: new Date(now - 86400000 * 12).toISOString(),
         total: 18.50,
-        currency: 'USD',
+        currency: 'AUD',
         tracking: null,
         items: [{ id: 'p3', name: 'Bluetooth Speaker Mini', qty: 1, price: 18.50, img: '' }],
         address: 'Default shipping address'
