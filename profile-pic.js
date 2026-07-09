@@ -1,7 +1,7 @@
 (function(){
   var pic = localStorage.getItem('bd_user_pic');
   if (!pic || pic === 'undefined' || pic === 'null') return;
-  
+
   function swapIcons() {
     var links = document.querySelectorAll('a[href="profile.html"]');
     links.forEach(function(a) {
@@ -20,10 +20,15 @@
       a.insertBefore(img, svg);
     });
   }
-  
+
+  // Run on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', swapIcons);
   } else {
     swapIcons();
   }
+
+  // Also run after a short delay in case of dynamic content
+  setTimeout(swapIcons, 500);
+  setTimeout(swapIcons, 1500);
 })();
