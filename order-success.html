@@ -8,8 +8,8 @@
 </head><body>
 <div class="card">
   <div class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-  <h1>Payment Confirmed!</h1>
-  <p>Your order has been placed and payment processed via Stripe.</p>
+  <h1>Order Confirmed!</h1>
+  <p>Your order has been placed and payment processed successfully.</p>
   <div class="oid" id="oid"></div>
   <a href="profile.html">View My Orders</a><br><br>
   <a href="/" style="background:none;color:var(--muted);font-size:.7rem;text-decoration:underline">← Continue Shopping</a>
@@ -44,7 +44,7 @@ window.API_BASE="https://bargain-drop.online";
         btn.disabled=true;btn.textContent='⏳ Syncing to CJ...';
         var st=document.getElementById('cj-status');
         try{
-          var resp=await fetch(window.API_BASE||'https://bargain-drop.online','/api/cj-order',{
+          var resp=await fetch((window.API_BASE||'https://bargain-drop.online')+'/api/cj-order',{
             method:'POST',headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
               line_items:ord.items||[],customer_email:ord.email,

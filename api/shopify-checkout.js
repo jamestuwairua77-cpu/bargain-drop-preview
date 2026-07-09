@@ -5,22 +5,25 @@ export default async function handler(req, res) {
   const SHOPIFY_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || '';
   const SHOP = 'bargain-drop-8194.myshopify.com';
   
-  if (!SHOPIFY_TOKEN || !SHOPIFY_TOKEN.startsWith('shp')) {
+  if (!SHOPIFY_TOKEN) {
     return res.status(500).json({ error: 'Shopify access token not configured' });
   }
 
   try {
     // Map line items to Shopify format
+    const currency = (req.body.currency || (line_items[0] && line_items[0].price_data && line_items[0].price_data.currency) || 'AUD').toLowerCase();
     const items = line_items.map(item => ({
       variant_id: item.variant_id || null,
       title: item.price_data?.product_data?.name || 'Product',
       price: (item.price_data?.unit_amount / 100).toFixed(2),
-      quantity: item.quantity || 1
+      quantity: item.quantity || 1,
+      currency: item.price_data?.currency || currency
     }));
 
     // Create order via Shopify REST API
     const orderData = {
       order: {
+        currency: currency.toUpperCase(),
         email: customer_email,
         financial_status: 'pending',
         send_receipt: true,
