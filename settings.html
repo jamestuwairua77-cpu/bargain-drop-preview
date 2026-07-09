@@ -68,6 +68,7 @@ a{color:inherit;text-decoration:none}
 .logout-btn{width:100%;padding:12px;margin-top:8px;background:#fff;color:var(--red);border:1.5px solid var(--red);border-radius:10px;font-size:.75rem;font-weight:700;cursor:pointer;text-align:center;display:none}
 .logout-btn:hover{background:#fef2f2}
 </style>
+  <script src="profile-pic.js"></script>
 </head>
 <body>
 <div class="top-bar"><a href="profile.html">← Profile</a><div>Free Shipping $29+</div></div>
@@ -144,25 +145,5 @@ function doLogout(){
 </script>
 
 
-<script>
-(function(){
-  var pic = localStorage.getItem('bd_user_pic');
-  if (!pic) return;
-  var links = document.querySelectorAll('a[href="profile.html"]');
-  links.forEach(function(a){
-    var svg = a.querySelector('svg');
-    if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
-    var svgText = svg.outerHTML || svg.innerHTML || '';
-    if (svgText.indexOf('M20 21v-2') === -1) return;
-    svg.style.display = 'none';
-    var img = document.createElement('img');
-    img.src = pic;
-    img.alt = 'Profile';
-    img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
-    img.onerror = function(){ svg.style.display=''; img.remove(); };
-    a.insertBefore(img, svg);
-  });
-})();
-</script>
 </body>
 </html>

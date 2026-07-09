@@ -135,6 +135,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .related-title{font-size:.7rem;line-height:1.3;color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px;min-height:1.8em}
 .related-price{font-size:.85rem;font-weight:800;color:var(--red)}
 </style>
+  <script src="profile-pic.js"></script>
 </head>
 <body>
 <div id="loading-overlay" class="loading-overlay"><div class="spinner"></div><div class="loading-text" id="loading-text">Loading product...</div></div>
@@ -250,25 +251,5 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <script src="js/product.js"></script>
 
 
-<script>
-(function(){
-  var pic = localStorage.getItem('bd_user_pic');
-  if (!pic) return;
-  var links = document.querySelectorAll('a[href="profile.html"]');
-  links.forEach(function(a){
-    var svg = a.querySelector('svg');
-    if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
-    var svgText = svg.outerHTML || svg.innerHTML || '';
-    if (svgText.indexOf('M20 21v-2') === -1) return;
-    svg.style.display = 'none';
-    var img = document.createElement('img');
-    img.src = pic;
-    img.alt = 'Profile';
-    img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
-    img.onerror = function(){ svg.style.display=''; img.remove(); };
-    a.insertBefore(img, svg);
-  });
-})();
-</script>
 </body>
 </html>

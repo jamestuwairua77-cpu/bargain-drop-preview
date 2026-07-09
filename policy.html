@@ -31,6 +31,7 @@ a{color:inherit;text-decoration:none}
 .bottom-nav a.active{color:var(--fg)}
 .nav-icon{width:20px;height:20px;flex-shrink:0}
 </style>
+  <script src="profile-pic.js"></script>
 </head>
 <body>
 <div class="top-bar"><a href="profile.html">← Profile</a><div>Free Shipping $29+</div></div>
@@ -108,25 +109,5 @@ document.getElementById('s-'+this.dataset.section).style.display='block';
 </script>
 
 
-<script>
-(function(){
-  var pic = localStorage.getItem('bd_user_pic');
-  if (!pic) return;
-  var links = document.querySelectorAll('a[href="profile.html"]');
-  links.forEach(function(a){
-    var svg = a.querySelector('svg');
-    if (!svg || a.querySelector('img[src]') || svg.querySelector('img')) return;
-    var svgText = svg.outerHTML || svg.innerHTML || '';
-    if (svgText.indexOf('M20 21v-2') === -1) return;
-    svg.style.display = 'none';
-    var img = document.createElement('img');
-    img.src = pic;
-    img.alt = 'Profile';
-    img.style.cssText = 'width:22px;height:22px;border-radius:50%;object-fit:cover';
-    img.onerror = function(){ svg.style.display=''; img.remove(); };
-    a.insertBefore(img, svg);
-  });
-})();
-</script>
 </body>
 </html>
