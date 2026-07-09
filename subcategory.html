@@ -64,7 +64,7 @@ document.title=found.title+' — Bargain Drop';
 document.getElementById('title').textContent=found.title;
 document.getElementById('cat-link').textContent=catName;
 document.getElementById('cat-link').href='category.html?cat='+encodeURIComponent(catName);
-document.getElementById('count').textContent=found.product_count+' products';
+document.getElementById('count').textContent='';
 var grid=document.getElementById('grid');
 if(!found.products||found.products.length===0){grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);grid-column:1/-1"><h2></h2><p>No products</p></div>';return}
 found.products.forEach(function(prod){
