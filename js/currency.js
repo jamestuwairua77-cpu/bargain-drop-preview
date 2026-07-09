@@ -99,9 +99,12 @@
   // Set user's selected currency
   BD.setCurrency = function (code) {
     if (!BD.currencyDefs[code]) return false;
+    // Write to both session key AND guest key for cross-page consistency
     var s = (typeof BD.getSession === 'function') ? BD.getSession() : null;
-    var email = (s && s.email) ? s.email.toLowerCase() : 'guest';
-    localStorage.setItem('bd_currency_' + email, code);
+    if (s && s.email) {
+      localStorage.setItem('bd_currency_' + s.email.toLowerCase(), code);
+    }
+    localStorage.setItem('bd_currency_guest', code);
     return true;
   };
 

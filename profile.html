@@ -254,7 +254,7 @@
   })();
 })();
 
-function changeCurrency(code) { var s = BD.getSession ? BD.getSession() : null; var email = (s && s.email) ? s.email.toLowerCase() : "guest"; localStorage.setItem("bd_currency_" + email, code); location.reload(); }
+function changeCurrency(code) { localStorage.setItem("bd_currency_guest", code); try { var s = JSON.parse(localStorage.getItem("bd_session") || "null"); if (s && s.email) { localStorage.setItem("bd_currency_" + s.email.toLowerCase(), code); } } catch(e) {} location.reload(); }
 function handleLogout() {
   if (confirm('Are you sure you want to sign out?')) BD.logout();
 }

@@ -8,7 +8,7 @@
   <script src="profile-pic.js"></script>
 </head>
 <body>
-<div class="top-bar"><a href="profile.html">← Back</a><div>Free Shipping $29+</div></div>
+<div class="top-bar"><a href="profile.html" class="active">← Back</a><div>Free Shipping $29+</div></div>
 <div class="page-header">
   <div class="breadcrumb"><a href="profile.html">My Account</a> →> Returns & Exchanges</div>
   <h1>Returns &amp; Exchanges</h1>
@@ -35,7 +35,7 @@
 <script src="js/account.js"></script>
 <script src="js/currency.js"></script>
 <script>
-)function(){
+(function(){
   var user = BD.requireAuth(); if (!user) return;
   var returns = BD.returns.list();
   var list = document.getElementById('returns-list');
