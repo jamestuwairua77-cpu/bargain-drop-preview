@@ -5,7 +5,7 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 var ALL=[],RAW={};
 (function load(){
 var x=new XMLHttpRequest();
-x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json',true);
+x.open('GET','https://raw.githubusercontent.com/jamestuwairua77-cpu/bargain-drop-preview/main/categories-data.json',true);
 x.onload=function(){if(x.status>=200&&x.status<400){RAW=JSON.parse(x.responseText);var cats=Object.keys(RAW),prods=[];for(var i=0;i<cats.length;i++){var c=cats[i],items=RAW[c]&&RAW[c].products?RAW[c].products:[];for(var j=0;j<items.length;j++){var p=items[j];p._cat=c;p._emoji=C[c]||'[box]';prods.push(p)}}ALL=prods;renderCats(cats);renderProds(prods.slice(0,50))}};
 x.send()
 })();
