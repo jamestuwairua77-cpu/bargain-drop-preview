@@ -168,6 +168,19 @@
 <script src="js/account.js"></script>
 <script>
 (function () {
+  // Handle Google auth callback hash
+  if (location.hash && location.hash.includes('google-auth=')) {
+    try {
+      var raw = location.hash.split('google-auth=')[1];
+      var gUser = JSON.parse(decodeURIComponent(raw));
+      localStorage.setItem('bd_session', JSON.stringify(gUser));
+      localStorage.setItem('bd_user_name', gUser.name || '');
+      localStorage.setItem('bd_user_email', gUser.email || '');
+      localStorage.setItem('bd_user_pic', gUser.picture || '');
+      history.replaceState(null, null, location.pathname);
+    } catch(e) {}
+  }
+  
   var user = BD.requireAuth();
   if (!user) return;
   BD.seedIfEmpty();
