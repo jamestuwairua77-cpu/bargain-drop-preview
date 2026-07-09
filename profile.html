@@ -99,7 +99,19 @@
     <div class="list-row" id="currency-row" style="cursor:default">
       <div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#333" stroke-width="1.8"/><path d="M12 6v12M9 9h6M9 12h6M9 15h4" stroke="#333" stroke-width="1.5"/></svg></div>
       <div class="mi-info"><div class="mi-label">Currency</div><div class="mi-desc" id="currency-desc">Australian Dollar (A$)</div></div>
-      <div class="mi-value" id="currency-select-container"></div>
+      <div class="mi-value">
+        <select id="currency-select" style="padding:6px 10px;border:1.5px solid #eee;border-radius:8px;font-size:.8rem;background:#fff;cursor:pointer" onchange="changeCurrency(this.value)">
+          <option value="AUD">🇦🇺 AUD (A$)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="EUR">🇪🇺 EUR (€)</option>
+          <option value="GBP">🇬🇧 GBP (£)</option>
+          <option value="CAD">🇨🇦 CAD (C$)</option>
+          <option value="NZD">🇳🇿 NZD (N$)</option>
+          <option value="JPY">🇯🇵 JPY (¥)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="HKD">🇭🇰 HKD (HK$)</option>
+        </select>
+      </div>
     </div>
     <a href="wishlist.html" class="list-row">
       <div class="mi-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#333" stroke-width="1.5"/></svg></div>
@@ -227,16 +239,22 @@
   document.getElementById('payments-count').textContent = BD.payments.list().length + ' methods';
   document.getElementById('wishlist-count').textContent = BD.wishlist.list().length + ' items';
   
-  // Initialize currency selector
-  BD.initCurrency().then(function () {
-    BD.renderCurrencySelector('currency-select-container', function (newCode) {
-      location.reload();
-    });
-    var info = BD.getCurrencyInfo();
-    document.getElementById('currency-desc').textContent = info.name + ' (' + info.symbol + ')';
-  });
+  // Set selected currency in dropdown
+  (function() {
+    var cur = localStorage.getItem('bd_currency_guest') || 'AUD';
+    var s = BD.getSession ? BD.getSession() : null;
+    if (s && s.email) {
+      cur = localStorage.getItem('bd_currency_' + s.email.toLowerCase()) || 'AUD';
+    }
+    var sel = document.getElementById('currency-select');
+    if (sel) { sel.value = cur; }
+    var defs = {AUD:'Australian Dollar (A$)',USD:'US Dollar ($)',EUR:'Euro (€)',GBP:'British Pound (£)',CAD:'Canadian Dollar (C$)',NZD:'New Zealand Dollar (N$)',JPY:'Japanese Yen (¥)',SGD:'Singapore Dollar (S$)',HKD:'Hong Kong Dollar (HK$)'};
+    var desc = document.getElementById('currency-desc');
+    if (desc) { desc.textContent = defs[cur] || defs['AUD']; }
+  })();
 })();
 
+function changeCurrency(code) { var s = BD.getSession ? BD.getSession() : null; var email = (s && s.email) ? s.email.toLowerCase() : "guest"; localStorage.setItem("bd_currency_" + email, code); location.reload(); }
 function handleLogout() {
   if (confirm('Are you sure you want to sign out?')) BD.logout();
 }
