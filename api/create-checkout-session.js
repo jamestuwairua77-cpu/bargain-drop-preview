@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
-  const { line_items, customer_email, success_url, cancel_url, metadata } = req.body;
+  const { line_items, customer_email, success_url, cancel_url, metadata, payment_method } = req.body;
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY || '';
 
   if (!STRIPE_KEY) {
@@ -19,10 +19,18 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
 
-    // All AU payment methods — remove any that aren't activated in your dashboard
-    // All activated payment methods from Stripe dashboard
-    const methods = ['card', 'link', 'afterpay_clearpay', 'klarna', 'zip'];
-    methods.forEach(m => params.append('payment_method_types[]', m));
+    // If a specific payment method is requested, use only that one
+    // Otherwise show all activated methods
+    if (payment_method === 'paypal') {
+      params.append('payment_method_types[]', 'paypal');
+    } else if (payment_method === 'card') {
+      // Card-only — Apple Pay & Google Pay auto-show on supported devices
+      params.append('payment_method_types[]', 'card');
+    } else {
+      // Default: all activated methods
+      const methods = ['card', 'link', 'afterpay_clearpay', 'klarna', 'zip'];
+      methods.forEach(m => params.append('payment_method_types[]', m));
+    }
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
