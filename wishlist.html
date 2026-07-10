@@ -1,40 +1,169 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Wishlist — Bargain Drop</title>
-<link rel="stylesheet" href="css/account.css">
-  <script src="profile-pic.js"></script>
+<style>
+:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee;--red:#e60023;--green:#10b981}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;background:#111;color:#fff;font-size:.7rem;position:sticky;top:0;z-index:110}
+.top-bar a{color:#fff}
+.page-header{padding:16px}
+.page-header h1{font-size:1.1rem;font-weight:800}
+.page-header .breadcrumb{font-size:.7rem;color:var(--muted)}
+.page-header .subtitle{font-size:.75rem;color:var(--muted);margin-top:2px}
+.section{padding:0 16px 24px}
+.card-list{display:flex;flex-direction:column;gap:10px}
+.wishlist-item{display:flex;gap:12px;padding:10px;border:1.5px solid var(--line);border-radius:12px;background:#fff;align-items:center;transition:all .15s}
+.wishlist-item:active{background:#fafafa}
+.wishlist-img{width:72px;height:72px;border-radius:8px;background:#f5f5f5;flex-shrink:0;overflow:hidden}
+.wishlist-img img{width:100%;height:100%;object-fit:cover}
+.wishlist-info{flex:1;min-width:0}
+.wishlist-title{font-size:.75rem;font-weight:600;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wishlist-price{font-size:.82rem;font-weight:800;margin-bottom:4px}
+.wishlist-cat{font-size:.6rem;color:var(--muted)}
+.wishlist-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.btn-icon{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .15s}
+.btn-icon:hover{background:#fef2f2;border-color:var(--red);color:var(--red)}
+.btn-cart{background:var(--fg);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-size:.65rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-cart:active{opacity:.8}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .icon{font-size:4rem;margin-bottom:12px}
+.empty-state h2{font-size:1rem;margin-bottom:4px}
+.empty-state p{font-size:.75rem}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 24px;border-radius:20px;font-size:.75rem;font-weight:600;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:.6rem;color:var(--muted);text-decoration:none}
+.bottom-nav a.active{color:var(--fg)}
+.nav-icon{width:20px;height:20px;flex-shrink:0}
+</style>
 </head>
 <body>
 <div class="top-bar"><a href="profile.html">← Back</a><div>Free Shipping $29+</div></div>
 <div class="page-header">
-  <div class="breadcrumb"><a href="profile.html">My Account</a> →> Wishlist</div>
-  <h1>Wishlist</h1>
+  <div class="breadcrumb"><a href="profile.html">My Account</a> → Wishlist</div>
+  <h1>Wishlist (<span id="wl-count">0</span>)</h1>
   <p class="subtitle">Items you've saved</p>
 </div>
 <div class="section">
   <div class="card-list" id="wishlist-list"></div>
-  <div class="empty-state" id="empty-state">
+  <div class="empty-state" id="empty-state" style="display:none">
     <div class="icon">❤️</div>
     <h2>Your wishlist is empty</h2>
-    <p>Save items you love to your wishlist.</p>
+    <p>Tap the ♡ heart on any product to save it here.</p>
+    <br><a href="products.html" style="color:var(--fg);font-weight:600;text-decoration:underline">Browse Products →</a>
   </div>
 </div>
-<div class="toast" id="toast"></div>
+<div id="toast" class="toast"></div>
 <nav class="bottom-nav">
-  <a href="/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2"/></svg>Home</a>
-  <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5"/></svg>Products</a>
-  <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
-  <a href="wishlist.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#111" stroke-width="1.5"/></svg>Wishlist</a>
-  <a href="cart.html" class="cart-btn" style="position:relative" title="Cart"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span class="cart-count-badge" id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:#e60023;color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
-href="profile.html" id="nav-profile-link"><span id="nav-profile-icon-svg"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2" fill="none"/></svg></span><img id="nav-profile-pic" src="" alt="" style="display:none;width:22px;height:22px;border-radius:50%;object-fit:cover">Me</a>
+  <a href="/"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
+  <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5" fill="none"/></svg>Products</a>
+  <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
+  <a href="wishlist.html" class="active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#111" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
+  <a href="cart.html" style="position:relative"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:#e60023;color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
+  <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
-<script src="js/account.js"></script>
-<script src="js/currency.js"></script>
 
+<script>
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function fmt(p){return "A$"+Number(p||0).toFixed(2);}
 
-<script src="js/cart-count.js"></script>
+function getWishlist(){
+  try { return JSON.parse(localStorage.getItem("bd_wishlist")||"[]"); }
+  catch(e){ return []; }
+}
+
+function saveWishlist(arr){
+  localStorage.setItem("bd_wishlist", JSON.stringify(arr));
+}
+
+function renderWishlist(){
+  var items = getWishlist();
+  document.getElementById("wl-count").textContent = items.length;
+  
+  var list = document.getElementById("wishlist-list");
+  var empty = document.getElementById("empty-state");
+  
+  if(!items.length){
+    list.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  
+  empty.style.display = "none";
+  var html = "";
+  
+  // Sort newest first
+  items.sort(function(a,b){ return new Date(b.added||0) - new Date(a.added||0); });
+  
+  items.forEach(function(it, idx){
+    html += '<div class="wishlist-item">'+
+      '<a href="product.html?id='+esc(it.id)+'" class="wishlist-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()">':"")+'</a>'+
+      '<a href="product.html?id='+esc(it.id)+'" class="wishlist-info">'+
+        '<div class="wishlist-title">'+esc(it.title)+'</div>'+
+        '<div class="wishlist-price">'+fmt(it.price)+'</div>'+
+        (it.category?'<div class="wishlist-cat">'+esc(it.category)+'</div>':"")+
+      '</a>'+
+      '<div class="wishlist-actions">'+
+        '<button class="btn-icon" onclick="removeItem('+idx+')" title="Remove">✕</button>'+
+        '<button class="btn-cart" onclick="addToCart('+idx+')">Add to cart</button>'+
+      '</div>'+
+    '</div>';
+  });
+  
+  list.innerHTML = html;
+}
+
+function removeItem(idx){
+  var items = getWishlist();
+  var removed = items[idx];
+  items.splice(idx, 1);
+  saveWishlist(items);
+  renderWishlist();
+  toast("Removed from wishlist");
+}
+
+function addToCart(idx){
+  var items = getWishlist();
+  var it = items[idx];
+  if(!it) return;
+  
+  var cart = JSON.parse(localStorage.getItem("bd_cart")||"[]");
+  var existing = cart.find(function(c){ return c.id === it.id; });
+  if(existing){
+    existing.qty = (existing.qty||1) + 1;
+  } else {
+    cart.push({id:it.id, title:it.title, price:it.price, image:it.image, qty:1});
+  }
+  localStorage.setItem("bd_cart", JSON.stringify(cart));
+  updateCartCount();
+  toast("Added to cart ✓");
+}
+
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(function(){ t.classList.remove("show"); }, 2000);
+}
+
+function updateCartCount(){
+  try {
+    var cart = JSON.parse(localStorage.getItem("bd_cart")||"[]");
+    var n = cart.reduce(function(s,i){ return s + (i.qty||1); }, 0);
+    var b = document.getElementById("nav-cart-count");
+    if(b){ b.textContent = n; b.style.display = n>0 ? "" : "none"; }
+  } catch(e){}
+}
+
+// Init
+renderWishlist();
+updateCartCount();
+</script>
 </body>
 </html>
