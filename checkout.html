@@ -61,6 +61,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .nav-icon{width:20px;height:20px}
 </style>
   <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://pay.google.com/gp/p/js/pay.js"></script>
 <script src="profile-pic.js"></script>
 <script src="js/currency.js"></script>
 </head>
@@ -273,43 +274,48 @@ window.payWithGPay = async function(){
 
   var totalCents=Math.round(total*100);
   try{
-    var stripe=Stripe(STRIPE_PK);
-    var pr=stripe.paymentRequest({
-      country:'AU',
-      currency:(BD.getCurrency()||'aud').toLowerCase(),
-      total:{label:'Bargain Drop',amount:totalCents},
-      requestPayerName:true,
-      requestPayerEmail:true,
-      disableWallets:['link']
-    });
+    // Use Google Pay's own JS SDK — NOT Stripe's Payment Request
+    if(typeof google==='undefined'||!google.payments){throw new Error('Google Pay SDK not loaded')}
+    
+    var client=new google.payments.api.PaymentsClient({environment:'PRODUCTION'});
+    var req={
+      apiVersion:2,apiVersionMinor:0,
+      allowedPaymentMethods:[{
+        type:'CARD',
+        parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX']},
+        tokenizationSpecification:{type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe','stripe:version':'2023-08-16','stripe:publishableKey':STRIPE_PK}}
+      }],
+      merchantInfo:{merchantName:'Bargain Drop'},
+      transactionInfo:{totalPriceStatus:'FINAL',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU',totalPriceLabel:'Total'}
+    };
 
-    var canPay=await pr.canMakePayment();
-    if(!canPay){
-      // Fall back to Stripe checkout — wallet not set up in browser
-      btn.classList.remove('loading');
-      await stripeCheckout(oid,s,'card');
+    var ready=await client.isReadyToPay(req);
+    if(!ready.result){
+      btn.classList.remove('loading');setAllBtnsDisabled(false);
+      showError('Google Pay is not set up in this browser. Go to pay.google.com to add a card, or use Stripe below.');
       return;
     }
 
-    pr.on('paymentmethod', async function(ev){
-      var intentResp=await fetch(API_BASE+'/api/create-payment-intent',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'bargain-drop-v10'}})
-      });
-      var intentData=await intentResp.json();
-      var result=await stripe.confirmCardPayment(intentData.client_secret,{payment_method:ev.paymentMethod.id},{handleActions:false});
-      if(result.error){ev.complete('fail');throw new Error(result.error.message)}
-      ev.complete('success');
-      window.location.href=API_BASE+'/order-success.html?id='+oid;
-    });
+    var paymentData=await client.loadPaymentData(req);
+    var token=paymentData.paymentMethodData.tokenizationData.token;
 
-    pr.show();
+    // Create PaymentIntent and confirm with the Google Pay token
+    var intentResp=await fetch(API_BASE+'/api/create-payment-intent',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'bargain-drop-v10'}})
+    });
+    var intentData=await intentResp.json();
+
+    var stripe=Stripe(STRIPE_PK);
+    var result=await stripe.confirmCardPayment(intentData.client_secret,{payment_method:{card:{token:token}}});
+    if(result.error){throw new Error(result.error.message)}
+
+    window.location.href=API_BASE+'/order-success.html?id='+oid;
   }catch(e){
     btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Google Pay unavailable — opening Stripe checkout instead');
-    await stripeCheckout(oid,s,'card');
+    showError('Google Pay: '+e.message+' — Try Stripe below');
   }
+};
 };
 
 window.payWithPayPal = async function(){
