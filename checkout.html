@@ -310,11 +310,8 @@ window.payWithGPay = async function(){
 window.payWithPayPal = async function(){
   if(cart.length===0){showError('Your cart is empty');return}
   var s=getShippingInfo();if(!validateShip(s))return;
-  var btn=document.getElementById('pay-paypal');
-  btn.classList.add('loading');setAllBtnsDisabled(true);
-  var oid='BD-PP-'+Date.now().toString(36).toUpperCase();
-  saveOrder(oid,s.email,s.fname,s.lname,'PayPal');
-  await stripeCheckout(oid,s,'paypal');
+  // PayPal not available through Stripe — need PayPal Client ID
+  showError('PayPal is being set up separately — please use another payment method for now');
 };
 
 window.payWithStripe = async function(){
