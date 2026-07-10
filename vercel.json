@@ -64,6 +64,10 @@
     "api/cron-sync.js": {
       "memory": 256,
       "maxDuration": 60
+    },
+    "api/debug-env.js": {
+      "memory": 128,
+      "maxDuration": 15
     }
   },
   "headers": [
