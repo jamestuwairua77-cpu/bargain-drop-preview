@@ -20,8 +20,8 @@ export default async function handler(req, res) {
     params.append('customer_email', customer_email);
 
     // All AU payment methods — remove any that aren't activated in your dashboard
-    const methods = ['card', 'link', 'afterpay_clearpay', 'zip', 'klarna'];
-    methods.forEach(m => params.append('payment_method_types[]', m));
+    // Use your Payment Method Configuration — bundles ALL activated methods
+    params.append('payment_method_configuration', 'pmc_1Tf0FZAkMf7PmMVhhlPyfMJ0');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
