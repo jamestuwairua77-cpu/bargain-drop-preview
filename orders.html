@@ -94,8 +94,8 @@ a{color:inherit;text-decoration:none}
 
 <script>
 // === ORDER LOADER v3 — verified clean ===
-document.getElementById("js-status").textContent = "JS: loaded";
-document.getElementById("js-status").style.background = "#10b981";
+document.title = "[OK] My Orders";
+try { document.getElementById("js-status").textContent = "JS: loaded"; document.getElementById("js-status").style.background = "#10b981"; } catch(e){ document.title = "[ERR] "+e.message; }
 
 (function(){
   function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
