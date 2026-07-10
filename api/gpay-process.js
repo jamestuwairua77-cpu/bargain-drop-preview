@@ -12,10 +12,10 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
-  const GPAY_PEM_B64 = process.env.GPAY_PRIVATE_KEY_PEM_B64;
+  const GPAY_KEY_HEX = process.env.GPAY_PRIVATE_KEY;
   
   if (!STRIPE_KEY) return res.status(500).json({ error: 'Stripe key missing' });
-  if (!GPAY_PEM_B64) return res.status(500).json({ error: 'Google Pay key missing' });
+  if (!GPAY_KEY_HEX) return res.status(500).json({ error: 'Google Pay key missing' });
 
   const { encryptedMessage, ephemeralPublicKey, tag, amount, currency, email } = req.body;
   if (!encryptedMessage || !ephemeralPublicKey || !tag || !amount) {
@@ -24,9 +24,8 @@ export default async function handler(req, res) {
 
   try {
     // Step 1: Decrypt Google Pay DIRECT token (ECv2)
-    const privPem = Buffer.from(GPAY_PEM_B64, 'base64').toString('utf8');
     const ecdh = crypto.createECDH('prime256v1');
-    ecdh.setPrivateKey(privPem);
+    ecdh.setPrivateKey(Buffer.from(GPAY_KEY_HEX, 'hex'));
     
     const ephemeralKeyBytes = base64ToBytes(ephemeralPublicKey);
     const sharedSecret = ecdh.computeSecret(ephemeralKeyBytes);
