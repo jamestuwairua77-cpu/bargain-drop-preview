@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     // Payment Method Configuration — bundles ALL activated methods
     // (card, Apple Pay, Google Pay, PayPal, Afterpay, Klarna, Zip, Link, etc.)
-    params.append('payment_method_configuration', 'pmc_1Tf0FZAkMf7PmMVhhlPyfMJ0');
+    params.append('payment_method_types[]', 'card');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
