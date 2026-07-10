@@ -1,6 +1,7 @@
 // CJ → Shopify product sync. SKU-matched (not title), multi-variant aware, inventory push.
 // GET: status. POST: run one page. Body: { page?, limit?, category?, dry?: bool }
 import { cors, cjFetch, shopifyFetch, appendSyncLog, SHOPIFY_TOKEN, CJ_API_KEY } from './_sync-lib.js';
+// fix: truncate title to 255 chars to avoid Shopify 422 + surface API errors in response
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
