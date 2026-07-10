@@ -250,118 +250,104 @@ window.payWithApplePay = async function(){
   if(cart.length===0){showError('Your cart is empty');return}
   var s=getShippingInfo();if(!validateShip(s))return;
   var btn=document.getElementById('pay-applepay');
-  if(!window.ApplePaySession||!ApplePaySession.canMakePayments()){
-    showError('Apple Pay requires Safari on iPhone, iPad, or Mac');
-    return;
-  }
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-AP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Apple Pay');
   var totalCents=Math.round(total*100);
   try{
-    // Create PaymentIntent on server
-    var pi=await fetch(API_BASE+'/api/create-payment-intent',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'apple-pay-native'}})
-    });
-    var pid=await pi.json();
+    // Try #1: ApplePaySession (native)
+    if(window.ApplePaySession&&ApplePaySession.canMakePayments()){
+      var pi=await fetch(API_BASE+'/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'apple-pay-native'}})});
+      var pid=await pi.json();
+      var apReq={countryCode:'AU',currencyCode:(BD.getCurrency()||'AUD'),supportedNetworks:['visa','masterCard','amex'],merchantCapabilities:['supports3DS','supportsCredit','supportsDebit'],total:{label:'Bargain Drop',amount:(totalCents/100).toFixed(2)},requiredBillingContactFields:['postalAddress','name','email']};
+      var session=new ApplePaySession(6,apReq);
+      session.onvalidatemerchant=async function(ev){try{var mr=await fetch(API_BASE+'/api/apple-pay-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({validationURL:ev.validationURL})});var ms=await mr.json();session.completeMerchantValidation(ms);}catch(ve){session.abort();btn.classList.remove('loading');setAllBtnsDisabled(false);showError('Apple Pay unavailable: vendor validation failed');}};
+      session.onpaymentauthorized=async function(ev){try{var stripe=Stripe(STRIPE_PK);var result=await stripe.confirmPayment(pid.client_secret,{payment_method:ev.payment.token});if(result.error){session.completePayment(ApplePaySession.STATUS_FAILURE);throw new Error(result.error.message)}session.completePayment(ApplePaySession.STATUS_SUCCESS);window.location.href=API_BASE+'/order-success.html?id='+oid;}catch(er){session.completePayment(ApplePaySession.STATUS_FAILURE);btn.classList.remove('loading');setAllBtnsDisabled(false);showError(er.message);}};
+      session.oncancel=function(){btn.classList.remove('loading');setAllBtnsDisabled(false)};
+      session.begin();
+      return;
+    }
 
-    // Build Apple Pay request
-    var apReq={countryCode:'AU',currencyCode:(BD.getCurrency()||'AUD'),
-      supportedNetworks:['visa','masterCard','amex'],
-      merchantCapabilities:['supports3DS','supportsCredit','supportsDebit'],
-      total:{label:'Bargain Drop',amount:(totalCents/100).toFixed(2)},
-      requiredBillingContactFields:['postalAddress','name','email']
-    };
+    // Try #2: Stripe Payment Request (only Apple Pay if available)
+    try{var stripe=Stripe(STRIPE_PK);var pr=stripe.paymentRequest({country:'AU',currency:(BD.getCurrency()||'aud').toLowerCase(),total:{label:'Bargain Drop',amount:totalCents},requestPayerName:true,requestPayerEmail:true,disableWallets:['link','googlePay']});var canMake=await pr.canMakePayment();if(canMake){pr.on('paymentmethod',async function(ev){var ir=await fetch(API_BASE+'/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'apple-pay-pr'}})});var idt=await ir.json();var cf=await stripe.confirmCardPayment(idt.client_secret,{payment_method:ev.paymentMethod.id},{handleActions:false});if(cf.error){ev.complete('fail');throw new Error(cf.error.message)}ev.complete('success');window.location.href=API_BASE+'/order-success.html?id='+oid;});pr.show();return;}}catch(prErr){}
 
-    var session=new ApplePaySession(6,apReq);
+    // Try #3: Stripe Checkout (card) — shows Apple Pay on Safari automatically
+    btn.classList.remove('loading');
+    await stripeCheckout(oid,s,'card');
 
-    session.onvalidatemerchant=async function(ev){
-      try{
-        var mr=await fetch(API_BASE+'/api/apple-pay-session',{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({validationURL:ev.validationURL})
-        });
-        var ms=await mr.json();
-        session.completeMerchantValidation(ms);
-      }catch(ve){session.abort();btn.classList.remove('loading');setAllBtnsDisabled(false);showError('Apple Pay unavailable: vendor validation failed');}
-    };
-
-    session.onpaymentauthorized=async function(ev){
-      try{
-        var stripe=Stripe(STRIPE_PK);
-        var result=await stripe.confirmPayment(pid.client_secret,{payment_method:ev.payment.token});
-        if(result.error){session.completePayment(ApplePaySession.STATUS_FAILURE);throw new Error(result.error.message)}
-        session.completePayment(ApplePaySession.STATUS_SUCCESS);
-        window.location.href=API_BASE+'/order-success.html?id='+oid;
-      }catch(er){session.completePayment(ApplePaySession.STATUS_FAILURE);btn.classList.remove('loading');setAllBtnsDisabled(false);showError(er.message);}
-    };
-
-    session.oncancel=function(){btn.classList.remove('loading');setAllBtnsDisabled(false)};
-    session.begin();
   }catch(e){
     btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Apple Pay: '+e.message);
+    showError('Apple Pay: '+e.message+' — Using Stripe checkout instead');
+    await stripeCheckout(oid,s,'card');
   }
 };
-
 window.payWithGPay = async function(){
   if(cart.length===0){showError('Your cart is empty');return}
   var s=getShippingInfo();if(!validateShip(s))return;
   var btn=document.getElementById('pay-gpay');
-  if(typeof google==='undefined'||!google.payments||!google.payments.api){
-    showError('Google Pay requires Chrome. Apple Pay needs Safari. Use Stripe for other browsers.');
-    return;
-  }
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
   var totalCents=Math.round(total*100);
   try{
+    // Try #1: Google Pay SDK with existingPaymentMethodRequired:false
     var gpayClient=new google.payments.api.PaymentsClient({environment:'PRODUCTION'});
-    var gpayReq={
+    var readyReq={
       apiVersion:2,apiVersionMinor:0,
-      allowedPaymentMethods:[{
-        type:'CARD',
-        parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX'],billingAddressRequired:true},
-        tokenizationSpecification:{type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe','stripe:version':'2018-10-31','stripe:publishableKey':STRIPE_PK}}
-      }],
-      merchantInfo:{merchantName:'Bargain Drop'},
-      transactionInfo:{totalPriceStatus:'FINAL',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'}
+      allowedPaymentMethods:[{type:'CARD',parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX','JCB','DISCOVER']}}],
+      existingPaymentMethodRequired:false
     };
-
-    var ready=await gpayClient.isReadyToPay(gpayReq);
-    if(!ready.result){
-      btn.classList.remove('loading');setAllBtnsDisabled(false);
-      showError('Google Pay not set up. Sign into Chrome and add a card at pay.google.com');
+    var ready=(typeof google!=='undefined'&&google.payments&&google.payments.api)?await gpayClient.isReadyToPay(readyReq):{result:false};
+    
+    if(ready.result){
+      var gpayReq={
+        apiVersion:2,apiVersionMinor:0,
+        allowedPaymentMethods:[{type:'CARD',parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX','JCB','DISCOVER']},tokenizationSpecification:{type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe','stripe:version':'2018-10-31','stripe:publishableKey':STRIPE_PK}}}],
+        merchantInfo:{merchantName:'Bargain Drop'},
+        transactionInfo:{totalPriceStatus:'FINAL',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'}
+      };
+      var paymentData=await gpayClient.loadPaymentData(gpayReq);
+      var gpToken=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
+      var stripe=Stripe(STRIPE_PK);
+      var pm=await stripe.createPaymentMethod({type:'card',card:{token:gpToken.id}});
+      if(pm.error)throw new Error(pm.error.message);
+      var pi=await fetch(API_BASE+'/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'google-pay-sdk'}})});
+      var pid=await pi.json();
+      var cf=await stripe.confirmCardPayment(pid.client_secret,{payment_method:pm.paymentMethod.id});
+      if(cf.error)throw new Error(cf.error.message);
+      window.location.href=API_BASE+'/order-success.html?id='+oid;
       return;
     }
 
-    var paymentData=await gpayClient.loadPaymentData(gpayReq);
-    var gpToken=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
+    // Try #2: Stripe Payment Request (only Apple Pay + Google Pay)
+    try{
+      var stripe=Stripe(STRIPE_PK);
+      var pr=stripe.paymentRequest({country:'AU',currency:(BD.getCurrency()||'aud').toLowerCase(),total:{label:'Bargain Drop',amount:totalCents},requestPayerName:true,requestPayerEmail:true,disableWallets:['link']});
+      var canMake=await pr.canMakePayment();
+      if(canMake){
+        pr.on('paymentmethod',async function(ev){
+          var ir=await fetch(API_BASE+'/api/create-payment-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'google-pay-pr'}})});
+          var idt=await ir.json();
+          var cf=await stripe.confirmCardPayment(idt.client_secret,{payment_method:ev.paymentMethod.id},{handleActions:false});
+          if(cf.error){ev.complete('fail');throw new Error(cf.error.message)}
+          ev.complete('success');
+          window.location.href=API_BASE+'/order-success.html?id='+oid;
+        });
+        pr.show();
+        return;
+      }
+    }catch(prErr){/* fall through */}
 
-    // Create PaymentMethod from GPay token
-    var stripe=Stripe(STRIPE_PK);
-    var pm=await stripe.createPaymentMethod({type:'card',card:{token:gpToken.id}});
-    if(pm.error)throw new Error(pm.error.message);
+    // Try #3: Stripe Checkout (card) — shows GPay on Chrome automatically
+    btn.classList.remove('loading');
+    await stripeCheckout(oid,s,'card');
 
-    // Create and confirm PaymentIntent
-    var pi=await fetch(API_BASE+'/api/create-payment-intent',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({amount:totalCents,currency:(BD.getCurrency()||'AUD').toLowerCase(),customer_email:s.email,metadata:{order_id:oid,source:'google-pay-native'}})
-    });
-    var pid=await pi.json();
-    var cf=await stripe.confirmCardPayment(pid.client_secret,{payment_method:pm.paymentMethod.id});
-    if(cf.error)throw new Error(cf.error.message);
-
-    window.location.href=API_BASE+'/order-success.html?id='+oid;
   }catch(e){
     btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Google Pay: '+e.message);
+    showError('Google Pay: '+e.message+' — Using Stripe checkout instead');
+    await stripeCheckout(oid,s,'card');
   }
 };
-
-
 // PayPal SDK — authentic PayPal native popup
 (function initPayPal(){
   var ppS=document.createElement('script');
