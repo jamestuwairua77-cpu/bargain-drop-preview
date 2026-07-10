@@ -1,170 +1,134 @@
-// Sync products from CJ Dropshipping to Shopify
+// CJ → Shopify product sync. SKU-matched (not title), multi-variant aware, inventory push.
+// GET: status. POST: run one page. Body: { page?, limit?, category?, dry?: bool }
+import { cors, cjFetch, shopifyFetch, appendSyncLog, SHOPIFY_TOKEN, CJ_API_KEY } from './_sync-lib.js';
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  cors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const CJ_TOKEN = process.env.CJ_ACCESS_TOKEN || '';
-  const SHOPIFY_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || '';
-  const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
-
-  const results = { cj_products: 0, shopify_created: 0, shopify_updated: 0, errors: [] };
-
-  // ── GET: Check sync status ─────────────────────────────
   if (req.method === 'GET') {
-    const status = {
-      cj_configured: !!CJ_TOKEN,
+    return res.status(200).json({
+      cj_configured: !!CJ_API_KEY,
       shopify_configured: !!SHOPIFY_TOKEN,
-      shopify_domain: SHOPIFY_DOMAIN,
-      message: (CJ_TOKEN && SHOPIFY_TOKEN) 
-        ? 'Both CJ and Shopify configured. POST to start sync.'
-        : !CJ_TOKEN ? 'CJ token not configured. Set CJ_ACCESS_TOKEN.'
-        : 'Shopify token not configured. Set SHOPIFY_ACCESS_TOKEN.'
-    };
-    return res.status(200).json(status);
+      hint: 'POST { page, limit, category, dry } to sync one page (max 50 products) from CJ → Shopify.',
+    });
   }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (!CJ_API_KEY || !SHOPIFY_TOKEN) return res.status(500).json({ error: 'CJ or Shopify not configured' });
 
-  // ── POST: Execute sync ──────────────────────────────────
-  if (!CJ_TOKEN) return res.status(500).json({ error: 'CJ_ACCESS_TOKEN not configured' });
-  if (!SHOPIFY_TOKEN) return res.status(500).json({ error: 'SHOPIFY_ACCESS_TOKEN not configured' });
+  const { category, page = 1, limit = 50, dry = false } = (req.body || {});
+  const results = { page, cj_products: 0, created: 0, updated: 0, skipped: 0, errors: [] };
 
   try {
-    // 1. Authenticate with CJ
-    const authRes = await fetch('https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ apiKey: CJ_TOKEN })
-    });
-    const authData = await authRes.json();
-    const cjToken = authData.data?.accessToken;
-    if (!cjToken) return res.status(500).json({ error: 'CJ authentication failed', details: authData });
+    const params = new URLSearchParams({ pageNum: String(page), pageSize: String(Math.min(limit, 50)) });
+    if (category) params.set('categoryId', category);
 
-    // 2. Get products from CJ
-    const { category, page = 1, limit = 50 } = req.body;
-    let cjProducts = [];
+    const cj = await cjFetch(`/product/list?${params}`, { method: 'GET' });
+    if (cj.code !== 200) return res.status(400).json({ error: 'CJ product fetch failed', details: cj });
+    const cjProducts = cj.data?.list || [];
+    results.cj_products = cjProducts.length;
 
-    const cjParams = new URLSearchParams({
-      page: String(page),
-      size: String(Math.min(limit, 50))
-    });
-    if (category) cjParams.set('categoryId', category);
-
-    const cjRes = await fetch(
-      `https://developers.cjdropshipping.com/api2.0/v1/product/list?${cjParams}`,
-      { headers: { 'CJ-Access-Token': cjToken } }
-    );
-    const cjData = await cjRes.json();
-
-    if (cjData.code === 200 && cjData.data?.list) {
-      cjProducts = cjData.data.list;
-      results.cj_products = cjProducts.length;
-    } else {
-      return res.status(400).json({ error: 'CJ product fetch failed', details: cjData });
-    }
-
-    // 3. Get existing Shopify products
-    const shopProducts = {};
-    let shopPage = 1;
-    let hasMore = true;
-    while (hasMore) {
-      const shopRes = await fetch(
-        `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/products.json?limit=250&page=${shopPage}&fields=id,title,variants`,
-        { headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN } }
-      );
-      const shopData = await shopRes.json();
-      if (shopData.products?.length > 0) {
-        shopData.products.forEach(p => {
-          // Map by title for matching
-          shopProducts[p.title.toLowerCase().trim()] = p;
-        });
-        shopPage++;
-      } else {
-        hasMore = false;
+    // Prefetch a page of Shopify products to build a SKU index for this batch.
+    // Cheap heuristic: pull the same-size Shopify page; matches on SKU below regardless.
+    const shopIndex = new Map(); // sku → { product, variant }
+    const { body: shopBody } = await shopifyFetch(`/products.json?limit=250&fields=id,title,variants,handle`);
+    for (const p of (shopBody.products || [])) {
+      for (const v of (p.variants || [])) {
+        if (v.sku) shopIndex.set(v.sku.trim(), { product: p, variant: v });
       }
     }
-    results.shopify_existing = Object.keys(shopProducts).length;
 
-    // 4. Sync each CJ product to Shopify
     for (const cp of cjProducts) {
       try {
-        const title = cp.productNameEn || cp.productName || '';
-        const price = cp.sellPrice || cp.price || 0;
-        const sku = cp.productSku || cp.sku || cp.pid || '';
-        const images = (cp.productImageList || []).map(img => ({
-          src: img.url || img
-        })).filter(i => i.src);
+        const title = cp.productNameEn || cp.productName || cp.nameEn || 'Untitled';
         const description = cp.description || cp.productDescEn || '';
-        const tags = cp.categoryName ? cp.categoryName.split(',').map(t => t.trim()) : [];
-        const cjVid = cp.vid || cp.pid || '';
+        const tags = (cp.categoryName ? String(cp.categoryName).split(/[,>]/).map(s => s.trim()) : []).filter(Boolean);
+        const images = (cp.productImageSet || cp.productImageList || cp.images || [])
+          .map(x => typeof x === 'string' ? x : (x?.url || x?.image)).filter(Boolean)
+          .slice(0, 10).map(src => ({ src }));
 
-        const existingProduct = shopProducts[title.toLowerCase().trim()];
+        // Variants: CJ returns either a single product-level price/vid, or a variantList with SKUs.
+        const variants = (cp.variants || cp.variantList || []).length
+          ? (cp.variants || cp.variantList).map(vv => ({
+              sku: (vv.variantSku || vv.sku || vv.vid || '').trim(),
+              price: String(vv.variantSellPrice || vv.sellPrice || vv.price || cp.sellPrice || 0),
+              option1: vv.variantNameEn || vv.variantName || 'Default',
+              inventory_management: 'shopify',
+              inventory_policy: 'deny',
+              requires_shipping: true,
+              weight: Number(vv.variantWeight || cp.productWeight || 0),
+              weight_unit: 'g',
+            }))
+          : [{
+              sku: (cp.productSku || cp.pid || cp.vid || '').trim(),
+              price: String(cp.sellPrice || cp.price || 0),
+              option1: 'Default',
+              inventory_management: 'shopify',
+              inventory_policy: 'deny',
+              requires_shipping: true,
+              weight: Number(cp.productWeight || 0),
+              weight_unit: 'g',
+            }];
 
-        if (existingProduct) {
-          // Update existing product — update images and price
-          await fetch(
-            `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/products/${existingProduct.id}.json`,
-            {
-              method: 'PUT',
-              headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN, 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                product: {
-                  id: existingProduct.id,
-                  title: title,
-                  body_html: description,
-                  tags: tags.join(', '),
-                  variants: [{
-                    id: existingProduct.variants[0]?.id,
-                    price: String(price),
-                    sku: sku
-                  }],
-                  ...(images.length > 0 ? { images: images.slice(0, 10) } : {})
-                }
-              })
-            }
-          );
-          results.shopify_updated++;
+        // Match by ANY variant SKU present in the Shopify index.
+        const match = variants.map(v => shopIndex.get(v.sku)).find(Boolean);
+        if (dry) { results.skipped++; continue; }
+
+        if (match) {
+          // Update in place: price, title, images, tags, description.
+          const productId = match.product.id;
+          await shopifyFetch(`/products/${productId}.json`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              product: {
+                id: productId,
+                title,
+                body_html: description,
+                tags: tags.join(', '),
+                variants: variants.map((v, i) => ({
+                  id: match.product.variants[i]?.id,
+                  price: v.price,
+                  sku: v.sku,
+                })).filter(v => v.id),
+                ...(images.length ? { images } : {}),
+              },
+            }),
+          });
+          results.updated++;
         } else {
-          // Create new product
-          const newProduct = {
-            product: {
-              title: title,
-              body_html: description,
-              vendor: 'CJ Dropshipping',
-              product_type: tags[0] || '',
-              tags: tags.join(', '),
-              status: 'active',
-              variants: [{
-                price: String(price),
-                sku: sku,
-                inventory_management: null,
-                requires_shipping: true
-              }],
-              ...(images.length > 0 ? { images: images.slice(0, 10) } : {})
-            }
-          };
-
-          await fetch(
-            `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/products.json`,
-            {
-              method: 'POST',
-              headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN, 'Content-Type': 'application/json' },
-              body: JSON.stringify(newProduct)
-            }
-          );
-          results.shopify_created++;
+          await shopifyFetch('/products.json', {
+            method: 'POST',
+            body: JSON.stringify({
+              product: {
+                title,
+                body_html: description,
+                vendor: 'CJ Dropshipping',
+                product_type: tags[0] || '',
+                tags: tags.join(', '),
+                status: 'active',
+                options: [{ name: 'Variant' }],
+                variants,
+                ...(images.length ? { images } : {}),
+                metafields: [
+                  { namespace: 'cj', key: 'pid', value: String(cp.pid || cp.productId || ''), type: 'single_line_text_field' },
+                ],
+              },
+            }),
+          });
+          results.created++;
         }
+        await sleep(200); // Shopify rate limit
       } catch (e) {
         results.errors.push({ product: cp.productNameEn || cp.pid, error: e.message });
       }
     }
 
-    res.status(200).json({
-      success: true,
-      results,
-      message: `Synced ${results.shopify_created} new + ${results.shopify_updated} updated products from CJ to Shopify`
-    });
+    appendSyncLog({ kind: 'product-sync', ok: true, ...results });
+    res.status(200).json({ success: true, results, message: `Synced page ${page}: +${results.created} new, ~${results.updated} updated` });
   } catch (e) {
+    appendSyncLog({ kind: 'product-sync', ok: false, error: e.message });
     res.status(500).json({ success: false, error: e.message });
   }
 }

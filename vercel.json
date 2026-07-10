@@ -40,6 +40,30 @@
     "api/setup-shopify.js": {
       "memory": 128,
       "maxDuration": 10
+    },
+    "api/shopify-webhook.js": {
+      "memory": 256,
+      "maxDuration": 30
+    },
+    "api/sync-inventory.js": {
+      "memory": 512,
+      "maxDuration": 60
+    },
+    "api/sync-cj-orders.js": {
+      "memory": 256,
+      "maxDuration": 60
+    },
+    "api/track-order.js": {
+      "memory": 128,
+      "maxDuration": 10
+    },
+    "api/register-shopify-webhooks.js": {
+      "memory": 128,
+      "maxDuration": 30
+    },
+    "api/cron-sync.js": {
+      "memory": 256,
+      "maxDuration": 60
     }
   },
   "headers": [
@@ -501,6 +525,16 @@
           "value": "0"
         }
       ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron-sync?task=inventory",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron-sync?task=orders",
+      "schedule": "0 */6 * * *"
     }
   ]
 }
