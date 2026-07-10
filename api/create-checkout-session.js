@@ -19,8 +19,9 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
 
-    // Show ALL payment methods activated in your Stripe dashboard
-    params.append('automatic_payment_methods[enabled]', 'true');
+    // All AU payment methods — remove any that aren't activated in your dashboard
+    const methods = ['card', 'link', 'afterpay_clearpay', 'zip', 'klarna', 'paypal', 'au_becs_debit', 'payto'];
+    methods.forEach(m => params.append('payment_method_types[]', m));
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
@@ -54,8 +55,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${STRIPE_KEY}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Stripe-Version': '2024-06-20'
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: params.toString()
     });
