@@ -105,9 +105,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 <a href="profile.html" id="nav-profile-link"><span id="nav-profile-icon-svg"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/><circle cx="12" cy="7" r="4" stroke="#777" stroke-width="2" fill="none"/></svg></span><img id="nav-profile-pic" src="" alt="" style="display:none;width:22px;height:22px;border-radius:50%;object-fit:cover">Me</a>
 </nav>
 <script>
+var API_BASE = window.location.origin;
 var STRIPE_PK='';
 fetch(API_BASE+'/api/stripe-pk').then(function(r){return r.json()}).then(function(d){STRIPE_PK=d.key;}).catch(function(){});
-BD.initCurrency().then(function(){
+try { BD.initCurrency().then(function(){
 var cart=JSON.parse(localStorage.getItem('bd_cart')||'[]');
 var subtotal=cart.reduce(function(s,i){return s+(i.price||0)*(i.qty||1)},0);
 var shipping=subtotal>BD.convert(41)?0:BD.convert(8.44);
@@ -115,8 +116,6 @@ var total=subtotal+shipping;
 document.getElementById('summary-subtotal').textContent=BD.formatMoneyCompact(subtotal);
 document.getElementById('summary-shipping').textContent=shipping===0?'FREE':BD.formatMoneyCompact(shipping);
 document.getElementById('summary-total').textContent=BD.formatMoneyCompact(total);
-
-var API_BASE = window.location.origin;
 
 // --- Toast ---
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500);}
@@ -337,7 +336,8 @@ window.payWithStripe = async function(){
 })();
 
 
-});
+}).catch(function(e){console.error('Init failed:',e);document.getElementById('checkout-error').style.display='block';document.getElementById('checkout-error').textContent='Loading error — please refresh the page';});
+}catch(e){console.error('BD error:',e);}
 </script>
 <script src="js/cart-count.js"></script>
 </body></html>
