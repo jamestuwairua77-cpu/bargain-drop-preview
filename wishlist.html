@@ -70,7 +70,7 @@ a{color:inherit;text-decoration:none}
 
 <script>
 function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-function fmt(p){return "A$"+Number(p||0).toFixed(2);}
+function fmt(p){var n=Number(String(p||0).replace(/[^0-9.]/g,''));return 'A$'+(n||0).toFixed(2);}
 
 function getWishlist(){
   try { return JSON.parse(localStorage.getItem("bd_wishlist")||"[]"); }
@@ -102,12 +102,18 @@ function renderWishlist(){
   items.sort(function(a,b){ return new Date(b.added||0) - new Date(a.added||0); });
   
   items.forEach(function(it, idx){
+    var pid = it.id || it.handle || '';
+    var ptitle = it.title || 'Untitled';
+    var pimg = it.image || (it.images||[])[0] || '';
+    var pprice = it.price || 0;
+    if(typeof pprice==='string'&&pprice.startsWith('A$')) pprice = parseFloat(pprice.replace(/[^0-9.]/g,''))||0;
+    var pcat = it.category || '';
     html += '<div class="wishlist-item">'+
-      '<a href="product.html?id='+esc(it.id)+'" class="wishlist-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()" alt="">':"")+'</a>'+
-      '<a href="product.html?id='+esc(it.id)+'" class="wishlist-info">'+
-        '<div class="wishlist-title">'+esc(it.title)+'</div>'+
-        '<div class="wishlist-price">'+fmt(it.price)+'</div>'+
-        (it.category?'<div class="wishlist-cat">'+esc(it.category)+'</div>':"")+
+      '<a href="product.html?id='+esc(pid)+'" class="wishlist-img">'+(pimg?'<img src="'+esc(pimg)+'" onerror="this.remove()" alt="">':"")+'</a>'+
+      '<a href="product.html?id='+esc(pid)+'" class="wishlist-info">'+
+        '<div class="wishlist-title">'+esc(ptitle)+'</div>'+
+        '<div class="wishlist-price">'+fmt(pprice)+'</div>'+
+        (pcat?'<div class="wishlist-cat">'+esc(pcat)+'</div>':"")+
       '</a>'+
       '<div class="wishlist-actions">'+
         '<button class="btn-icon" onclick="removeItem('+idx+')" title="Remove">✕</button>'+
