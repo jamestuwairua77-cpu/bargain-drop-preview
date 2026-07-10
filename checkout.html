@@ -284,7 +284,12 @@ window.payWithGPay = async function(){
     });
 
     var canPay=await pr.canMakePayment();
-    if(!canPay){throw new Error('No wallet available on this browser. Use Stripe or try Chrome for Google Pay.')}
+    if(!canPay){
+      // Fall back to Stripe checkout — wallet not set up in browser
+      btn.classList.remove('loading');
+      await stripeCheckout(oid,s,'card');
+      return;
+    }
 
     pr.on('paymentmethod', async function(ev){
       var intentResp=await fetch(API_BASE+'/api/create-payment-intent',{
@@ -302,15 +307,20 @@ window.payWithGPay = async function(){
     pr.show();
   }catch(e){
     btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Google Pay: '+e.message+' — Try Stripe below');
+    showError('Google Pay unavailable — opening Stripe checkout instead');
+    await stripeCheckout(oid,s,'card');
   }
 };
 
 window.payWithPayPal = async function(){
   if(cart.length===0){showError('Your cart is empty');return}
   var s=getShippingInfo();if(!validateShip(s))return;
-  // PayPal needs its own SDK — not available through Stripe
-  showError('PayPal needs a separate setup — please use Apple Pay, Google Pay, or Stripe instead');
+  var btn=document.getElementById('pay-paypal');
+  btn.classList.add('loading');setAllBtnsDisabled(true);
+  var oid='BD-PP-'+Date.now().toString(36).toUpperCase();
+  saveOrder(oid,s.email,s.fname,s.lname,'PayPal');
+  // Opens Stripe checkout — PayPal not separately integrated yet
+  await stripeCheckout(oid,s);
 };
 
 window.payWithStripe = async function(){
