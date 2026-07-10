@@ -44,11 +44,34 @@
         body:JSON.stringify({order:order})
       }).catch(function(){});
 
-      // 3. Auto-sync to CJ after 1s delay
-      setTimeout(function(){ syncCJ(); }, 1000);
+      // 3. Auto-sync to CJ + Shopify after 1s delay
+      setTimeout(function(){ 
+        syncCJ(); 
+        syncShopify(); 
+      }, 1000);
     }
   }
 
+  window.syncShopify = function(){
+    var oid3=new URLSearchParams(location.search).get('id')||'';
+    var orders3=JSON.parse(localStorage.getItem('bd_orders')||'[]');
+    var ord3=orders3.find(function(o){return o.id===oid3});
+    if(!ord3) return;
+
+    fetch(API+'/api/shopify-order',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        order:ord3,
+        customer:{email:ord3.email||'',first_name:ord3.name?ord3.name.split(' ')[0]:'',last_name:ord3.name?ord3.name.split(' ').slice(1).join(' '):''},
+        line_items:ord3.items||[],
+        shipping_address:{city:'Perth',state:'WA',zip:'6000',country:'Australia',country_code:'AU'}
+      })
+    }).then(function(r){return r.json()}).then(function(d){
+      if(d.results&&d.results.shopify&&d.results.shopify.success){
+        console.log('Shopify order created:',d.results.shopify.order_number);
+      }
+    }).catch(function(){});
+  };
   window.syncCJ = function(){
     var oid2=new URLSearchParams(location.search).get('id')||'';
     var orders2=JSON.parse(localStorage.getItem('bd_orders')||'[]');
