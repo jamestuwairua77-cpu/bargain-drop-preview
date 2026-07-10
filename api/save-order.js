@@ -2,8 +2,8 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
-const DATA_DIR = join(process.cwd(), 'data');
-const ORDERS_FILE = join(DATA_DIR, 'orders.json');
+const DATA_DIR = '/tmp/data';
+const ORDERS_FILE = '/tmp/data/orders.json';
 
 function loadOrders() {
   try {
