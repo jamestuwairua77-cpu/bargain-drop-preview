@@ -1,33 +1,30 @@
 // Search API — paginated product search across all categories
 // GET /api/search-products?q=&page=1&limit=50&category=
 
-let cachedData = null;
-let cachedAll = null;
-let cacheTime = 0;
-const TTL = 600000;
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
-async function ensureData() {
-  const now = Date.now();
-  if (cachedData && (now - cacheTime) < TTL) return;
+let cachedAll = null;
+
+function ensureData() {
+  if (cachedAll) return;
   
-  const res = await fetch('https://raw.githubusercontent.com/jamestuwairua77-cpu/bargain-drop-preview/main/categories-data.json');
-  if (!res.ok) throw new Error('Failed to fetch');
-  cachedData = await res.json();
+  const raw = readFileSync(join(process.cwd(), 'categories-data.json'), 'utf-8');
+  const data = JSON.parse(raw);
   
   // Flatten all products
   cachedAll = [];
-  for (const [cat, catData] of Object.entries(cachedData)) {
+  for (const [cat, catData] of Object.entries(data)) {
     for (const p of (catData.products || [])) {
       p._category = cat;
       cachedAll.push(p);
     }
   }
-  cacheTime = now;
 }
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
   try {
-    await ensureData();
+    ensureData();
     
     const q = (req.query.q || '').toLowerCase().trim();
     const page = Math.max(1, parseInt(req.query.page) || 1);

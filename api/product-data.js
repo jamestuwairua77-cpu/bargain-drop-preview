@@ -1,10 +1,10 @@
-export default async function handler(req, res) {
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+export default function handler(req, res) {
   try {
-    const response = await fetch('categories-data.json');
-    if (!response.ok) {
-      return res.status(502).json({ error: 'Failed to fetch product data' });
-    }
-    const data = await response.json();
+    const raw = readFileSync(join(process.cwd(), 'categories-data.json'), 'utf-8');
+    const data = JSON.parse(raw);
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
     return res.status(200).json(data);

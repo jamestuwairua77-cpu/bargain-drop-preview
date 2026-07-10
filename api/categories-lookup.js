@@ -1,18 +1,15 @@
-// Categories metadata API — returns lightweight category info (no products)
+// Categories metadata API — reads from local file
 // GET /api/categories-lookup
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 let cached = null;
-let cacheTime = 0;
-const TTL = 600000;
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
   try {
-    const now = Date.now();
-    if (!cached || (now - cacheTime) > TTL) {
-      const r = await fetch('https://raw.githubusercontent.com/jamestuwairua77-cpu/bargain-drop-preview/main/categories-index.json');
-      if (!r.ok) throw new Error('Failed to fetch');
-      cached = await r.json();
-      cacheTime = now;
+    if (!cached) {
+      const raw = readFileSync(join(process.cwd(), 'categories-index.json'), 'utf-8');
+      cached = JSON.parse(raw);
     }
     
     res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');

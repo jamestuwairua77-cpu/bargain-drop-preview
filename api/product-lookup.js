@@ -2,32 +2,27 @@
 // GET /api/product-lookup?id=9115605336195
 
 // Module-level cache (persists between warm invocations on Vercel)
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
 let cachedData = null;
 let cachedIndex = null;
-let cacheTime = 0;
-const CACHE_TTL = 600000; // 10 minutes
 
-async function loadData() {
-  const now = Date.now();
-  if (cachedData && (now - cacheTime) < CACHE_TTL) {
+function loadData() {
+  if (cachedData && cachedIndex) {
     return { data: cachedData, index: cachedIndex };
   }
   
-  const [dataRes, indexRes] = await Promise.all([
-    fetch('https://raw.githubusercontent.com/jamestuwairua77-cpu/bargain-drop-preview/main/categories-data.json'),
-    fetch('https://raw.githubusercontent.com/jamestuwairua77-cpu/bargain-drop-preview/main/products-index.json')
-  ]);
+  const dataRaw = readFileSync(join(process.cwd(), 'categories-data.json'), 'utf-8');
+  const indexRaw = readFileSync(join(process.cwd(), 'products-index.json'), 'utf-8');
   
-  if (!dataRes.ok || !indexRes.ok) throw new Error('Failed to fetch data');
-  
-  cachedData = await dataRes.json();
-  cachedIndex = await indexRes.json();
-  cacheTime = now;
+  cachedData = JSON.parse(dataRaw);
+  cachedIndex = JSON.parse(indexRaw);
   
   return { data: cachedData, index: cachedIndex };
 }
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
   const { id } = req.query;
   
   if (!id) {
@@ -35,7 +30,7 @@ export default async function handler(req, res) {
   }
   
   try {
-    const { data, index } = await loadData();
+    const { data, index } = loadData();
     
     // Fast path: use index to find product location
     const entry = index[String(id)];
