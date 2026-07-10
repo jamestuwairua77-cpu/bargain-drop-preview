@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     // All AU payment methods — remove any that aren't activated in your dashboard
     // All activated payment methods from Stripe dashboard
-    const methods = ['card', 'link', 'afterpay_clearpay', 'klarna', 'scalapay', 'zip', 'pay_by_bank', 'payto', 'bancontact', 'blik', 'eps', 'ideal', 'bizum', 'mb_way', 'pix', 'satispay', 'upi'];
+    const methods = ['card', 'link', 'afterpay_clearpay', 'klarna', 'zip', 'pay_by_bank', 'payto', 'bancontact', 'blik', 'eps', 'ideal', 'bizum', 'mb_way', 'pix', 'satispay', 'upi'];
     methods.forEach(m => params.append('payment_method_types[]', m));
     
     if (metadata) {
