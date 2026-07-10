@@ -337,7 +337,7 @@ window.payWithGPay = async function(){
       allowedPaymentMethods:[{
         type:'CARD',
         parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX'],billingAddressRequired:true},
-        tokenizationSpecification:{type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe','stripe:version':'2018-11-08','stripe:publishableKey':pubKey}}
+        tokenizationSpecification:{type:'DIRECT',parameters:{protocolVersion:'ECv2',publicKey:'BI5Wfx6gYJ0/+YJqfs5q4ejSDwEVd2XZ0lRygbyev4p1d0FJ8s8sFCu7bna0TEEQfo4z6PiZTFzJQpqou7+h+Vk='}}
       }],
       merchantInfo:{merchantName:'Bargain Drop'},
       transactionInfo:{totalPriceStatus:'FINAL',totalPriceLabel:'Total',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'}
@@ -355,9 +355,9 @@ window.payWithGPay = async function(){
     var paymentData=await gpayClient.loadPaymentData(gpayReq);
     var gpToken=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
     
-    var resp=await fetch(API_BASE+'/api/gpay-stripe-process',{
+    var resp=await fetch(API_BASE+'/api/gpay-process',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({token:gpToken.id,amount:totalCents,currency:(BD.getCurrency()||'AUD'),email:s.email})
+      body:JSON.stringify({encryptedMessage:gpToken.encryptedMessage,ephemeralPublicKey:gpToken.ephemeralPublicKey,tag:gpToken.tag,amount:totalCents,currency:(BD.getCurrency()||'AUD'),email:s.email})
     });
     var data=await resp.json();
     if(!data.success)throw new Error(data.error||'Payment failed');
