@@ -19,10 +19,9 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
 
-    // Card always works. Apple Pay + Google Pay auto-included with card.
-    // To add PayPal/Afterpay/Klarna/Zip, activate them in Stripe dashboard
-    // then add them here: params.append('payment_method_types[]', 'paypal');
-    params.append('payment_method_types[]', 'card');
+    // Payment Method Configuration — bundles ALL activated methods
+    // (card, Apple Pay, Google Pay, PayPal, Afterpay, Klarna, Zip, Link, etc.)
+    params.append('payment_method_configuration', 'pmc_1Tf0FZAkMf7PmMVhhlPyfMJ0');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
