@@ -84,9 +84,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 <div class="error-box" id="checkout-error"></div>
 <div class="pay-btns">
   <!-- Apple Pay -->
-  <button class="pay-btn btn-applepay" id="pay-applepay" onclick="payWithApplePay()"><span class="spinner"></span><span class="btn-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.52-3.24 0-1.44.67-2.2.48-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fff"/></svg></span><span class="btn-text">Apple Pay</span></button>
+  <button class="pay-btn btn-applepay" id="pay-applepay" onclick="payWithApplePay()"><span class="spinner"></span><span class="btn-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.52-3.24 0-1.44.67-2.2.48-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fff"/></svg></span><span class="btn-text">Apple Pay</span><span class="btn-sub">Safari · iPhone · Mac</span></button>
   <!-- Google Pay -->
-  <button class="pay-btn btn-gpay" id="pay-gpay" onclick="payWithGPay()"><span class="spinner"></span><span class="btn-logo"><svg width="24" height="24" viewBox="0 0 32 12.5"><path fill="#4285F4" d="M29.17 5.07c-.09-.42-.26-.8-.52-1.12H22.7v2.63h3.74a3.2 3.2 0 01-.92 1.6l.01.01v1.33h2.06c1.58-1.46 2.48-3.6 2.48-6.15 0-.62-.1-1.2-.25-1.73"/><path fill="#34A853" d="M22.7 11.77c2.25 0 4.14-.74 5.52-2.01l-2.06-1.6c-.57.38-1.3.61-2.13.61-1.64 0-3.04-1.1-3.54-2.6h-2.1v1.36c1.37 2.72 4.2 4.64 8.31 4.64z"/><path fill="#FBBC05" d="M19.53 7.55c-.13-.38-.2-.78-.2-1.2s.07-.83.2-1.2V4.25h-2.11a5.98 5.98 0 000 6.63l1.47-1.14a3.58 3.58 0 01.64-2.19z"/><path fill="#EA4335" d="M22.7 4.28c1.22 0 2.32.42 3.18 1.25l2.4-2.4C26.85 1.94 24.95 1.1 22.7 1.1c-4.1 0-6.94 2.53-8.31 5.24l2.11 1.64c.5-1.49 1.9-2.6 3.54-2.6"/></svg></span><span class="btn-text">Google Pay</span></button>
+  <button class="pay-btn btn-gpay" id="pay-gpay" onclick="payWithGPay()"><span class="spinner"></span><span class="btn-logo"><svg width="24" height="24" viewBox="0 0 32 12.5"><path fill="#4285F4" d="M29.17 5.07c-.09-.42-.26-.8-.52-1.12H22.7v2.63h3.74a3.2 3.2 0 01-.92 1.6l.01.01v1.33h2.06c1.58-1.46 2.48-3.6 2.48-6.15 0-.62-.1-1.2-.25-1.73"/><path fill="#34A853" d="M22.7 11.77c2.25 0 4.14-.74 5.52-2.01l-2.06-1.6c-.57.38-1.3.61-2.13.61-1.64 0-3.04-1.1-3.54-2.6h-2.1v1.36c1.37 2.72 4.2 4.64 8.31 4.64z"/><path fill="#FBBC05" d="M19.53 7.55c-.13-.38-.2-.78-.2-1.2s.07-.83.2-1.2V4.25h-2.11a5.98 5.98 0 000 6.63l1.47-1.14a3.58 3.58 0 01.64-2.19z"/><path fill="#EA4335" d="M22.7 4.28c1.22 0 2.32.42 3.18 1.25l2.4-2.4C26.85 1.94 24.95 1.1 22.7 1.1c-4.1 0-6.94 2.53-8.31 5.24l2.11 1.64c.5-1.49 1.9-2.6 3.54-2.6"/></svg></span><span class="btn-text">Google Pay</span><span class="btn-sub">Chrome · Android</span></button>
   <!-- PayPal -->
   <button class="pay-btn btn-paypal" id="pay-paypal" onclick="payWithPayPal()"><span class="spinner"></span><span class="btn-logo"><svg width="20" height="22" viewBox="0 0 12.5 18.3"><path fill="#003087" d="M6.19 1.14c-.63 0-1.14.45-1.23 1.06l-1.56 9.9a.07.07 0 00.07.08h1.56c.1 0 .18-.07.2-.17l.45-2.85c.08-.5.5-.87 1.02-.87h2.13c2.02 0 3.63-.82 4.11-3.19.2-.98.1-1.76-.45-2.29-.59-.56-1.6-.79-2.88-.79H7.65a.18.18 0 00.01-.02C7.51.8 7.06 1.14 6.19 1.14z"/><path fill="#009CDE" d="M6.79.34H3.01a.18.18 0 00-.17.15L1.56 10.84c-.01.07.04.13.11.13h1.72a.18.18 0 01.17-.15l.47-2.8c.02-.14.14-.24.28-.24h1.29c2.08 0 3.66-.85 4.13-3.3.02-.11.04-.22.05-.33a2.2 2.2 0 00-.43-.38 3.53 3.53 0 00-1.56-.3H4.63a.18.18 0 01-.17-.12.18.18 0 01.04-.2c.19-.15.47-.23.86-.23h1.67c.56 0 1.07.04 1.5.14.09.02.18.04.26.07-.01-1.48-.77-2.09-2.2-2.09z"/></svg></span><span class="btn-text">PayPal</span></button>
   <!-- Stripe -->
@@ -232,17 +232,16 @@ window.payWithApplePay = async function(){
 
   var totalCents=Math.round(total*100);
   try{
+    if(!window.ApplePaySession||!window.ApplePaySession.canMakePayments()){throw new Error('Apple Pay requires Safari on iPhone, iPad, or Mac')}
     var stripe=Stripe(STRIPE_PK);
     var pr=stripe.paymentRequest({
       country:'AU',
       currency:(BD.getCurrency()||'aud').toLowerCase(),
       total:{label:'Bargain Drop',amount:totalCents},
       requestPayerName:true,
-      requestPayerEmail:true
+      requestPayerEmail:true,
+      disableWallets:['link']
     });
-
-    var canPay=await pr.canMakePayment();
-    if(!canPay){throw new Error('Apple Pay not available on this device');}
 
     pr.on('paymentmethod', async function(ev){
       var intentResp=await fetch(API_BASE+'/api/create-payment-intent',{
@@ -280,11 +279,12 @@ window.payWithGPay = async function(){
       currency:(BD.getCurrency()||'aud').toLowerCase(),
       total:{label:'Bargain Drop',amount:totalCents},
       requestPayerName:true,
-      requestPayerEmail:true
+      requestPayerEmail:true,
+      disableWallets:['link']
     });
 
     var canPay=await pr.canMakePayment();
-    if(!canPay){throw new Error('Google Pay not available on this device');}
+    if(!canPay){throw new Error('No wallet available on this browser. Use Stripe or try Chrome for Google Pay.')}
 
     pr.on('paymentmethod', async function(ev){
       var intentResp=await fetch(API_BASE+'/api/create-payment-intent',{
@@ -309,8 +309,8 @@ window.payWithGPay = async function(){
 window.payWithPayPal = async function(){
   if(cart.length===0){showError('Your cart is empty');return}
   var s=getShippingInfo();if(!validateShip(s))return;
-  // PayPal not available through Stripe — need PayPal Client ID
-  showError('PayPal is being set up separately — please use another payment method for now');
+  // PayPal needs its own SDK — not available through Stripe
+  showError('PayPal needs a separate setup — please use Apple Pay, Google Pay, or Stripe instead');
 };
 
 window.payWithStripe = async function(){
@@ -324,15 +324,14 @@ window.payWithStripe = async function(){
 };
 
 // Apple Pay availability
+// Always show — error message handles unsupported devices
 (function(){
-  var apBtn=document.getElementById('pay-applepay');
-  if(window.ApplePaySession && window.ApplePaySession.canMakePayments()){
-    apBtn.style.display='flex';
-  } else {
-    apBtn.style.display='flex'; // always show — error handled on click
-    apBtn.style.opacity='.55';
-    apBtn.title='Apple Pay requires an Apple device';
-  }
+  var ap=document.getElementById('pay-applepay');
+  var gp=document.getElementById('pay-gpay');
+  ap.style.display='flex';
+  gp.style.display='flex';
+  if(window.ApplePaySession&&window.ApplePaySession.canMakePayments()){ap.style.opacity='1'}
+  else{ap.style.opacity='.6'}
 })();
 
 
