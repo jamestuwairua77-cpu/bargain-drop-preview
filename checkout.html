@@ -173,7 +173,7 @@ function validateShip(s){
 
 // --- Order saving ---
 function saveOrder(oid,email,fname,lname,method){
-  var order={id:oid,status:'pending',count:cart.length,total:total,date:new Date().toISOString(),items:cart.slice(),email:email,name:fname+' '+lname,payment:method};
+  var order={id:oid,status:'unpaid',count:cart.length,total:total,date:new Date().toISOString(),items:cart.slice(),email:email,name:fname+' '+lname,payment:method};
   var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');orders.push(order);
   localStorage.setItem('bd_orders',JSON.stringify(orders));
   return order;
