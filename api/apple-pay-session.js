@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${STRIPE_KEY}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams({ validation_url: validationURL, domain: 'bargain-drop.online' }).toString()
+      body: new URLSearchParams({ validation_url: validationURL, domain_name: 'bargain-drop.online' }).toString()
     });
     const session = await resp.json();
     res.status(200).json(session);

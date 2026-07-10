@@ -371,11 +371,10 @@ window.payWithGPay = async function(){
     showError('Google Pay: '+e.message);
   }
 };// PayPal SDK — authentic PayPal native popup
+// PayPal — SDK loaded in <head>, just render once available
 (function initPayPal(){
-  var ppS=document.createElement('script');
-  ppS.src='https://www.paypal.com/sdk/js?client-id=Afb8aEAzOEhf6Y80Sx3a4xNIVFIsyKGqXGAASYxlrg1O-K5hSxfqQCit-ClqREEhiWdLEw7lU49EXZFG&currency=AUD&intent=capture';
-  ppS.onload=function(){
-    if(typeof paypal==='undefined')return;
+  function renderPP(){
+    if(typeof paypal==='undefined'){setTimeout(renderPP,200);return;}
     paypal.Buttons({
       style:{layout:'horizontal',color:'gold',shape:'rect',label:'paypal',height:48,tagline:false},
       onClick:function(data,actions){
@@ -401,8 +400,8 @@ window.payWithGPay = async function(){
       onError:function(err){setAllBtnsDisabled(false);showError('PayPal: '+(err.message||err));},
       onCancel:function(){setAllBtnsDisabled(false);}
     }).render('#paypal-btn-container');
-  };
-  document.head.appendChild(ppS);
+  }
+  renderPP();
 })();
 
 window.payWithStripe = async function(){
