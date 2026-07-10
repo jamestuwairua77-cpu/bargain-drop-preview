@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="UTF-8"><title>Order Test</title></head><body>
+<h1>Order Test</h1>
+<button onclick="addTest()">Add Test Order</button>
+<button onclick="checkOrders()">Check localStorage</button>
+<button onclick="window.location='orders.html'">Go to Orders</button>
+<pre id="out"></pre>
+<script>
+function addTest(){
+  var o=[{id:'BD-CC-DEMO',status:'processing',total:87.50,date:new Date().toISOString(),items:[{title:'Wireless Headphones Pro',price:59.99,qty:1,image:''},{title:'USB-C Cable',price:12.99,qty:2,image:''}],email:'james@example.com',name:'James T',payment:'Stripe'}];
+  localStorage.setItem('bd_orders',JSON.stringify(o));
+  document.getElementById('out').textContent='✅ Order saved';
+}
+function checkOrders(){
+  var raw=localStorage.getItem('bd_orders')||'none';
+  document.getElementById('out').textContent='localStorage bd_orders: '+raw;
+}
+checkOrders();
+</script>
+</body></html>
