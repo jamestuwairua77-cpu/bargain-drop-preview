@@ -19,11 +19,10 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
 
-    // Automatic payment methods — Stripe shows ALL activated methods in your dashboard
-    // This includes: card, Apple Pay, Google Pay, PayPal, Afterpay, Klarna, Zip, Link, etc.
-    // Whatever you activate at https://dashboard.stripe.com/settings/payment_methods appears here
-    params.append('automatic_payment_methods[enabled]', 'true');
-    params.append('automatic_payment_methods[allow_redirects]', 'always');
+    // Card always works. Apple Pay + Google Pay auto-included with card.
+    // To add PayPal/Afterpay/Klarna/Zip, activate them in Stripe dashboard
+    // then add them here: params.append('payment_method_types[]', 'paypal');
+    params.append('payment_method_types[]', 'card');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
