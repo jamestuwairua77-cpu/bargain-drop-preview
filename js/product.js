@@ -210,7 +210,7 @@ function renderReviews(){
     var stars='';
     for(var i=1;i<=5;i++)stars+=i<=r.rating?'★':'☆';
     var imgs='';
-    if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+src+'" alt="" loading="lazy">'});imgs+='</div>';}
+    if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+src+'" alt="" loading="lazy" onerror="this.remove()">'});imgs+='</div>';}
     var variant=r.variant?'<div class="review-variant">'+esc(r.variant)+'</div>':'';
     var verified=r.verified?'<span class="review-verified"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#10b981"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2"/></svg>Verified</span>':'';
     

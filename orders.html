@@ -139,7 +139,7 @@ function renderOrders(filter){
       var thumbs = "";
       for(var i=0; i<Math.min(items.length,4); i++){
         var im = items[i].image||"";
-        thumbs += '<div class="order-thumb">'+(im?'<img src="'+esc(im)+'" onerror="this.remove()">':"")+"</div>";
+        thumbs += '<div class="order-thumb">'+(im?'<img src="'+esc(im)+'" onerror="this.remove()" alt="">':"")+"</div>";
       }
       if(items.length>4) thumbs += '<div class="order-thumb" style="display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted)">+'+ (items.length-4) +"</div>";
       var d = new Date(o.date);
@@ -174,7 +174,7 @@ function showOrderDetail(oid){
 
   var itemsHtml = "";
   items.forEach(function(it,i){
-    itemsHtml += '<div class="modal-item"><div class="modal-item-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()">':"")+'</div><div class="modal-item-info"><div class="modal-item-title">'+esc(it.title||"Item #"+(i+1))+'</div><div class="modal-item-qty">Qty: '+(it.qty||it.quantity||1)+'</div></div><div class="modal-item-price">'+fmt((it.price||0)*(it.qty||it.quantity||1))+'</div></div>';
+    itemsHtml += '<div class="modal-item"><div class="modal-item-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()" alt="">':"")+'</div><div class="modal-item-info"><div class="modal-item-title">'+esc(it.title||"Item #"+(i+1))+'</div><div class="modal-item-qty">Qty: '+(it.qty||it.quantity||1)+'</div></div><div class="modal-item-price">'+fmt((it.price||0)*(it.qty||it.quantity||1))+'</div></div>';
   });
 
   document.getElementById("modal-title").textContent = "Order #"+esc(o.id);

@@ -102,7 +102,7 @@ function renderWishlist(){
   
   items.forEach(function(it, idx){
     html += '<div class="wishlist-item">'+
-      '<a href="product.html?id='+esc(it.id)+'" class="wishlist-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()">':"")+'</a>'+
+      '<a href="product.html?id='+esc(it.id)+'" class="wishlist-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()" alt="">':"")+'</a>'+
       '<a href="product.html?id='+esc(it.id)+'" class="wishlist-info">'+
         '<div class="wishlist-title">'+esc(it.title)+'</div>'+
         '<div class="wishlist-price">'+fmt(it.price)+'</div>'+
