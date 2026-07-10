@@ -4,65 +4,91 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Order Confirmed — Bargain Drop</title>
-<style>:root{--bg:#fff;--fg:#111;--muted:#777;--green:#10b981}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}.card{text-align:center;max-width:380px}.check{width:64px;height:64px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}.check svg{width:32px;height:32px;stroke:#fff;stroke-width:3;fill:none}.card h1{font-size:1.2rem;font-weight:800;margin-bottom:6px}.card p{font-size:.75rem;color:var(--muted);margin-bottom:6px;line-height:1.5}.card .oid{font-weight:700;font-size:.85rem;margin-bottom:20px}.card a{display:inline-block;padding:12px 32px;background:var(--fg);color:#fff;border-radius:10px;font-size:.8rem;font-weight:700;text-decoration:none;margin:4px}</style>  <script src="profile-pic.js"></script>
+<style>:root{--bg:#fff;--fg:#111;--muted:#777;--green:#10b981}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}.card{text-align:center;max-width:380px}.check{width:64px;height:64px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}.check svg{width:32px;height:32px;stroke:#fff;stroke-width:3;fill:none}.card h1{font-size:1.2rem;font-weight:800;margin-bottom:6px}.card p{font-size:.75rem;color:var(--muted);margin-bottom:6px;line-height:1.5}.card .oid{font-weight:700;font-size:.85rem;margin-bottom:20px}.card a{display:inline-block;padding:12px 32px;background:var(--fg);color:#fff;border-radius:10px;font-size:.8rem;font-weight:700;text-decoration:none;margin:4px}.cj-section{text-align:center;margin-top:20px}.cj-btn{background:#ff6b00;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:16px;cursor:pointer}.cj-btn:disabled{opacity:.6;cursor:wait}.cj-status{margin-top:10px;font-size:.7rem}</style>
 </head><body>
 <div class="card">
   <div class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
   <h1>Order Confirmed!</h1>
-  <p>Your order has been placed and payment processed successfully.</p>
+  <p>Payment processed successfully. Your order is now processing.</p>
   <div class="oid" id="oid"></div>
-  <a href="profile.html">View My Orders</a><br><br>
+  <a href="orders.html">View My Orders</a><br><br>
   <a href="/" style="background:none;color:var(--muted);font-size:.7rem;text-decoration:underline">← Continue Shopping</a>
+  <div class="cj-section">
+    <button class="cj-btn" id="cj-btn" onclick="syncCJ()" style="display:none">🔄 Sync to Fulfillment</button>
+    <div class="cj-status" id="cj-status"></div>
+  </div>
 </div>
 <script>
-window.API_BASE="https://bargain-drop.online";
-var p=new URLSearchParams(location.search);
-var id=p.get('id')||p.get('oid')||'';
-if(id)document.getElementById('oid').textContent='Order #'+id;
-// Mark order as paid in localStorage
-if(id){
-  var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');
-  var order=orders.find(function(o){return o.id===id});
-  if(order){order.status='paid';order.payment='stripe';localStorage.setItem('bd_orders',JSON.stringify(orders))}
-}
-</script>
-    <!-- CJ Dropshipping Auto-Sync -->
-    <div style="text-align:center;margin-top:20px">
-      <button id="cj-sync-btn" style="background:#ff6b00;color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:16px;cursor:pointer;display:none" onclick="syncToCJ()">🔄 Sync Order to CJ Dropshipping</button>
-      <div id="cj-status" style="margin-top:10px"></div>
-    </div>
-    <script>
-window.API_BASE="https://bargain-drop.online";
-    (async function(){
-      var oid=new URLSearchParams(location.search).get('id')||'';
-      var ord=JSON.parse(localStorage.getItem('order_'+oid)||'null');
-      var btn=document.getElementById('cj-sync-btn');
-      if(ord){btn.style.display='inline-block'}
-      
-      window.syncToCJ=async function(){
-        if(!ord)return;
-        btn.disabled=true;btn.textContent='⏳ Syncing to CJ...';
-        var st=document.getElementById('cj-status');
-        try{
-          var resp=await fetch((window.API_BASE||'https://bargain-drop.online')+'/api/cj-order',{
-            method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({
-              line_items:ord.items||[],customer_email:ord.email,
-              shipping_address:{first_name:ord.fname,last_name:ord.lname,city:ord.city,state:ord.state,zip:ord.zip,addr:ord.addr,country:'Australia',country_code:'AU',phone:ord.phone},
-              payment_method:ord.method
-            })
-          });
-          var d=await resp.json();
-          if(d.success){btn.textContent='✅ Sent to CJ! Order #'+d.order_number;btn.style.background='#28a745';st.innerHTML='CJ Order ID: '+d.cj_order_id+(d.cj_pay_url?'<br><a href="'+d.cj_pay_url+'" target="_blank" style="color:#ff6b00">Complete payment on CJ</a>':'')}
-          else{btn.textContent='❌ Sync failed';st.textContent=d.error||'Unknown error';btn.style.background='#dc3545'}
-        }catch(e){btn.textContent='❌ Network error';st.textContent=e.message}
+(function(){
+  var API=window.location.origin;
+  var p=new URLSearchParams(location.search);
+  var oid=p.get('id')||p.get('oid')||'';
+
+  if(oid){
+    document.getElementById('oid').textContent='Order #'+oid;
+
+    // 1. Update localStorage: unpaid → processing
+    var orders=JSON.parse(localStorage.getItem('bd_orders')||'[]');
+    var order=orders.find(function(o){return o.id===oid});
+    if(order){
+      order.status='processing';
+      order.paidAt=new Date().toISOString();
+      localStorage.setItem('bd_orders',JSON.stringify(orders));
+
+      // Show CJ sync button
+      document.getElementById('cj-btn').style.display='inline-block';
+
+      // 2. Save to server for persistence
+      fetch(API+'/api/save-order',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({order:order})
+      }).catch(function(){});
+
+      // 3. Auto-sync to CJ after 1s delay
+      setTimeout(function(){ syncCJ(); }, 1000);
+    }
+  }
+
+  window.syncCJ = function(){
+    var oid2=new URLSearchParams(location.search).get('id')||'';
+    var orders2=JSON.parse(localStorage.getItem('bd_orders')||'[]');
+    var ord=orders2.find(function(o){return o.id===oid2});
+    if(!ord) return;
+
+    var btn=document.getElementById('cj-btn');
+    var st=document.getElementById('cj-status');
+    btn.disabled=true;btn.textContent='Syncing to fulfillment...';
+
+    fetch(API+'/api/cj-order',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        order_id:oid2,
+        line_items:ord.items||[],
+        customer_email:ord.email||'',
+        shipping_address:{
+          first_name:ord.name?ord.name.split(' ')[0]:'',
+          last_name:ord.name?ord.name.split(' ').slice(1).join(' '):'',
+          city:'',state:'WA',zip:'6000',addr:'',country:'Australia',country_code:'AU',phone:''
+        },
+        payment_method:ord.payment||'Stripe'
+      })
+    }).then(function(r){return r.json()}).then(function(d){
+      if(d.success){
+        btn.textContent='Synced to fulfillment';
+        btn.style.background='#10b981';
+        st.textContent='CJ Order #'+d.order_number;
+      }else{
+        btn.textContent='Sync failed — try again';
+        btn.style.background='#dc3545';
+        btn.disabled=false;
+        st.textContent=d.error||'';
       }
-      // Auto-sync
-      if(ord){setTimeout(function(){syncToCJ()},500)}
-    })();
-    </script>
-    
-
-
-<script src="js/currency.js"></script>
+    }).catch(function(e){
+      btn.textContent='Network error — try again';
+      btn.style.background='#dc3545';
+      btn.disabled=false;
+    });
+  };
+})();
+</script>
 </body></html>

@@ -67,8 +67,9 @@ a{color:inherit;text-decoration:none}
 
 
 <script>
-// Order loader — reads from localStorage, filters by tab
+// Order loader — localStorage + server API, filters by tab
 (function(){
+  var API=window.location.origin;
   var statuses = ['unpaid','processing','shipped','review','return'];
   var labels = {unpaid:'Unpaid',processing:'Processing',shipped:'Shipped',review:'To Review','return':'Return'};
   var styleMap = {unpaid:'unpaid',processing:'processing',shipped:'shipped',review:'review','return':'return'};
@@ -76,13 +77,31 @@ a{color:inherit;text-decoration:none}
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function fmt(p){return 'A$'+Number(p||0).toFixed(2);}
 
-  function getOrders(){
-    try { return JSON.parse(localStorage.getItem('bd_orders')||'[]'); }
-    catch(e){ return []; }
+  function getOrders(cb){
+    // Try server first, fall back to localStorage
+    fetch(API+'/api/save-order').then(function(r){return r.json()}).then(function(d){
+      var serverOrders = d.orders || [];
+      // Merge with localStorage
+      var localOrders = [];
+      try { localOrders = JSON.parse(localStorage.getItem('bd_orders')||'[]'); } catch(e){}
+      // Merge: server orders take priority, dedupe by id
+      var map = {};
+      localOrders.forEach(function(o){ map[o.id] = o; });
+      serverOrders.forEach(function(o){ map[o.id] = o; });
+      // Sync localStorage with merged
+      var merged = Object.values(map);
+      localStorage.setItem('bd_orders', JSON.stringify(merged));
+      cb(merged);
+    }).catch(function(){
+      // Server unavailable — use localStorage only
+      var orders = [];
+      try { orders = JSON.parse(localStorage.getItem('bd_orders')||'[]'); } catch(e){}
+      cb(orders);
+    });
   }
 
   function renderOrders(filter){
-    var orders = getOrders();
+    getOrders(function(orders){
     var filtered = filter && filter!=='all' ? orders.filter(function(o){ return o.status===filter; }) : orders;
     var c = document.getElementById('content');
     
@@ -127,6 +146,7 @@ a{color:inherit;text-decoration:none}
     });
 
     c.innerHTML = html;
+    });
   }
 
   // Initial render — show all orders
