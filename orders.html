@@ -68,6 +68,7 @@ a{color:inherit;text-decoration:none}
   
 </head>
 <body>
+<div id="js-status" style="background:red;color:#fff;text-align:center;padding:4px;font-size:.7rem">JS: loading...</div>
 <div class="top-bar"><a href="profile.html" class="active">← Profile</a><div>Free Shipping $29+</div></div>
 <div class="page-header"><div class="breadcrumb"><a href="/">Home</a> → <a href="profile.html">Profile</a> → Orders</div><h1>My Orders</h1></div>
 <div class="tabs" id="tabs">
@@ -92,6 +93,7 @@ a{color:inherit;text-decoration:none}
 
 
 <script>
+document.getElementById("js-status").textContent="JS: loaded ✓";document.getElementById("js-status").style.background="#10b981";
 // Simple localStorage-based order loader — instant, no network dependency
 (function(){
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
