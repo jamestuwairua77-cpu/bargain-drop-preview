@@ -253,8 +253,7 @@ function renderRelatedProducts(){
         var a=document.createElement('a');
         a.className='related-card';
         a.href='product.html?id='+p.id;
-        var disc='';
-        if(p.compare_at_price&&p.compare_at_price>p.price)disc='<span style="font-size:.6rem;color:#e60023;font-weight:700">-'+Math.round((1-p.price/p.compare_at_price)*100)+'%</span>';
+        var disc=''; // discount removed
         a.innerHTML='<img src="'+(p.image||(p.images||[])[0]||'')+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="related-info"><div class="related-title">'+esc(p.title)+'</div><div class="related-price">'+money(p.price||0)+' '+disc+'</div></div>';
         grid.appendChild(a);
       });
@@ -289,24 +288,11 @@ function showProduct(){
     document.getElementById('gallery-count').style.display=imgs.length>1?'':'none';
   }
   
-  // Discount
-  var compareAt=p.compare_at_price||0;
-  if(compareAt&&compareAt>p.price){
-    var d=Math.round((1-p.price/compareAt)*100);
-    document.getElementById('product-original').textContent=money(compareAt);
-    document.getElementById('product-discount').textContent='-'+d+'%';
-    document.getElementById('product-original').style.display='';
-    document.getElementById('product-discount').style.display='';
-    document.getElementById('savings').style.display='';
-    document.getElementById('savings-text').textContent='You save '+money(compareAt-p.price);
-    document.getElementById('gallery-badge').textContent='SALE';
-    document.getElementById('gallery-badge').style.display='';
-  }else{
-    document.getElementById('product-original').style.display='none';
-    document.getElementById('product-discount').style.display='none';
-    document.getElementById('savings').style.display='none';
-    document.getElementById('gallery-badge').style.display='none';
-  }
+  // Discount removed — all products shown at regular price
+  document.getElementById('product-original').style.display='none';
+  document.getElementById('product-discount').style.display='none';
+  document.getElementById('savings').style.display='none';
+  document.getElementById('gallery-badge').style.display='none';
   
   // Description
   document.getElementById('product-desc').innerHTML=p.body_html||'No description available.';

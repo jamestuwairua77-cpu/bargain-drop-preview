@@ -65,8 +65,8 @@ function renderProds(prods){
     var a=document.createElement('a');a.className='product-card fade-in';
     a.href='product.html?id='+p.id;
     var d='';
-    if(p.compare_at_price&&p.compare_at_price>p.price)d='<div class="prod-badge">-'+Math.round((1-p.price/p.compare_at_price)*100)+'%</div>';
-    a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy">':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+BD.formatMoneyCompact(p.price||0)+'</span>'+(p.compare_at_price&&p.compare_at_price>p.price?'<span class="prod-compare">'+BD.formatMoneyCompact(p.compare_at_price)+'</span>':'')+'</div></div>';
+    var d=''; // discount removed
+    a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy">':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+BD.formatMoneyCompact(p.price||0)+'</span>'+'</div></div>';
     g.appendChild(a);
   }
 }
