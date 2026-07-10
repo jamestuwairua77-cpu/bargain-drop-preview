@@ -67,104 +67,74 @@ a{color:inherit;text-decoration:none}
 
 
 <script>
-// Order loader — localStorage + server API, filters by tab
+// Simple localStorage-based order loader — instant, no network dependency
 (function(){
-  var API=window.location.origin;
-  var statuses = ['unpaid','processing','shipped','review','return'];
-  var labels = {unpaid:'Unpaid',processing:'Processing',shipped:'Shipped',review:'To Review','return':'Return'};
-  var styleMap = {unpaid:'unpaid',processing:'processing',shipped:'shipped',review:'review','return':'return'};
-
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function fmt(p){return 'A$'+Number(p||0).toFixed(2);}
+  var labels={unpaid:'Unpaid',processing:'Processing',shipped:'Shipped',review:'To Review','return':'Return'};
+  var styleMap={unpaid:'unpaid',processing:'processing',shipped:'shipped',review:'review','return':'return'};
+  
+  function getOrders(){
+    try { return JSON.parse(localStorage.getItem('bd_orders')||'[]'); }
+    catch(e){ return []; }
+  }
 
-  function getOrders(cb){
-    // Try server first, fall back to localStorage
-    fetch(API+'/api/save-order').then(function(r){return r.json()}).then(function(d){
-      var serverOrders = d.orders || [];
-      // Merge with localStorage
-      var localOrders = [];
-      try { localOrders = JSON.parse(localStorage.getItem('bd_orders')||'[]'); } catch(e){}
-      // Merge: server orders take priority, dedupe by id
-      var map = {};
-      localOrders.forEach(function(o){ map[o.id] = o; });
-      serverOrders.forEach(function(o){ map[o.id] = o; });
-      // Sync localStorage with merged
-      var merged = Object.values(map);
-      localStorage.setItem('bd_orders', JSON.stringify(merged));
-      cb(merged);
-    }).catch(function(){
-      // Server unavailable — use localStorage only
-      var orders = [];
-      try { orders = JSON.parse(localStorage.getItem('bd_orders')||'[]'); } catch(e){}
-      cb(orders);
+  // Migrate old 'pending' → 'unpaid', 'paid' → 'processing'
+  function migrate(orders){
+    var changed = false;
+    orders.forEach(function(o){
+      if(o.status==='pending'){ o.status='unpaid'; changed=true; }
+      if(o.status==='paid'){ o.status='processing'; changed=true; }
     });
+    if(changed) localStorage.setItem('bd_orders', JSON.stringify(orders));
+    return orders;
   }
 
   function renderOrders(filter){
-    getOrders(function(orders){
-    var filtered = filter && filter!=='all' ? orders.filter(function(o){ return o.status===filter; }) : orders;
+    var orders = migrate(getOrders());
     var c = document.getElementById('content');
+    var filtered = filter && filter!=='all' ? orders.filter(function(o){ return o.status===filter; }) : orders;
     
-    // Fix orders with 'pending' status — migrate to 'unpaid'
-    var migrated = false;
-    orders.forEach(function(o){
-      if(o.status==='pending'){ o.status='unpaid'; migrated=true; }
-    });
-    if(migrated){ localStorage.setItem('bd_orders',JSON.stringify(orders)); filtered = getOrders().filter(function(o){ return filter ? o.status===filter : true; }); }
-
     if(!filtered.length){
-      c.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>No orders yet</h2><p>Orders will appear here once you make a purchase</p><br><a href="products.html" style="color:var(--accent);font-weight:600">Start Shopping →</a></div>';
+      var msg = filter && filter!=='all' ? 'No '+labels[filter].toLowerCase()+' orders' : 'No orders yet';
+      c.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>'+msg+'</h2><p>Orders appear here after purchase</p><br><a href="products.html" style="color:var(--fg);font-weight:600;text-decoration:underline">Start Shopping</a></div>';
       return;
     }
 
-    // Sort newest first
     filtered.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
 
     var html = '';
     filtered.forEach(function(o){
-      var statusLabel = labels[o.status] || o.status || 'Unknown';
-      var statusClass = styleMap[o.status] || 'unpaid';
-      var items = o.items || [];
+      var st = o.status||'unpaid';
       var thumbs = '';
+      var items = o.items||[];
       for(var i=0; i<Math.min(items.length,4); i++){
-        var img = items[i].image || '';
-        thumbs += '<div class="order-thumb">'+(img?'<img src="'+esc(img)+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">':'')+'</div>';
+        var img = items[i].image||'';
+        thumbs += '<div class="order-thumb">'+(img?'<img src="'+esc(img)+'" style="width:100%;height:100%;object-fit:cover" onerror="this.remove()">':'')+'</div>';
       }
       if(items.length>4) thumbs += '<div class="order-thumb" style="display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted)">+'+ (items.length-4) +'</div>';
-
+      
       var d = new Date(o.date);
-      var dateStr = d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
-
-      html += '<div class="order-card">'+
-        '<div class="order-header">'+
-          '<div><div class="order-id">'+esc(o.id)+'</div><div style="font-size:.62rem;color:var(--muted)">'+dateStr+'</div></div>'+
-          '<span class="order-status '+statusClass+'">'+statusLabel+'</span>'+
-        '</div>'+
-        '<div class="order-items">'+thumbs+'</div>'+
-        '<div class="order-total">'+fmt(o.total)+' &bull; '+items.length+' item'+(items.length!==1?'s':'')+'</div>'+
-      '</div>';
+      var ds = d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+      
+      html += '<div class="order-card"><div class="order-header"><div><div class="order-id">'+esc(o.id)+'</div><div style="font-size:.62rem;color:var(--muted)">'+ds+'</div></div><span class="order-status '+styleMap[st]+'">'+labels[st]+'</span></div><div class="order-items">'+thumbs+'</div><div class="order-total">'+fmt(o.total)+' &bull; '+items.length+' item'+(items.length!==1?'s':'')+'</div></div>';
     });
-
     c.innerHTML = html;
-    });
   }
 
-  // Initial render — show all orders
+  // Initial: show all
   renderOrders('all');
 
-  // Tab switching
+  // Tab clicks
   var tabs = document.querySelectorAll('#tabs .tab');
-  tabs.forEach(function(tab){
-    tab.addEventListener('click', function(){
-      tabs.forEach(function(t){ t.classList.remove('active'); });
-      tab.classList.add('active');
-      var status = tab.getAttribute('data-status');
-      renderOrders(status);
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      renderOrders(t.getAttribute('data-status'));
     });
   });
-
-  // Set first tab active
-  if(tabs.length>0){ tabs[0].classList.add('active'); tabs[0].click(); }
+  if(tabs.length){ tabs[0].classList.add('active'); tabs[0].click(); }
 })();
 </script>
 
