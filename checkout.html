@@ -327,13 +327,17 @@ window.payWithGPay = async function(){
   }
 
   try{
+    var pkResp=await fetch(API_BASE+'/api/stripe-pk');
+    var pkData=await pkResp.json();
+    var pubKey=pkData.key||STRIPE_PK;
+
     var gpayClient=new google.payments.api.PaymentsClient({environment:'PRODUCTION'});
     var gpayReq={
       apiVersion:2,apiVersionMinor:0,
       allowedPaymentMethods:[{
         type:'CARD',
         parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX'],billingAddressRequired:true},
-        tokenizationSpecification:{type:'DIRECT',parameters:{protocolVersion:'ECv2',publicKey:'BM/rGYCXdn9noLa5M/j1z8pYgPZ3HTfmwdWISsFoYyBQm3mRfr/pRZAfFpJllMCPPreRhA+CJ07CGareqHhOOD0='}}
+        tokenizationSpecification:{type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe','stripe:version':'2018-11-08','stripe:publishableKey':pubKey}}
       }],
       merchantInfo:{merchantName:'Bargain Drop'},
       transactionInfo:{totalPriceStatus:'FINAL',totalPriceLabel:'Total',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'}
@@ -344,34 +348,19 @@ window.payWithGPay = async function(){
     
     if(!ready.result){
       btn.classList.remove('loading');setAllBtnsDisabled(false);
-      showError('Google Pay not set up. Sign into Chrome and add a card at <a href="https://pay.google.com" target="_blank">pay.google.com</a>, then refresh.');
+      showError('Google Pay requires a saved card in Chrome. Go to pay.google.com, add a card, then refresh.');
       return;
     }
 
     var paymentData=await gpayClient.loadPaymentData(gpayReq);
     var gpToken=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
     
-    // Send encrypted GPay token to OUR server (zero Stripe.js — secret key only)
-    var resp=await fetch(API_BASE+'/api/gpay-process',{
+    var resp=await fetch(API_BASE+'/api/gpay-stripe-process',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        encryptedMessage:gpToken.encryptedMessage,
-        ephemeralPublicKey:gpToken.ephemeralPublicKey,
-        tag:gpToken.tag,
-        amount:totalCents,
-        currency:(BD.getCurrency()||'AUD'),
-        email:s.email
-      })
+      body:JSON.stringify({token:gpToken.id,amount:totalCents,currency:(BD.getCurrency()||'AUD'),email:s.email})
     });
     var data=await resp.json();
-    if(!data.success){
-      if(data.url){
-        document.getElementById('checkout-error').innerHTML='<b>Google Pay setup needed:</b><br><br>📋 <b>One-time fix:</b><br>1. Go to <a href="'+data.url+'" target="_blank" style="color:#2563eb">'+data.url+'</a><br>2. Enable <b>Raw Card Data API</b><br>3. Refresh this page<br><br><button onclick="payWithStripe()" style="background:#635bff;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:700">💳 Pay with Stripe instead</button>';
-        document.getElementById('checkout-error').style.display='block';
-      }else{throw new Error(data.error||'Payment failed')}
-      btn.classList.remove('loading');setAllBtnsDisabled(false);
-      return;
-    }
+    if(!data.success)throw new Error(data.error||'Payment failed');
     
     var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
     saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
@@ -379,7 +368,13 @@ window.payWithGPay = async function(){
 
   }catch(e){
     btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Google Pay: '+e.message);
+    var msg=(e.message||'').toLowerCase();
+    if(msg.indexOf('merchant')!==-1||msg.indexOf('unsupported')!==-1||msg.indexOf('tokenization')!==-1||msg.indexOf('publishable')!==-1){
+      document.getElementById('checkout-error').innerHTML='One setting needed:<br><br>Go to <a href="https://dashboard.stripe.com/settings/integration" target="_blank" style="color:#2563eb">Stripe Settings → Integration</a><br><br>Find checkbox: <b>Enable card data collection with a publishable key without using Stripe pre-built UI elements</b><br><br>Toggle ON, refresh page.';
+      document.getElementById('checkout-error').style.display='block';
+    }else{
+      showError('Google Pay: '+e.message);
+    }
   }
 };// PayPal SDK — authentic PayPal native popup
 (function initPayPal(){
