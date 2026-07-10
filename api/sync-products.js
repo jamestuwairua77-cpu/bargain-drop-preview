@@ -42,7 +42,7 @@ export default async function handler(req, res) {
 
     for (const cp of cjProducts) {
       try {
-        const title = cp.productNameEn || cp.productName || cp.nameEn || 'Untitled';
+        const title = (cp.productNameEn || cp.productName || cp.nameEn || 'Untitled').substring(0, 255);
         const description = cp.description || cp.productDescEn || '';
         const tags = (cp.categoryName ? String(cp.categoryName).split(/[,>]/).map(s => s.trim()) : []).filter(Boolean);
         const images = (cp.productImageSet || cp.productImageList || cp.images || [])
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
         if (match) {
           // Update in place: price, title, images, tags, description.
           const productId = match.product.id;
-          await shopifyFetch(`/products/${productId}.json`, {
+          const upRes = await shopifyFetch(`/products/${productId}.json`, {
             method: 'PUT',
             body: JSON.stringify({
               product: {
@@ -96,9 +96,9 @@ export default async function handler(req, res) {
               },
             }),
           });
-          results.updated++;
+          if (upRes.ok || upRes.status === 200) results.updated++; else results.errors.push({ product: title.substring(0,30), error: 'Update failed: ' + upRes.status, details: JSON.stringify(upRes.body).substring(0,200) });
         } else {
-          await shopifyFetch('/products.json', {
+          const crRes = await shopifyFetch('/products.json', {
             method: 'POST',
             body: JSON.stringify({
               product: {
@@ -117,7 +117,7 @@ export default async function handler(req, res) {
               },
             }),
           });
-          results.created++;
+          if (crRes.ok || crRes.status === 201) results.created++; else results.errors.push({ product: title.substring(0,30), error: 'Create failed: ' + crRes.status, details: JSON.stringify(crRes.body).substring(0,200) });
         }
         await sleep(200); // Shopify rate limit
       } catch (e) {
