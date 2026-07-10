@@ -235,7 +235,7 @@ window.payWithApplePay = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-AP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Apple Pay');
-  await stripeCheckout(oid,s,'apple_pay');
+  await stripeCheckout(oid,s,'card');
 };
 
 window.payWithStripe = async function(){
@@ -255,7 +255,7 @@ window.payWithPayPal = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-PP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'PayPal');
-  await stripeCheckout(oid,s,'paypal');
+  await stripeCheckout(oid,s,'card');
 };
 
 window.payWithGPay = async function(){
@@ -265,7 +265,7 @@ window.payWithGPay = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
-  await stripeCheckout(oid,s,'google_pay');
+  await stripeCheckout(oid,s,'card');
 };
 
 // --- Apple Pay detection ---
