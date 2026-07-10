@@ -1,7 +1,8 @@
 {
   "rewrites": [],
   "functions": {
-    "api/create-checkout-session.js": { "memory": 128, "maxDuration": 10 },
+    "api/shopify-checkout.js": { "memory": 256, "maxDuration": 30 },
+    "api/create-checkout-session.js": { "memory": 256, "maxDuration": 30 },
     "api/cj-order.js": { "memory": 128, "maxDuration": 30 },
     "api/cj-webhook.js": { "memory": 128, "maxDuration": 5 },
     "api/product-lookup.js": { "memory": 512, "maxDuration": 30 },
