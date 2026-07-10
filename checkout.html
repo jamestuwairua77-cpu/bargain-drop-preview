@@ -318,64 +318,9 @@ window.payWithGPay = async function(){
   var s=getShippingInfo();if(!validateShip(s))return;
   var btn=document.getElementById('pay-gpay');
   btn.classList.add('loading');setAllBtnsDisabled(true);
-  var totalCents=Math.round(total*100);
-
-  if(typeof google==='undefined'||!google.payments||!google.payments.api){
-    btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Google Pay requires Chrome browser');
-    return;
-  }
-
-  try{
-    var pkResp=await fetch(API_BASE+'/api/stripe-pk');
-    var pkData=await pkResp.json();
-    var pubKey=pkData.key||STRIPE_PK;
-
-    var gpayClient=new google.payments.api.PaymentsClient({environment:'PRODUCTION'});
-    var gpayReq={
-      apiVersion:2,apiVersionMinor:0,
-      allowedPaymentMethods:[{
-        type:'CARD',
-        parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX'],billingAddressRequired:true},
-        tokenizationSpecification:{type:'DIRECT',parameters:{protocolVersion:'ECv2',publicKey:'BI5Wfx6gYJ0/+YJqfs5q4ejSDwEVd2XZ0lRygbyev4p1d0FJ8s8sFCu7bna0TEEQfo4z6PiZTFzJQpqou7+h+Vk='}}
-      }],
-      merchantInfo:{merchantName:'Bargain Drop'},
-      transactionInfo:{totalPriceStatus:'FINAL',totalPriceLabel:'Total',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'}
-    };
-
-    var readyReq={apiVersion:2,apiVersionMinor:0,allowedPaymentMethods:gpayReq.allowedPaymentMethods,existingPaymentMethodRequired:false};
-    var ready=await gpayClient.isReadyToPay(readyReq);
-    
-    if(!ready.result){
-      btn.classList.remove('loading');setAllBtnsDisabled(false);
-      showError('Google Pay requires a saved card in Chrome. Go to pay.google.com, add a card, then refresh.');
-      return;
-    }
-
-    var paymentData=await gpayClient.loadPaymentData(gpayReq);
-    var gpToken=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
-    
-    var resp=await fetch(API_BASE+'/api/gpay-process',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({encryptedMessage:gpToken.encryptedMessage,ephemeralPublicKey:gpToken.ephemeralPublicKey,tag:gpToken.tag,amount:totalCents,currency:(BD.getCurrency()||'AUD'),email:s.email})
-    });
-    var data=await resp.json();
-    if(!data.success)throw new Error(data.error||'Payment failed');
-    
-    var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
-    saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
-    window.location.href=API_BASE+'/order-success.html?id='+oid;
-
-  }catch(e){
-    btn.classList.remove('loading');setAllBtnsDisabled(false);
-    var msg=(e.message||'').toLowerCase();
-    if(msg.indexOf('merchant')!==-1||msg.indexOf('unsupported')!==-1||msg.indexOf('tokenization')!==-1||msg.indexOf('publishable')!==-1){
-      document.getElementById('checkout-error').innerHTML='One setting needed:<br><br>Go to <a href="https://dashboard.stripe.com/settings/integration" target="_blank" style="color:#2563eb">Stripe Settings → Integration</a><br><br>Find checkbox: <b>Enable card data collection with a publishable key without using Stripe pre-built UI elements</b><br><br>Toggle ON, refresh page.';
-      document.getElementById('checkout-error').style.display='block';
-    }else{
-      showError('Google Pay: '+e.message);
-    }
-  }
+  var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
+  saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
+  await stripeCheckout(oid,s);
 };// PayPal SDK — authentic PayPal native popup
 (function initPayPal(){
   var ppS=document.createElement('script');
