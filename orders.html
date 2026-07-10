@@ -23,10 +23,11 @@ a{color:inherit;text-decoration:none}
 .empty-state .icon{font-size:4rem;margin-bottom:12px}
 .empty-state h2{font-size:1rem;margin-bottom:4px}
 .empty-state p{font-size:0.75rem}
-.order-card{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.order-card{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s}
+.order-card:active{transform:scale(.98);background:#fafafa}
 .order-card .order-header{display:flex;justify-content:space-between;font-size:0.7rem;margin-bottom:8px}
 .order-card .order-id{font-weight:700}
-.order-card .order-status{padding:2px 8px;border-radius:10px;font-size:0.62rem;font-weight:600}
+.order-status{padding:2px 8px;border-radius:10px;font-size:0.62rem;font-weight:600}
 .order-status.unpaid{background:#fef2f2;color:var(--red)}
 .order-status.processing{background:#fffbeb;color:var(--amber)}
 .order-status.shipped{background:#eff6ff;color:var(--blue)}
@@ -34,24 +35,25 @@ a{color:inherit;text-decoration:none}
 .order-status.return{background:#faf5ff;color:#7c3aed}
 .order-card .order-items{display:flex;gap:8px;overflow-x:auto;margin-bottom:8px}
 .order-card .order-thumb{width:56px;height:56px;border-radius:8px;background:#f5f5f5;flex-shrink:0;overflow:hidden}
+.order-card .order-thumb img{width:100%;height:100%;object-fit:cover}
 .order-card .order-total{text-align:right;font-size:0.78rem;font-weight:700}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}
 .bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:0.6rem;color:var(--muted);text-decoration:none}
 .bottom-nav a.active{color:var(--fg)}
 .nav-icon{width:20px;height:20px;flex-shrink:0}
-
-/* Order Detail Modal */
+/* Modal */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
 .modal-sheet{background:#fff;width:100%;max-width:500px;max-height:85vh;border-radius:16px 16px 0 0;overflow-y:auto;padding:0;animation:slideUp .25s ease}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modal-handle{width:36px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0}
 .modal-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 8px;position:sticky;top:0;background:#fff;z-index:1}
 .modal-header h2{font-size:.95rem;font-weight:800}
 .modal-close{width:32px;height:32px;border-radius:50%;border:none;background:#f5f5f5;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .modal-body{padding:0 16px 24px}
 .modal-status-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-.modal-meta{font-size:.7rem;color:var(--muted);margin-bottom:16px;line-height:1.6}
-.modal-meta strong{color:var(--fg);font-weight:600}
+.modal-meta{font-size:.7rem;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.modal-meta strong{color:var(--fg);font-weight:600;display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
 .modal-section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 .modal-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5}
 .modal-item:last-child{border-bottom:none}
@@ -62,14 +64,10 @@ a{color:inherit;text-decoration:none}
 .modal-item-qty{font-size:.65rem;color:var(--muted)}
 .modal-item-price{font-size:.78rem;font-weight:700;text-align:right;white-space:nowrap}
 .modal-total-row{display:flex;justify-content:space-between;padding:12px 0;font-size:.85rem;font-weight:800;margin-top:4px}
-.order-card{cursor:pointer}
-
 </style>
-  
 </head>
 <body>
-<div id="js-status" style="background:red;color:#fff;text-align:center;padding:4px;font-size:.7rem">JS: loading...</div>
-<div class="top-bar"><a href="profile.html" class="active">← Profile</a><div>Free Shipping $29+</div></div>
+<div class="top-bar"><a href="profile.html">← Profile</a><div>Free Shipping $29+</div></div>
 <div class="page-header"><div class="breadcrumb"><a href="/">Home</a> → <a href="profile.html">Profile</a> → Orders</div><h1>My Orders</h1></div>
 <div class="tabs" id="tabs">
 <button class="tab active" data-status="unpaid">Unpaid</button>
@@ -78,60 +76,140 @@ a{color:inherit;text-decoration:none}
 <button class="tab" data-status="review">To Review</button>
 <button class="tab" data-status="return">Returns</button>
 </div>
-<div class="content" id="content"><div class="empty-state"><div class="icon">📦</div><h2>No orders yet</h2><p>Orders will appear here once you make a purchase</p><br><a href="products.html" style="color:var(--accent);font-weight:600">Start Shopping →</a></div></div>
+<div class="content" id="content"><div class="empty-state"><div class="icon">📦</div><h2>Loading orders…</h2></div></div>
 <nav class="bottom-nav">
 <a href="/"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
 <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5" fill="none"/></svg>Products</a>
 <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
 <a href="#"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
-<a href="cart.html" class="cart-btn" style="position:relative" title="Cart"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span class="cart-count-badge" id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:#e60023;color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
-<a href="profile.html" id="nav-profile-link"><span id="nav-profile-icon-svg"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg></span><img id="nav-profile-pic" src="" alt="" style="display:none;width:22px;height:22px;border-radius:50%;object-fit:cover">Me</a>
+<a href="cart.html" style="position:relative"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:#e60023;color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
+<a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
 
-
-
-
+<div id="order-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeOrderModal()">
+  <div class="modal-sheet"><div class="modal-handle"></div>
+    <div class="modal-header"><h2 id="modal-title">Order Details</h2><button class="modal-close" onclick="closeOrderModal()">✕</button></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
 
 <script>
-document.title = "[OK] Orders";
-var s = document.getElementById("js-status");
-s.textContent = "JS: OK";
-s.style.background = "green";
+// === Bargain Drop Orders — v4 FINAL ===
+var API = location.origin;
+var L = {unpaid:"Unpaid",processing:"Processing",shipped:"Shipped",review:"To Review","return":"Return"};
+var S = {unpaid:"unpaid",processing:"processing",shipped:"shipped",review:"review","return":"return"};
 
-var orders = [];
-try { orders = JSON.parse(localStorage.getItem("bd_orders") || "[]"); } catch(e) {}
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function fmt(p){return "A$"+Number(p||0).toFixed(2);}
 
-var ct = document.getElementById("content");
-if (!orders.length) {
-  ct.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>No orders (' + orders.length + ' in storage)</h2><p>Orders appear here after purchase</p><br><a href="products.html" style="color:var(--fg);font-weight:600;text-decoration:underline">Start Shopping</a></div>';
-} else {
-  var html = '';
-  orders.forEach(function(o) {
-    html += '<div class="order-card" onclick="alert('Order: ' + o.id + '')"><div class="order-header"><div><div class="order-id">' + o.id + '</div></div><span class="order-status ' + (o.status||'unpaid') + '">' + (o.status||'unpaid') + '</span></div><div class="order-total">A$' + Number(o.total||0).toFixed(2) + '</div></div>';
-  });
-  ct.innerHTML = html;
+function getOrders(){
+  try { return JSON.parse(localStorage.getItem("bd_orders")||"[]"); }
+  catch(e){ return []; }
 }
 
-// Tab clicks
+function saveOrders(orders){
+  localStorage.setItem("bd_orders", JSON.stringify(orders));
+}
+
+// Migrate old statuses
+function migrate(orders){
+  var ch = false;
+  orders.forEach(function(o){
+    if(o.status==="pending"){ o.status="unpaid"; ch=true; }
+    if(o.status==="paid"){ o.status="processing"; ch=true; }
+  });
+  if(ch) saveOrders(orders);
+  return orders;
+}
+
+function renderOrders(filter){
+  var orders = migrate(getOrders());
+  var ct = document.getElementById("content");
+  var filtered = filter && filter!=="all" ? orders.filter(function(o){return o.status===filter}) : orders;
+
+  if(!filtered.length){
+    var msg = filter && filter!=="all" ? "No "+L[filter].toLowerCase()+" orders" : "No orders yet";
+    ct.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>'+msg+'</h2><p>Orders appear here after purchase</p><br><a href="products.html" style="color:var(--fg);font-weight:600;text-decoration:underline">Start Shopping</a></div>';
+  } else {
+    filtered.sort(function(a,b){return new Date(b.date) - new Date(a.date)});
+    var html = "";
+    filtered.forEach(function(o){
+      var st = o.status||"unpaid";
+      var items = o.items||[];
+      var thumbs = "";
+      for(var i=0; i<Math.min(items.length,4); i++){
+        var im = items[i].image||"";
+        thumbs += '<div class="order-thumb">'+(im?'<img src="'+esc(im)+'" onerror="this.remove()">':"")+"</div>";
+      }
+      if(items.length>4) thumbs += '<div class="order-thumb" style="display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted)">+'+ (items.length-4) +"</div>";
+      var d = new Date(o.date);
+      var ds = d.toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"});
+      html += '<div class="order-card" onclick="showOrderDetail(\''+esc(o.id)+'\')"><div class="order-header"><div><div class="order-id">'+esc(o.id)+'</div><div style="font-size:.62rem;color:var(--muted)">'+ds+'</div></div><span class="order-status '+S[st]+'">'+L[st]+'</span></div><div class="order-items">'+thumbs+'</div><div class="order-total">'+fmt(o.total)+" &bull; "+items.length+" item"+(items.length!==1?"s":"")+"</div></div>";
+    });
+    ct.innerHTML = html;
+  }
+  updateCounts(orders);
+}
+
+function updateCounts(orders){
+  var counts = {};
+  orders.forEach(function(o){ var s=o.status||"unpaid"; counts[s]=(counts[s]||0)+1; });
+  var tabs = document.querySelectorAll("#tabs .tab");
+  tabs.forEach(function(t){
+    var s = t.getAttribute("data-status");
+    var c = counts[s]||0;
+    t.textContent = L[s] + (c>0?" ("+c+")":"");
+  });
+}
+
+// Modal
+function showOrderDetail(oid){
+  var orders = getOrders();
+  var o = orders.find(function(x){return x.id===oid}); if(!o) return;
+  var st = o.status||"unpaid";
+  var items = o.items||[];
+  var d = new Date(o.date);
+  var ds = d.toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+  var ts = d.toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"});
+
+  var itemsHtml = "";
+  items.forEach(function(it,i){
+    itemsHtml += '<div class="modal-item"><div class="modal-item-img">'+(it.image?'<img src="'+esc(it.image)+'" onerror="this.remove()">':"")+'</div><div class="modal-item-info"><div class="modal-item-title">'+esc(it.title||"Item #"+(i+1))+'</div><div class="modal-item-qty">Qty: '+(it.qty||it.quantity||1)+'</div></div><div class="modal-item-price">'+fmt((it.price||0)*(it.qty||it.quantity||1))+'</div></div>';
+  });
+
+  document.getElementById("modal-title").textContent = "Order #"+esc(o.id);
+  document.getElementById("modal-body").innerHTML =
+    '<div class="modal-status-row"><span class="order-status '+S[st]+'">'+L[st]+'</span></div>'+
+    '<div class="modal-meta"><strong>Order ID</strong>'+esc(o.id)+'</div>'+
+    '<div class="modal-meta"><strong>Date</strong>'+ds+' at '+ts+'</div>'+
+    (o.name?'<div class="modal-meta"><strong>Customer</strong>'+esc(o.name)+'</div>':"")+
+    (o.email?'<div class="modal-meta"><strong>Email</strong>'+esc(o.email)+'</div>':"")+
+    (o.payment?'<div class="modal-meta"><strong>Payment Method</strong>'+esc(o.payment)+'</div>':"")+
+    '<div class="modal-section-title">Items ('+items.length+')</div>'+itemsHtml+
+    '<div class="modal-total-row"><span>Total</span><span>'+fmt(o.total||0)+'</span></div>';
+  document.getElementById("order-modal").style.display = "flex";
+}
+
+function closeOrderModal(){
+  document.getElementById("order-modal").style.display = "none";
+}
+
+// Cart count
+function updateCart(){
+  try { var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]"); var n=cart.reduce(function(s,i){return s+(i.qty||1)},0); var b=document.getElementById("nav-cart-count"); if(b){b.textContent=n;b.style.display=n>0?"":"none"} } catch(e){}
+}
+
+// Init
 var tabs = document.querySelectorAll("#tabs .tab");
-tabs.forEach(function(t) {
-  t.addEventListener("click", function() {
-    tabs.forEach(function(x) { x.classList.remove("active"); });
+tabs.forEach(function(t){
+  t.addEventListener("click", function(){
+    tabs.forEach(function(x){x.classList.remove("active")});
     t.classList.add("active");
-    var status = t.getAttribute("data-status");
-    var filtered = orders.filter(function(o) { return o.status === status; });
-    if (!filtered.length) {
-      ct.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>No ' + status + ' orders</h2></div>';
-    } else {
-      var h = '';
-      filtered.forEach(function(o) {
-        h += '<div class="order-card" onclick="alert('Order: ' + o.id + '')"><div class="order-header"><div><div class="order-id">' + o.id + '</div></div><span class="order-status ' + (o.status||'unpaid') + '">' + (o.status||'unpaid') + '</span></div><div class="order-total">A$' + Number(o.total||0).toFixed(2) + '</div></div>';
-      });
-      ct.innerHTML = h;
-    }
+    renderOrders(t.getAttribute("data-status"));
   });
 });
+renderOrders("all");
+updateCart();
 </script>
-
 </body>
 </html>
