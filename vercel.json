@@ -1,12 +1,103 @@
 {
   "rewrites": [],
   "functions": {
-    "api/shopify-checkout.js": { "memory": 256, "maxDuration": 30 },
-    "api/create-checkout-session.js": { "memory": 256, "maxDuration": 30 },
-    "api/cj-order.js": { "memory": 128, "maxDuration": 30 },
-    "api/cj-webhook.js": { "memory": 128, "maxDuration": 5 },
-    "api/product-lookup.js": { "memory": 512, "maxDuration": 30 },
-    "api/categories-lookup.js": { "memory": 256, "maxDuration": 10 },
-    "api/search-products.js": { "memory": 512, "maxDuration": 30 }
-  }
+    "api/shopify-checkout.js": {
+      "memory": 256,
+      "maxDuration": 30
+    },
+    "api/create-checkout-session.js": {
+      "memory": 256,
+      "maxDuration": 30
+    },
+    "api/cj-order.js": {
+      "memory": 128,
+      "maxDuration": 30
+    },
+    "api/cj-webhook.js": {
+      "memory": 128,
+      "maxDuration": 5
+    },
+    "api/product-lookup.js": {
+      "memory": 512,
+      "maxDuration": 30
+    },
+    "api/categories-lookup.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/search-products.js": {
+      "memory": 512,
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/orders.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/order-success.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/products.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/categories.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    }
+  ]
 }
