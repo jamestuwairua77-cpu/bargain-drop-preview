@@ -46,7 +46,7 @@ function renderCats(cats, catData){
     var h='';
     if(heroes.length>0){
       h='<div class="cat-hero">';
-      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.remove()"'+(j===0?' style="grid-row:1/3"':'')+'>';
+      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem;opacity:.2>📦</span>'"'+(j===0?' style="grid-row:1/3"':'')+'>';
       h+='</div>';
     }else{
       h='<div class="cat-hero"><div style="grid-row:1/3;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#f5f5f5;width:100%;height:100%">'+e+'</div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div></div>';
@@ -66,7 +66,7 @@ function renderProds(prods){
     a.href='product.html?id='+p.id;
     var d='';
     var d=''; // discount removed
-    a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.remove()">':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+BD.formatMoneyCompact(p.price||0)+'</span>'+'</div></div>';
+    a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem;opacity:.2>📦</span>'">':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!=='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span>'+'</div></div>';
     g.appendChild(a);
   }
 }

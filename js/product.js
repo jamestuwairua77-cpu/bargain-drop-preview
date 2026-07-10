@@ -210,7 +210,7 @@ function renderReviews(){
     var stars='';
     for(var i=1;i<=5;i++)stars+=i<=r.rating?'★':'☆';
     var imgs='';
-    if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+src+'" alt="" loading="lazy" onerror="this.remove()">'});imgs+='</div>';}
+    if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+src+'" alt="" loading="lazy" onerror="this.parentElement.removeChild(this)">'});imgs+='</div>';}
     var variant=r.variant?'<div class="review-variant">'+esc(r.variant)+'</div>':'';
     var verified=r.verified?'<span class="review-verified"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#10b981"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2"/></svg>Verified</span>':'';
     
@@ -254,7 +254,7 @@ function renderRelatedProducts(){
         a.className='related-card';
         a.href='product.html?id='+p.id;
         var disc=''; // discount removed
-        a.innerHTML='<img src="'+(p.image||(p.images||[])[0]||'')+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="related-info"><div class="related-title">'+esc(p.title)+'</div><div class="related-price">'+money(p.price||0)+' '+disc+'</div></div>';
+        var ri=p.image||(p.images||[])[0]||'';a.innerHTML=(ri?'<img src="'+esc(ri)+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2rem;opacity:.2>📦</span>\'">':'<span style="font-size:2rem;opacity:.2;display:flex;align-items:center;justify-content:center;width:80px;height:80px;background:#f5f5f5;border-radius:8px">📦</span>')+'<div class="related-info"><div class="related-title">'+esc(p.title)+'</div><div class="related-price">'+money(p.price||0)+' '+disc+'</div></div>';
         grid.appendChild(a);
       });
     }catch(e){}

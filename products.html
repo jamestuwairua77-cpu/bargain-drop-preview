@@ -49,7 +49,7 @@ function renderPage(pn){
   if(!slice.length){g.innerHTML='<div class="loading-text">No products found.</div>';return}
   slice.forEach(function(p){
     var a=document.createElement('a');a.className='product-card fade-in';a.href='product.html?id='+p.id;
-    a.innerHTML='<div class="prod-img"><img src="'+esc(p.image||'')+'" onerror="this.style.display=\'none\'" alt=""></div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+fmtPrice(p.price)+'</span></div></div>';
+    var pi=p.image||(p.images||[])[0]||'';a.innerHTML='<div class="prod-img">'+(pi?'<img src="'+esc(pi)+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'" alt="">':'<span style="font-size:2.5rem;opacity:.2">📦</span>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+fmtPrice(p.price)+'</span></div></div>';
     g.appendChild(a);
   });
   window.scrollTo({top:0,behavior:'smooth'});
