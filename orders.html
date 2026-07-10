@@ -122,10 +122,19 @@ a{color:inherit;text-decoration:none}
     c.innerHTML = html;
   }
 
-  // Initial: show all
-  renderOrders('all');
+  // Tab clicks — update counts
+  function updateCounts(){
+    var orders = migrate(getOrders());
+    var counts = {};
+    orders.forEach(function(o){ var s=o.status||'unpaid'; counts[s]=(counts[s]||0)+1; });
+    var tabs = document.querySelectorAll('#tabs .tab');
+    tabs.forEach(function(t){
+      var s = t.getAttribute('data-status');
+      var c = counts[s]||0;
+      t.textContent = labels[s] + (c>0?' ('+c+')':'');
+    });
+  }
 
-  // Tab clicks
   var tabs = document.querySelectorAll('#tabs .tab');
   tabs.forEach(function(t){
     t.addEventListener('click', function(){
@@ -134,7 +143,29 @@ a{color:inherit;text-decoration:none}
       renderOrders(t.getAttribute('data-status'));
     });
   });
-  if(tabs.length){ tabs[0].classList.add('active'); tabs[0].click(); }
+
+  // Default: show ALL orders, highlight appropriate tab
+  renderOrders('all');
+  updateCounts();
+
+  // Add debug section
+  var dbg = document.createElement('div');
+  dbg.id = 'order-debug';
+  dbg.style.cssText = 'margin:12px 0;padding:10px;background:#f5f5f5;border-radius:8px;font-size:.6rem;font-family:monospace;color:#999;word-break:break-all;cursor:pointer';
+  dbg.textContent = '🔍 Debug: click to show raw localStorage';
+  dbg.onclick = function(){
+    var raw = localStorage.getItem('bd_orders')||'[]';
+    try {
+      var o = JSON.parse(raw);
+      var summary = o.map(function(x){ return x.id+' ['+x.status+'] '+x.date; }).join('\n');
+      dbg.textContent = '📦 '+o.length+' orders in localStorage:\n'+summary+'\n\n(click to collapse)';
+      dbg.onclick = function(){ dbg.textContent = '🔍 Debug: click to show raw localStorage'; dbg.onclick = arguments.callee; };
+    } catch(e){ dbg.textContent = 'Error parsing: '+e.message; }
+  };
+
+  var content = document.getElementById('content');
+  content.parentNode.insertBefore(dbg, content.nextSibling);
+})();
 })();
 </script>
 
