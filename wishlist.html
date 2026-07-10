@@ -82,6 +82,7 @@ function saveWishlist(arr){
 }
 
 function renderWishlist(){
+  try {
   var items = getWishlist();
   document.getElementById("wl-count").textContent = items.length;
   
@@ -116,6 +117,12 @@ function renderWishlist(){
   });
   
   list.innerHTML = html;
+  } catch(e) {
+    document.getElementById("wl-count").textContent = "0";
+    document.getElementById("wishlist-list").innerHTML = "";
+    document.getElementById("empty-state").style.display = "block";
+    console.error("Wishlist error:", e);
+  }
 }
 
 function removeItem(idx){

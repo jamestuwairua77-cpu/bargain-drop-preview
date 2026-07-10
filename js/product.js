@@ -19,7 +19,7 @@ function updateCartCount(){var c=JSON.parse(localStorage.getItem('bd_cart')||'[]
 function addToCart(){if(!product)return;var c=JSON.parse(localStorage.getItem('bd_cart')||'[]');var e=c.findIndex(function(x){return x.id===product.id});var selVariant=Object.keys(selectedVariants).length>0?Object.values(selectedVariants).filter(Boolean).join(' / '):null;if(e>=0){c[e].qty+=qty}else{c.push({id:product.id,title:product.title,price:product.price,image:product.image||(product.images||[])[0]||'',qty:qty,variant:selVariant})}localStorage.setItem('bd_cart',JSON.stringify(c));updateCartCount();showToast('Added '+qty+' to cart!');}
 
 function buyNow(){addToCart();location.href='checkout.html';}
-function toggleWishlist(){var b=document.getElementById('wishlist-btn');if(b)b.classList.toggle('wishlisted');var w=JSON.parse(localStorage.getItem('bd_wishlist')||'[]');var idx=w.findIndex(function(x){return x.id===product.id});if(idx>=0){w.splice(idx,1)}else if(product){w.push({id:product.id,title:product.title,price:product.price,image:product.image,category:product.category,added:new Date().toISOString()})}localStorage.setItem('bd_wishlist',JSON.stringify(w));}
+function toggleWishlist(){var b=document.getElementById('wishlist-btn');if(b)b.classList.toggle('wishlisted');var w=JSON.parse(localStorage.getItem('bd_wishlist')||'[]');var idx=w.findIndex(function(x){return x.id===product.id});if(idx>=0){w.splice(idx,1)}else if(product){w.push({id:product.id,title:product.title,price:product.price,image:product.image||(product.images||[])[0]||"",category:product.category,added:new Date().toISOString()})}localStorage.setItem('bd_wishlist',JSON.stringify(w));}
 function shareProduct(){if(navigator.share){navigator.share({title:product?product.title:'',url:location.href}).catch(function(){})}else{navigator.clipboard.writeText(location.href);showToast('Link copied!');}}
 function changeQty(d){qty=Math.max(1,qty+d);document.getElementById('qty-value').textContent=qty;document.getElementById('qty-minus').disabled=qty<=1;document.getElementById('qty-plus').disabled=qty>=99;}
 function loadMoreReviews(){reviewsShownCount+=5;renderReviews();}
@@ -308,7 +308,7 @@ function showProduct(){
   
   // Wishlist state
   var w=JSON.parse(localStorage.getItem('bd_wishlist')||'[]');
-  if(w.indexOf(p.id)>=0)document.getElementById('wishlist-btn').classList.add('wishlisted');
+  if(w.some(function(x){return x.id===p.id}))document.getElementById('wishlist-btn').classList.add('wishlisted');
   
   hideLoad();
   updateCartCount();
