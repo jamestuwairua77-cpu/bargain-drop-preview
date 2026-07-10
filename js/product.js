@@ -187,7 +187,10 @@ function renderReviewSummary(stats){
   headerStars.innerHTML=bigStars.innerHTML;
   document.getElementById('rating-num').textContent=stats.avg.toFixed(1);
   document.getElementById('rating-count').textContent=stats.total+' reviews';
-  document.getElementById('sold-count').textContent='\u2022 '+(stats.total*7+Math.abs(hash%50))+' sold';
+  // Compute hash for sold count
+  var phash=0;
+  if(product&&product.id){for(var hi=0;hi<String(product.id).length;hi++)phash=((phash<<5)-phash)+String(product.id).charCodeAt(hi);phash=Math.abs(phash);}
+  document.getElementById('sold-count').textContent='\u2022 '+(stats.total*7+Math.abs(phash%50))+' sold';
   document.getElementById('rating-summary').style.display='';
 }
 
