@@ -2,7 +2,7 @@
 <h1>Order Test</h1>
 <button onclick="addTest()">Add Test Order</button>
 <button onclick="checkOrders()">Check localStorage</button>
-<button onclick="window.location='orders.html'">Go to Orders</button>
+<button onclick="window.location='orders.html?ts='+Date.now()">Go to Orders</button>
 <pre id="out"></pre>
 <script>
 function addTest(){
