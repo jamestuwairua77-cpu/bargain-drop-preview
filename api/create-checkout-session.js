@@ -19,9 +19,8 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
 
-    // Payment Method Configuration — bundles ALL activated methods
-    // (card, Apple Pay, Google Pay, PayPal, Afterpay, Klarna, Zip, Link, etc.)
-    params.append('payment_method_types[]', 'card');
+    // Show ALL payment methods activated in your Stripe dashboard
+    params.append('automatic_payment_methods[enabled]', 'true');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
@@ -55,7 +54,8 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${STRIPE_KEY}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Stripe-Version': '2024-06-20'
       },
       body: params.toString()
     });
