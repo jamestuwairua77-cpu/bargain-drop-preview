@@ -21,9 +21,7 @@ export default async function handler(req, res) {
 
     // If a specific payment method is requested, use only that one
     // Otherwise show all activated methods
-    if (payment_method === 'paypal') {
-      params.append('payment_method_types[]', 'paypal');
-    } else if (payment_method === 'card') {
+    if (payment_method === 'card') {
       // Card-only — Apple Pay & Google Pay auto-show on supported devices
       params.append('payment_method_types[]', 'card');
     } else {
