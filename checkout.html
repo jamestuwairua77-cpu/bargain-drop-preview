@@ -74,7 +74,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
   <script src="https://js.stripe.com/v3/"></script>
   <script src="https://www.paypal.com/sdk/js?client-id=Afb8aEAzOEhf6Y80Sx3a4xNIVFIsyKGqXGAASYxlrg1O-K5hSxfqQCit-ClqREEhiWdLEw7lU49EXZFG&currency=AUD&intent=capture"></script>
   <script src="https://pay.google.com/gp/p/js/pay.js"></script>
-<script src="profile-pic.js"></script>
+
 <script src="js/currency.js"></script>
 </head>
 <body>
@@ -427,5 +427,5 @@ window.payWithStripe = async function(){
 }).catch(function(e){console.error('Init failed:',e);document.getElementById('checkout-error').style.display='block';document.getElementById('checkout-error').textContent='Loading error — please refresh the page';});
 }catch(e){console.error('BD error:',e);}
 </script>
-<script src="js/cart-count.js"></script>
+
 </body></html>
