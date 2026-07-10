@@ -93,107 +93,44 @@ a{color:inherit;text-decoration:none}
 
 
 <script>
-// === ORDER LOADER v3 — verified clean ===
-document.title = "[OK] My Orders";
-try { document.getElementById("js-status").textContent = "JS: loaded"; document.getElementById("js-status").style.background = "#10b981"; } catch(e){ document.title = "[ERR] "+e.message; }
+document.title = "[OK] Orders";
+var s = document.getElementById("js-status");
+s.textContent = "JS: OK";
+s.style.background = "green";
 
-(function(){
-  function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-  function fmt(p){return "A$"+Number(p||0).toFixed(2);}
-  var L={unpaid:"Unpaid",processing:"Processing",shipped:"Shipped",review:"To Review","return":"Return"};
-  var S={unpaid:"unpaid",processing:"processing",shipped:"shipped",review:"review","return":"return"};
+var orders = [];
+try { orders = JSON.parse(localStorage.getItem("bd_orders") || "[]"); } catch(e) {}
 
-  function getOrders(){
-    try { return JSON.parse(localStorage.getItem("bd_orders")||"[]"); }
-    catch(e){ return []; }
-  }
-
-  function migrate(orders){
-    var ch=false;
-    orders.forEach(function(o){
-      if(o.status==="pending"){o.status="unpaid";ch=true;}
-      if(o.status==="paid"){o.status="processing";ch=true;}
-    });
-    if(ch) localStorage.setItem("bd_orders",JSON.stringify(orders));
-    return orders;
-  }
-
-  function renderOrders(filter){
-    var orders = migrate(getOrders());
-    var ct = document.getElementById("content");
-    var filtered = filter && filter!=="all" ? orders.filter(function(o){return o.status===filter;}) : orders;
-
-    if(!filtered.length){
-      var msg = filter && filter!=="all" ? "No "+L[filter].toLowerCase()+" orders" : "No orders yet";
-      ct.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>'+msg+'</h2><p>Orders appear here after purchase</p><br><a href="products.html" style="color:var(--fg);font-weight:600;text-decoration:underline">Start Shopping</a></div>';
-      renderDebug(orders);
-      updateCounts(orders);
-      return;
-    }
-
-    filtered.sort(function(a,b){return new Date(b.date) - new Date(a.date);});
-
-    var html = "";
-    filtered.forEach(function(o){
-      var st = o.status||"unpaid";
-      var itemsHtml = "";
-      var items = o.items||[];
-      for(var i=0; i<Math.min(items.length,4); i++){
-        var im = items[i].image||"";
-        itemsHtml += '<div class="order-thumb">'+(im?'<img src="'+esc(im)+'" style="width:100%;height:100%;object-fit:cover" onerror="this.remove()">':"")+"</div>";
-      }
-      if(items.length>4) itemsHtml += '<div class="order-thumb" style="display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted)">+'+ (items.length-4) +"</div>";
-
-      var d = new Date(o.date);
-      var ds = d.toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"});
-
-      html += '<div class="order-card" onclick="showOrderDetail(''+esc(o.id)+'')"><div class="order-header"><div><div class="order-id">'+esc(o.id)+'</div><div style="font-size:.62rem;color:var(--muted)">'+ds+'</div></div><span class="order-status '+S[st]+'">'+L[st]+'</span></div><div class="order-items">'+itemsHtml+'</div><div class="order-total">'+fmt(o.total)+" &bull; "+items.length+" item"+(items.length!==1?"s":"")+"</div></div>";
-    });
-    ct.innerHTML = html;
-    renderDebug(orders);
-    updateCounts(orders);
-  }
-
-  function updateCounts(orders){
-    var counts = {};
-    orders.forEach(function(o){var s=o.status||"unpaid";counts[s]=(counts[s]||0)+1;});
-    var tabs = document.querySelectorAll("#tabs .tab");
-    tabs.forEach(function(t){
-      var s = t.getAttribute("data-status");
-      var c = counts[s]||0;
-      t.textContent = L[s] + (c>0?" ("+c+")":"");
-    });
-  }
-
-  function renderDebug(orders){
-    var existing = document.getElementById("order-debug");
-    if(existing) existing.remove();
-    var dbg = document.createElement("div");
-    dbg.id = "order-debug";
-    dbg.style.cssText = "margin:12px 16px;padding:10px;background:#f5f5f5;border-radius:8px;font-size:.6rem;font-family:monospace;color:#999;word-break:break-all;cursor:pointer";
-    dbg.textContent = "🔍 Debug: "+orders.length+" orders in localStorage (click to expand)";
-    dbg.onclick = function(){
-      try {
-        var summary = orders.map(function(x){return x.id+" ["+x.status+"] "+x.date;}).join("\n");
-        dbg.textContent = "📦 "+orders.length+" orders:\n"+summary+"\n\n(click to collapse)";
-        dbg.onclick = function(){ renderDebug(orders); };
-      } catch(e){ dbg.textContent = "Error: "+e.message; }
-    };
-    var ct = document.getElementById("content");
-    ct.parentNode.insertBefore(dbg, ct.nextSibling);
-  }
-
-  // Init
-  var tabs = document.querySelectorAll("#tabs .tab");
-  tabs.forEach(function(t){
-    t.addEventListener("click", function(){
-      tabs.forEach(function(x){x.classList.remove("active");});
-      t.classList.add("active");
-      renderOrders(t.getAttribute("data-status"));
-    });
+var ct = document.getElementById("content");
+if (!orders.length) {
+  ct.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>No orders (' + orders.length + ' in storage)</h2><p>Orders appear here after purchase</p><br><a href="products.html" style="color:var(--fg);font-weight:600;text-decoration:underline">Start Shopping</a></div>';
+} else {
+  var html = '';
+  orders.forEach(function(o) {
+    html += '<div class="order-card" onclick="alert('Order: ' + o.id + '')"><div class="order-header"><div><div class="order-id">' + o.id + '</div></div><span class="order-status ' + (o.status||'unpaid') + '">' + (o.status||'unpaid') + '</span></div><div class="order-total">A$' + Number(o.total||0).toFixed(2) + '</div></div>';
   });
-  renderOrders("all");
-})();
+  ct.innerHTML = html;
+}
+
+// Tab clicks
+var tabs = document.querySelectorAll("#tabs .tab");
+tabs.forEach(function(t) {
+  t.addEventListener("click", function() {
+    tabs.forEach(function(x) { x.classList.remove("active"); });
+    t.classList.add("active");
+    var status = t.getAttribute("data-status");
+    var filtered = orders.filter(function(o) { return o.status === status; });
+    if (!filtered.length) {
+      ct.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h2>No ' + status + ' orders</h2></div>';
+    } else {
+      var h = '';
+      filtered.forEach(function(o) {
+        h += '<div class="order-card" onclick="alert('Order: ' + o.id + '')"><div class="order-header"><div><div class="order-id">' + o.id + '</div></div><span class="order-status ' + (o.status||'unpaid') + '">' + (o.status||'unpaid') + '</span></div><div class="order-total">A$' + Number(o.total||0).toFixed(2) + '</div></div>';
+      });
+      ct.innerHTML = h;
+    }
+  });
+});
 </script>
 
 </body>
