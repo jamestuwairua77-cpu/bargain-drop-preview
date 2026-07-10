@@ -317,50 +317,47 @@ window.payWithGPay = async function(){
   if(cart.length===0){showError('Your cart is empty');return}
   var s=getShippingInfo();if(!validateShip(s))return;
   var btn=document.getElementById('pay-gpay');
-  
-  if(typeof google==='undefined'||!google.payments||!google.payments.api){
-    showError('Google Pay requires Chrome. Use Stripe for other browsers.');
-    return;
-  }
-  
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var totalCents=Math.round(total*100);
-  
+
+  // Google Pay SDK check
+  if(typeof google==='undefined'||!google.payments||!google.payments.api){
+    btn.classList.remove('loading');setAllBtnsDisabled(false);
+    showError('Google Pay requires Chrome browser');
+    return;
+  }
+
   try{
     var gpayClient=new google.payments.api.PaymentsClient({environment:'PRODUCTION'});
+    
+    // Option A: PAYMENT_GATEWAY with Stripe (standard approach)
     var gpayReq={
       apiVersion:2,apiVersionMinor:0,
       allowedPaymentMethods:[{
         type:'CARD',
-        parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX']},
-        tokenizationSpecification:{type:'DIRECT',parameters:{protocolVersion:'ECv2',publicKey:'BM/rGYCXdn9noLa5M/j1z8pYgPZ3HTfmwdWISsFoYyBQm3mRfr/pRZAfFpJllMCPPreRhA+CJ07CGareqHhOOD0='}}
+        parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX'],billingAddressRequired:true},
+        tokenizationSpecification:{type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe','stripe:version':'2018-11-08','stripe:publishableKey':STRIPE_PK}}
       }],
       merchantInfo:{merchantName:'Bargain Drop'},
-      transactionInfo:{totalPriceStatus:'FINAL',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'},
-      existingPaymentMethodRequired:false
+      transactionInfo:{totalPriceStatus:'FINAL',totalPrice:(totalCents/100).toFixed(2),currencyCode:(BD.getCurrency()||'AUD'),countryCode:'AU'}
     };
+
+    var readyReq={apiVersion:2,apiVersionMinor:0,allowedPaymentMethods:gpayReq.allowedPaymentMethods,existingPaymentMethodRequired:false};
+    var ready=await gpayClient.isReadyToPay(readyReq);
     
-    var ready=await gpayClient.isReadyToPay({apiVersion:2,apiVersionMinor:0,allowedPaymentMethods:gpayReq.allowedPaymentMethods,existingPaymentMethodRequired:false});
     if(!ready.result){
       btn.classList.remove('loading');setAllBtnsDisabled(false);
-      showError('Google Pay not available. Sign into Chrome and add a card at pay.google.com');
+      showError('Google Pay not set up. Sign into Chrome, go to pay.google.com, and add a card. Then refresh this page.');
       return;
     }
-    
+
     var paymentData=await gpayClient.loadPaymentData(gpayReq);
     var gpToken=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
     
-    // Send encrypted Google Pay token to our server (ZERO Stripe.js)
-    var resp=await fetch(API_BASE+'/api/gpay-process',{
+    // Send Stripe token to our server (processed with SECRET key, no pub key needed)
+    var resp=await fetch(API_BASE+'/api/gpay-stripe-process',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        encryptedMessage:gpToken.encryptedMessage,
-        ephemeralPublicKey:gpToken.ephemeralPublicKey,
-        tag:gpToken.tag,
-        amount:totalCents,
-        currency:(BD.getCurrency()||'AUD'),
-        email:s.email
-      })
+      body:JSON.stringify({token:gpToken.id,amount:totalCents,currency:(BD.getCurrency()||'AUD'),email:s.email})
     });
     var data=await resp.json();
     if(!data.success)throw new Error(data.error||'Payment failed');
@@ -368,9 +365,15 @@ window.payWithGPay = async function(){
     var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
     saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
     window.location.href=API_BASE+'/order-success.html?id='+oid;
+
   }catch(e){
     btn.classList.remove('loading');setAllBtnsDisabled(false);
-    showError('Google Pay: '+e.message);
+    var msg=e.message||'';
+    if(msg.indexOf('unsupported')!==-1||msg.indexOf('tokenization')!==-1||msg.indexOf('merchant')!==-1){
+      showError('Stripe publishable key issue: go to dashboard.stripe.com/settings/integration and enable publishable key tokenization. Then refresh.');
+    }else{
+      showError('Google Pay: '+msg);
+    }
   }
 };// PayPal SDK — authentic PayPal native popup
 (function initPayPal(){
