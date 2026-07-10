@@ -5,23 +5,12 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
-  const { line_items, customer_email, success_url, cancel_url, metadata, payment_method } = req.body;
+  const { line_items, customer_email, success_url, cancel_url, metadata } = req.body;
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY || '';
 
   if (!STRIPE_KEY) {
     return res.status(500).json({ error: 'Stripe key not configured' });
   }
-
-  // Map our payment method names to Stripe payment_method_types
-  const PAYMENT_METHOD_MAP = {
-    'card': ['card'],
-    'paypal': ['paypal'],
-    'google_pay': ['google_pay'],
-    'apple_pay': ['apple_pay'],
-    'afterpay': ['afterpay_clearpay']
-  };
-
-  const stripe_methods = PAYMENT_METHOD_MAP[payment_method] || ['card'];
 
   try {
     const params = new URLSearchParams();
@@ -29,9 +18,12 @@ export default async function handler(req, res) {
     params.append('success_url', success_url);
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
-    
-    // Add payment method types
-    stripe_methods.forEach(m => params.append('payment_method_types[]', m));
+
+    // Automatic payment methods — Stripe shows ALL activated methods in your dashboard
+    // This includes: card, Apple Pay, Google Pay, PayPal, Afterpay, Klarna, Zip, Link, etc.
+    // Whatever you activate at https://dashboard.stripe.com/settings/payment_methods appears here
+    params.append('automatic_payment_methods[enabled]', 'true');
+    params.append('automatic_payment_methods[allow_redirects]', 'always');
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
