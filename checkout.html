@@ -164,47 +164,14 @@ function buildLineItems(){
   });
 }
 
-// --- Shopify Checkout (Shop Pay, PayPal, GPay, Apple Pay all route here) ---
+// --- Shop Pay goes to Shopify store directly ---
 async function shopifyCheckout(method,oid,s){
-  try{
-    var body={
-      line_items:buildLineItems(),
-      customer_email:s.email,
-      shipping_address:{first_name:s.fname,last_name:s.lname,address1:s.addr,city:s.city,province:s.state,country:'AU',zip:s.zip,phone:s.phone},
-      payment_method:method,
-      success_url:API_BASE+'/order-success.html?id='+oid,
-      cancel_url:API_BASE+'/checkout.html',
-      currency:(BD.getCurrency()||'AUD').toLowerCase()
-    };
-
-    var resp=await fetch(API_BASE+'/api/shopify-checkout',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(body)
-    });
-
-    if(!resp.ok){
-      var errText='';
-      try{var ed=await resp.json();errText=ed.error||ed.details||JSON.stringify(ed)}catch(e){errText='Server error ('+resp.status+')'}
-      throw new Error(errText);
-    }
-
-    var data=await resp.json();
-    if(data.url){
-      window.location.href=data.url;
-    }else{
-      throw new Error('No checkout URL returned');
-    }
-  }catch(e){
-    showError(method+' checkout failed: '+e.message+' — Please try another method below');
-    setAllBtnsDisabled(false);
-    var btn=document.getElementById(method==='shop_pay'?'pay-shopay':method==='apple_pay'?'pay-applepay':method==='paypal'?'pay-paypal':'pay-gpay');
-    if(btn)btn.classList.remove('loading');
-  }
+  showToast('Redirecting to Shopify for '+method+' checkout...');
+  setTimeout(function(){window.location.href='https://bargain-drop-8194.myshopify.com';},800);
 }
-
-// --- Stripe Checkout ---
-async function stripeCheckout(oid,s){
+// --- Stripe Checkout (handles Card, PayPal, Google Pay, Apple Pay) ---
+async function stripeCheckout(oid,s,paymentMethod){
+  var label=paymentMethod==='paypal'?'PayPal':paymentMethod==='google_pay'?'Google Pay':paymentMethod==='apple_pay'?'Apple Pay':'Card';
   try{
     var shipping_options=shipping>0?[{
       shipping_rate_data:{display_name:'Standard Shipping',type:'fixed_amount',
@@ -240,9 +207,11 @@ async function stripeCheckout(oid,s){
       throw new Error('No checkout URL returned');
     }
   }catch(e){
-    showError('Card payment failed: '+e.message+' — Please try another method below');
+    showError(label+' payment failed: '+e.message+' — Please try another method below');
     setAllBtnsDisabled(false);
-    var btn=document.getElementById('pay-stripe');
+    var btnMap={'card':'pay-stripe','paypal':'pay-paypal','google_pay':'pay-gpay','apple_pay':'pay-applepay'};
+    var btnId=btnMap[paymentMethod]||'pay-stripe';
+    var btn=document.getElementById(btnId);
     if(btn)btn.classList.remove('loading');
   }
 }
@@ -266,7 +235,7 @@ window.payWithApplePay = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-AP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Apple Pay');
-  await shopifyCheckout('apple_pay',oid,s);
+  await stripeCheckout(oid,s,'apple_pay');
 };
 
 window.payWithStripe = async function(){
@@ -276,7 +245,7 @@ window.payWithStripe = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-CC-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Card');
-  await stripeCheckout(oid,s);
+  await stripeCheckout(oid,s,'card');
 };
 
 window.payWithPayPal = async function(){
@@ -286,7 +255,7 @@ window.payWithPayPal = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-PP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'PayPal');
-  await shopifyCheckout('paypal',oid,s);
+  await stripeCheckout(oid,s,'paypal');
 };
 
 window.payWithGPay = async function(){
@@ -296,7 +265,7 @@ window.payWithGPay = async function(){
   btn.classList.add('loading');setAllBtnsDisabled(true);
   var oid='BD-GP-'+Date.now().toString(36).toUpperCase();
   saveOrder(oid,s.email,s.fname,s.lname,'Google Pay');
-  await shopifyCheckout('google_pay',oid,s);
+  await stripeCheckout(oid,s,'google_pay');
 };
 
 // --- Apple Pay detection ---

@@ -1,4 +1,8 @@
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
   const { line_items, customer_email, success_url, cancel_url, metadata, payment_method } = req.body;
@@ -8,6 +12,17 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Stripe key not configured' });
   }
 
+  // Map our payment method names to Stripe payment_method_types
+  const PAYMENT_METHOD_MAP = {
+    'card': ['card'],
+    'paypal': ['paypal'],
+    'google_pay': ['google_pay'],
+    'apple_pay': ['apple_pay'],
+    'afterpay': ['afterpay_clearpay']
+  };
+
+  const stripe_methods = PAYMENT_METHOD_MAP[payment_method] || ['card'];
+
   try {
     const params = new URLSearchParams();
     params.append('mode', 'payment');
@@ -15,8 +30,8 @@ export default async function handler(req, res) {
     params.append('cancel_url', cancel_url);
     params.append('customer_email', customer_email);
     
-    // Use app-specific payment method config (card, apple_pay, google_pay, link, afterpay, zip)
-    params.append('payment_method_configuration', 'pmc_1TndqIJ3f0xAyevcWi4d8EuD');
+    // Add payment method types
+    stripe_methods.forEach(m => params.append('payment_method_types[]', m));
     
     if (metadata) {
       for (const [k, v] of Object.entries(metadata)) {
@@ -61,7 +76,7 @@ export default async function handler(req, res) {
       res.status(200).json({ url: data.url });
     } else {
       console.error('Stripe error:', JSON.stringify(data));
-      res.status(400).json({ error: data.error || data || 'Stripe error' });
+      res.status(400).json({ error: data.error?.message || 'Stripe error', details: data });
     }
   } catch (e) {
     console.error('Server error:', e.message);
