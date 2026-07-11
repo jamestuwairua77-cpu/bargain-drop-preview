@@ -4,7 +4,7 @@ var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 var ALL=[];
 
-// Load categories from lightweight CDN file (53KB instead of 16.7MB!)
+// Load categories from lightweight CDN file
 (function loadCats(){
 var x=new XMLHttpRequest();
 x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-index.json',true);
@@ -16,11 +16,11 @@ x.onload=function(){
     renderCats(cats,d);
   }
 };
-x.onerror=function(){document.getElementById('cat-grid').innerHTML='<div class="loading-text">Categories unavailable</div>'};
+x.onerror=function(){document.getElementById('cat-slider').innerHTML='<div class="loading-text">Categories unavailable</div>'};
 x.send();
 })();
 
-// Load trending products from CDN (first category, first 50 products)
+// Load trending products from CDN
 (function loadProds(){
 var x=new XMLHttpRequest();
 x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/data/home-garden-furniture.json',true);
@@ -37,24 +37,34 @@ x.send();
 })();
 
 function renderCats(cats, catData){
-  var g=document.getElementById('cat-grid');
+  var g=document.getElementById('cat-slider');
   g.innerHTML='';
   cats.sort(function(a,b){return (catData[b]&&catData[b].product_count||0)-(catData[a]&&catData[a].product_count||0)});
   for(var i=0;i<cats.length;i++){
     var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box]';
-    var a=document.createElement('a');a.className='cat-card fade-in';
+    var a=document.createElement('a');a.className='cat-chip fade-in';
     a.href='category.html?cat='+encodeURIComponent(c);
-    var h='';
-    if(heroes.length>0){
-      h='<div class="cat-hero">';
-      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'"'+(j===0?' style="grid-row:1/3"':'')+'>';
-      h+='</div>';
-    }else{
-      h='<div class="cat-hero"><div style="grid-row:1/3;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#f5f5f5;width:100%;height:100%">'+e+'</div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div></div>';
-    }
-    a.innerHTML=h+'<div class="cat-card-info"><div class="cc-label">'+esc(c)+'</div><div class="cc-count">'+(info.product_count||0).toLocaleString()+' products</div></div>';
+    var img=heroes[0]||'';
+    a.innerHTML=(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<span class="cat-chip-emoji">'+e+'</span>')+'<span class="cat-chip-label">'+esc(c)+'</span>';
     g.appendChild(a);
   }
+  // Init slider arrows
+  initSlider();
+}
+
+function initSlider(){
+  var slider=document.getElementById('cat-slider');
+  var prev=document.getElementById('slider-prev');
+  var next=document.getElementById('slider-next');
+  if(!slider||!prev||!next)return;
+  function updateArrows(){
+    prev.style.opacity=slider.scrollLeft<=4?'0.3':'1';
+    next.style.opacity=slider.scrollLeft+slider.clientWidth>=slider.scrollWidth-4?'0.3':'1';
+  }
+  slider.addEventListener('scroll',updateArrows);
+  prev.addEventListener('click',function(){slider.scrollBy({left:-220,behavior:'smooth'})});
+  next.addEventListener('click',function(){slider.scrollBy({left:220,behavior:'smooth'})});
+  updateArrows();
 }
 
 function renderProds(prods){
@@ -65,7 +75,7 @@ function renderProds(prods){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
     a.href='product.html?id='+p.id;
-    var d=''; // discount removed
+    var d='';
     a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'"':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!=='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span>'+'</div></div>';
     g.appendChild(a);
   }
