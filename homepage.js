@@ -12,10 +12,11 @@ x.onload=function(){
   if(x.status>=200&&x.status<400){
     var d=JSON.parse(x.responseText);
     var cats=Object.keys(d);
+    renderSubcatSlider(cats,d);
     renderSubcatGrid(cats,d);
   }
 };
-x.onerror=function(){document.getElementById('subcat-scroll-wrap').innerHTML='<div class="loading-text">Categories unavailable</div>'};
+x.onerror=function(){document.getElementById('subcat-slider').innerHTML='<div class="loading-text">Subcategories unavailable</div>';document.getElementById('subcat-scroll-wrap').innerHTML='<div class="loading-text">Categories unavailable</div>'};
 x.send();
 })();
 
@@ -34,13 +35,41 @@ x.onerror=function(){document.getElementById('product-grid').innerHTML='<div cla
 x.send();
 })();
 
+function renderSubcatSlider(cats, catData){
+  var g=document.getElementById('subcat-slider');
+  if(!g)return;
+  g.innerHTML='';
+  var seen={};
+  var items=[];
+  for(var i=0;i<cats.length;i++){
+    var c=cats[i],info=catData[c]||{},subs=info.subcategories||[];
+    for(var j=0;j<subs.length;j++){
+      var s=subs[j],title=s.title||'';
+      if(!seen[title]&&title&&s.count>0){
+        seen[title]=true;
+        items.push({title:title,count:s.count,image:s.image||'',parent:c});
+      }
+    }
+  }
+  items.sort(function(a,b){return b.count-a.count});
+  items=items.slice(0,24);
+  for(var k=0;k<items.length;k++){
+    var it=items[k];
+    var a=document.createElement('a');a.className='subcat-btn fade-in';
+    a.href='category.html?cat='+encodeURIComponent(it.parent)+'&sub='+encodeURIComponent(it.title);
+    var imgHtml=it.image?'<img src="'+it.image+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'';
+    a.innerHTML=imgHtml+esc(it.title)+'<span class="subcat-count">'+it.count+'</span>';
+    g.appendChild(a);
+  }
+}
+
 function renderSubcatGrid(cats, catData){
   var g=document.getElementById('subcat-scroll-wrap');
   if(!g)return;
   g.innerHTML='';
   cats.sort(function(a,b){return (catData[b]&&catData[b].product_count||0)-(catData[a]&&catData[a].product_count||0)});
   for(var i=0;i<cats.length;i++){
-    var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box]';
+    var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box'];
     var a=document.createElement('a');a.className='subcat-card fade-in';
     a.href='category.html?cat='+encodeURIComponent(c);
     var h='';
@@ -54,7 +83,7 @@ function renderSubcatGrid(cats, catData){
     }else{
       h='<div class="subcat-hero"><span class="subcat-emoji">'+e+'</span><div class="subcat-empty"></div><div class="subcat-empty"></div><div class="subcat-empty"></div></div>';
     }
-    a.innerHTML=h+'<div class="subcat-info"><div class="subcat-label">'+esc(c)+'</div><div class="subcat-count">'+(info.product_count||0).toLocaleString()+'</div></div>';
+    a.innerHTML=h+'<div class="subcat-info"><div class="subcat-label">'+esc(c)+'</div><div class="subcat-count-text">'+(info.product_count||0).toLocaleString()+'</div></div>';
     g.appendChild(a);
   }
 }
@@ -92,6 +121,7 @@ function doSearch(){
   clearTimeout(searchTimeout);
   searchTimeout=setTimeout(function(){
     if(q){
+      document.getElementById('subcat-slider-wrap').style.display='none';
       document.getElementById('cat-section').style.display='none';
       document.getElementById('trending-title').style.display='none';
       document.getElementById('search-title').style.display='flex';
@@ -101,6 +131,7 @@ function doSearch(){
       x.onload=function(){if(x.status>=200&&x.status<400){var d=JSON.parse(x.responseText);document.getElementById('search-count').textContent='';renderProds(d.products||[]);}};
       x.send();
     }else{
+      document.getElementById('subcat-slider-wrap').style.display='';
       document.getElementById('cat-section').style.display='';
       document.getElementById('trending-title').style.display='';
       document.getElementById('search-title').style.display='none';
