@@ -1,4 +1,3 @@
-
 // Currency handled by js/currency.js
 if(typeof BD!="undefined")BD.initCurrency();
 var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry & Watches":"[ring]","Automobiles & Motorcycles":"[car]","Health, Beauty & Hair":"[makeup]","Men's Clothing":"[shirt]","Bags & Shoes":"[bag]","Pet Supplies":"[paw]","Toys, Kids & Babies":"[toy]","Home Improvement":"[wrench]","Sports & Outdoors":"[ball]","Phones & Accessories":"[phone]","Consumer Electronics":"[headphones]","Other":"[box]"};
@@ -46,7 +45,7 @@ function renderSubcatSlider(cats, catData){
     var c=cats[i],info=catData[c]||{},subs=info.subcategories||[];
     for(var j=0;j<subs.length;j++){
       var s=subs[j],title=s.title||'';
-      if(!seen[title]&&title&&s.count>0){
+      if(!seen[title]&&title&&s.count>0&&title.indexOf(' > ')===-1){
         seen[title]=true;
         items.push({title:title,count:s.count,image:s.image||'',parent:c});
       }
@@ -92,7 +91,7 @@ function renderSubcatGrid(cats, catData){
 function renderProds(prods){
   var g=document.getElementById('product-grid');
   g.innerHTML='';
-  if(!prods.length){g.innerHTML='<div class="loading-text">No products found</div>';return}
+  if(!prods.length){g.innerHTML='<div class="loading-Text">No products found</div>';return}
   for(var i=0;i<prods.length;i++){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
