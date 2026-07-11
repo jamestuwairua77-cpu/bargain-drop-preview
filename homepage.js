@@ -59,12 +59,12 @@ function renderSubcatGrid(cats, catData){
 function renderProds(prods){
   var g=document.getElementById('product-grid');
   g.innerHTML='';
-  if(!prods.length){g.innerHTML='<div class="loading-text">No products found</div';return}
+  if(!prods.length){g.innerHTML='<div class="loading-text">No products found</div>';return}
   for(var i=0;i<prods.length;i++){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
     a.href='product.html?id='+p.id;
-    a.innerHTML='<div class="prod-img">'+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>&#x1f4e6;</span>\''":'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!='undefined'?BD.formatMoneyCompact(p.price||0):'AI'+(.price||0).toFixed(2))+'</span></div></div>';
+    a.innerHTML='<div class="prod-img">'+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>&#x1f4e6;</span>\''':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span></div></div>';
     g.appendChild(a);
   }
 }
