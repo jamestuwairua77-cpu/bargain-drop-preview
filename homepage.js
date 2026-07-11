@@ -46,7 +46,10 @@ function renderSubcatGrid(cats, catData){
     var h='';
     if(heroes.length>0){
       h='<div class="subcat-hero">';
-      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:1.5rem;opacity:.25>&#x1f4e6;</span>\''+(j===0?' style="grid-row:1/3"':'')+'>';
+      for(var j=0;j<4&&j<heroes.length;j++){
+        var heroStyle = j===0?' style="grid-row:1/3"':'';
+        h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"'+heroStyle+'>';
+      }
       h+='</div>';
     }else{
       h='<div class="subcat-hero"><span class="subcat-emoji">'+e+'</span><div class="subcat-empty"></div><div class="subcat-empty"></div><div class="subcat-empty"></div></div>';
@@ -64,7 +67,19 @@ function renderProds(prods){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
     a.href='product.html?id='+p.id;
-    a.innerHTML='<div class="prod-img">'+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>&#x1f4e6;</span>\''':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span></div></div>';
+    var imgHtml;
+    if(img){
+      imgHtml='<img src="'+img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    }else{
+      imgHtml='<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>';
+    }
+    var priceHtml;
+    if(typeof BD!='undefined'){
+      priceHtml=BD.formatMoneyCompact(p.price||0);
+    }else{
+      priceHtml='A$'+(p.price||0).toFixed(2);
+    }
+    a.innerHTML='<div class="prod-img">'+imgHtml+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+priceHtml+'</span></div></div>';
     g.appendChild(a);
   }
 }
