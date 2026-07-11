@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>Categories — Bargain Drop v10</title>
 <style>:root{--bg:#fff;--fg:#111;--muted:#777;--line:#eee}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:80px}a{color:inherit;text-decoration:none}img{display:block}.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fff;position:sticky;top:0;z-index:109;border-bottom:1px solid var(--line)}.top-bar a{font-size:.75rem;font-weight:600;color:var(--muted)}.top-bar span{font-size:.65rem;font-weight:700}.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px 14px 16px}@media(min-width:768px){.cat-grid{grid-template-columns:repeat(4,1fr);max-width:960px;margin:0 auto}}.cat-card{display:flex;flex-direction:column;overflow:hidden;border-radius:12px;border:1.5px solid var(--line);cursor:pointer;background:#fff;transition:all .15s}.cat-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}.cat-hero{width:100%;aspect-ratio:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;background:#f0f0f0;overflow:hidden}.cat-hero img{width:100%;height:100%;object-fit:cover}.cat-hero img:first-child{grid-row:1/3}.cat-card-info{padding:8px 10px 10px;text-align:center}.cat-card-info .cc-label{font-size:.72rem;font-weight:700;line-height:1.2}.cat-card-info .cc-count{font-size:.6rem;color:var(--muted)}.loading-text{text-align:center;padding:40px;color:var(--muted);grid-column:1/-1}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:120;padding:4px 0}.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;font-size:.6rem;color:var(--muted);text-decoration:none}.bottom-nav a.active,.bottom-nav a:hover{color:var(--fg)}.nav-icon{width:20px;height:20px}.fade-in{animation:fadeIn .3s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>  
@@ -15,14 +15,14 @@
 <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
 <script>
-var CEMOJI={"Women's Clothing":"👗","Home, Garden & Furniture":"🏠","Jewelry & Watches":"💍","Automobiles & Motorcycles":"🏍️","Health, Beauty & Hair":"💄","Men's Clothing":"👔","Bags & Shoes":"👜","Pet Supplies":"🐾","Toys, Kids & Babies":"🧸","Home Improvement":"🔧","Sports & Outdoors":"⚽","Phones & Accessories":"📱","Consumer Electronics":"🎧","Other":"📦"};
+var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry & Watches":"[ring]","Automobiles & Motorcycles":"[car]","Health, Beauty & Hair":"[makeup]","Men's Clothing":"[shirt]","Bags & Shoes":"[bag]","Pet Supplies":"[paw]","Toys, Kids & Babies":"[toy]","Home Improvement":"[wrench]","Sports & Outdoors":"[ball]","Phones & Accessories":"[phone]","Consumer Electronics":"[headphones]","Other":"[box]"};
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-// Bomb-proof loader — fires immediately, handles all errors
+// Load from CDN directly (bypass broken Vercel API)
 (function(){
   var g=document.getElementById('cat-grid');
   var x=new XMLHttpRequest();
-  x.open('GET','/api/categories-lookup',true);
+  x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-index.json',true);
   x.timeout=12000;
   x.onload=function(){
     try{
@@ -31,12 +31,12 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
         var cs=Object.keys(d);
         g.innerHTML='';
         cs.sort(function(a,b){return (d[b].product_count||0)-(d[a].product_count||0)}).forEach(function(c){
-          var info=d[c]||{},heroes=info.hero_images||[],count=info.product_count||0,emoji=CEMOJI[c]||'📦';
+          var info=d[c]||{},heroes=info.hero_images||[],count=info.product_count||0,emoji=C[c]||'[box]';
           var a=document.createElement('a');a.className='cat-card fade-in';a.href='category.html?cat='+encodeURIComponent(c);
           var imgHtml='';
           if(heroes.length>0){
             imgHtml='<div class="cat-hero">';
-            for(var h=0;h<4&&h<heroes.length;h++){imgHtml+='<img src="'+heroes[h]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem;opacity:.2>📦</span>'"'+(h===0?' style="grid-row:1/3"':'')+'>'}
+            for(var h=0;h<4&&h<heroes.length;h++){imgHtml+='<img src="'+heroes[h]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'"'+(h===0?' style="grid-row:1/3"':'')+'>'}
             imgHtml+='</div>';
           }else{
             imgHtml='<div class="cat-hero"><div style="grid-row:1/3;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#f5f5f5;width:100%;height:100%">'+emoji+'</div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div></div>';
@@ -56,7 +56,6 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
   x.send();
 })();
 </script>
-
 
 
 <script>(function(){var b=document.getElementById("nav-cart-count");if(b){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);b.textContent=n;b.style.display=n>0?"":"none"}catch(e){}}})();</script>
