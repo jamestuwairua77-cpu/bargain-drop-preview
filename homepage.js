@@ -1,5 +1,5 @@
 // Currency handled by js/currency.js
-if(typeof BD!=="undefined")BD.initCurrency();
+if(typeof BD!="undefined")BD.initCurrency();
 var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry & Watches":"[ring]","Automobiles & Motorcycles":"[car]","Health, Beauty & Hair":"[makeup]","Men's Clothing":"[shirt]","Bags & Shoes":"[bag]","Pet Supplies":"[paw]","Toys, Kids & Babies":"[toy]","Home Improvement":"[wrench]","Sports & Outdoors":"[ball]","Phones & Accessories":"[phone]","Consumer Electronics":"[headphones]","Other":"[box]"};
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 var ALL=[];
@@ -12,11 +12,10 @@ x.onload=function(){
   if(x.status>=200&&x.status<400){
     var d=JSON.parse(x.responseText);
     var cats=Object.keys(d);
-    renderCatChips(cats,d);
-    renderCatGrid(cats,d);
+    renderSubcatGrid(cats,d);
   }
 };
-x.onerror=function(){document.getElementById('cat-slider').innerHTML='<div class="loading-text">Categories unavailable</div>';document.getElementById('cat-grid').innerHTML='<div class="loading-text">Categories unavailable</div>'};
+x.onerror=function(){document.getElementById('subcat-scroll-wrap').innerHTML='<div class="loading-text">Categories unavailable</div>'};
 x.send();
 })();
 
@@ -35,57 +34,26 @@ x.onerror=function(){document.getElementById('product-grid').innerHTML='<div cla
 x.send();
 })();
 
-function renderCatChips(cats, catData){
-  var g=document.getElementById('cat-slider');
+function renderSubcatGrid(cats, catData){
+  var g=document.getElementById('subcat-scroll-wrap');
   if(!g)return;
   g.innerHTML='';
   cats.sort(function(a,b){return (catData[b]&&catData[b].product_count||0)-(catData[a]&&catData[a].product_count||0)});
   for(var i=0;i<cats.length;i++){
     var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box]';
-    var a=document.createElement('a');a.className='cat-chip fade-in';
-    a.href='category.html?cat='+encodeURIComponent(c);
-    var img=heroes[0]||'';
-    a.innerHTML=(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<span class="cat-chip-emoji">'+e+'</span>')+'<span class="cat-chip-label">'+esc(c)+'</span>';
-    g.appendChild(a);
-  }
-  initSlider();
-}
-
-function renderCatGrid(cats, catData){
-  var g=document.getElementById('cat-grid');
-  if(!g)return;
-  g.innerHTML='';
-  cats.sort(function(a,b){return (catData[b]&&catData[b].product_count||0)-(catData[a]&&catData[a].product_count||0)});
-  for(var i=0;i<cats.length;i++){
-    var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box]';
-    var a=document.createElement('a');a.className='cat-card fade-in';
+    var a=document.createElement('a');a.className='subcat-card fade-in';
     a.href='category.html?cat='+encodeURIComponent(c);
     var h='';
     if(heroes.length>0){
-      h='<div class="cat-hero">';
-      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2rem;opacity:.2>📦</span>\'"'+(j===0?' style="grid-row:1/3"':'')+'>';
+      h='<div class="subcat-hero">';
+      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:1.5rem;opacity:.25>&#x1f4e6;</span>\''+(j===0?' style="grid-row:1/3"':'')+'>';
       h+='</div>';
     }else{
-      h='<div class="cat-hero"><div style="grid-row:1/3;display:flex;align-items:center;justify-content:center;font-size:2rem;background:#f5f5f5;width:100%;height:100%">'+e+'</div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div></div>';
+      h='<div class="subcat-hero"><span class="subcat-emoji">'+e+'</span><div class="subcat-empty"></div><div class="subcat-empty"></div><div class="subcat-empty"></div></div>';
     }
-    a.innerHTML=h+'<div class="cat-card-info"><div class="cc-label">'+esc(c)+'</div><div class="cc-count">'+(info.product_count||0).toLocaleString()+'</div></div>';
+    a.innerHTML=h+'<div class="subcat-info"><div class="subcat-label">'+esc(c)+'</div><div class="subcat-count">'+(info.product_count||0).toLocaleString()+'</div></div>';
     g.appendChild(a);
   }
-}
-
-function initSlider(){
-  var slider=document.getElementById('cat-slider');
-  var prev=document.getElementById('slider-prev');
-  var next=document.getElementById('slider-next');
-  if(!slider||!prev||!next)return;
-  function updateArrows(){
-    prev.style.opacity=slider.scrollLeft<=4?'0.3':'1';
-    next.style.opacity=slider.scrollLeft+slider.clientWidth>=slider.scrollWidth-4?'0.3':'1';
-  }
-  slider.addEventListener('scroll',updateArrows);
-  prev.addEventListener('click',function(){slider.scrollBy({left:-220,behavior:'smooth'})});
-  next.addEventListener('click',function(){slider.scrollBy({left:220,behavior:'smooth'})});
-  updateArrows();
 }
 
 function renderProds(prods){
@@ -96,7 +64,7 @@ function renderProds(prods){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
     a.href='product.html?id='+p.id;
-    a.innerHTML='<div class="prod-img">'+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'"':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!=='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span></div></div>';
+    a.innerHTML='<div class="prod-img">'+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>&#x1f4e6;</span>\''":'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!='undefined'?BD.formatMoneyCompact(p.price||0):'AI'+(.price||0).toFixed(2))+'</span></div></div>';
     g.appendChild(a);
   }
 }
