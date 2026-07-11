@@ -59,4 +59,5 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 
 
 <script>(function(){var b=document.getElementById("nav-cart-count");if(b){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);b.textContent=n;b.style.display=n>0?"":"none"}catch(e){}}})();</script>
+<script src="js/nav-icons.js"></script>
 </body></html>
