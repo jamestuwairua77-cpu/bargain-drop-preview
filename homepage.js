@@ -4,10 +4,10 @@ var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 var ALL=[];
 
-// Load categories from lightweight API (52KB instead of 14MB)
+// Load categories from lightweight CDN file (53KB instead of 16.7MB!)
 (function loadCats(){
 var x=new XMLHttpRequest();
-x.open('GET','/api/categories-lookup',true);
+x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-index.json',true);
 x.timeout=10000;
 x.onload=function(){
   if(x.status>=200&&x.status<400){
@@ -16,28 +16,29 @@ x.onload=function(){
     renderCats(cats,d);
   }
 };
+x.onerror=function(){document.getElementById('cat-grid').innerHTML='<div class="loading-text">Categories unavailable</div>'};
 x.send();
 })();
 
-// Load trending products from search API
+// Load trending products from CDN (first category, first 50 products)
 (function loadProds(){
 var x=new XMLHttpRequest();
-x.open('GET','/api/search-products?limit=50',true);
+x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/data/home-garden-furniture.json',true);
 x.timeout=15000;
 x.onload=function(){
   if(x.status>=200&&x.status<400){
     var d=JSON.parse(x.responseText);
-    ALL=d.products||[];
-    renderProds(ALL.slice(0,50));
+    ALL=(d.products||[]).slice(0,50);
+    renderProds(ALL);
   }
 };
+x.onerror=function(){document.getElementById('product-grid').innerHTML='<div class="loading-text">Products unavailable</div>'};
 x.send();
 })();
 
 function renderCats(cats, catData){
   var g=document.getElementById('cat-grid');
   g.innerHTML='';
-  // Sort by product count descending
   cats.sort(function(a,b){return (catData[b]&&catData[b].product_count||0)-(catData[a]&&catData[a].product_count||0)});
   for(var i=0;i<cats.length;i++){
     var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box]';
@@ -46,12 +47,12 @@ function renderCats(cats, catData){
     var h='';
     if(heroes.length>0){
       h='<div class="cat-hero">';
-      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem;opacity:.2>📦</span>'"'+(j===0?' style="grid-row:1/3"':'')+'>';
+      for(var j=0;j<4&&j<heroes.length;j++)h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'"'+(j===0?' style="grid-row:1/3"':'')+'>';
       h+='</div>';
     }else{
       h='<div class="cat-hero"><div style="grid-row:1/3;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#f5f5f5;width:100%;height:100%">'+e+'</div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div><div style="background:#f5f5f5"></div></div>';
     }
-    a.innerHTML=h+'<div class="cat-card-info"><div class="cc-label">'+esc(c)+'</div><div class="cc-count"></div></div>';
+    a.innerHTML=h+'<div class="cat-card-info"><div class="cc-label">'+esc(c)+'</div><div class="cc-count">'+(info.product_count||0).toLocaleString()+' products</div></div>';
     g.appendChild(a);
   }
 }
@@ -64,9 +65,8 @@ function renderProds(prods){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
     a.href='product.html?id='+p.id;
-    var d='';
     var d=''; // discount removed
-    a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem;opacity:.2>📦</span>'">':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!=='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span>'+'</div></div>';
+    a.innerHTML='<div class="prod-img">'+d+(img?'<img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=font-size:2.5rem;opacity:.2>📦</span>\'"':'<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>')+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+(typeof BD!=='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2))+'</span>'+'</div></div>';
     g.appendChild(a);
   }
 }
