@@ -1,3 +1,4 @@
+
 // Currency handled by js/currency.js
 if(typeof BD!="undefined")BD.initCurrency();
 var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry & Watches":"[ring]","Automobiles & Motorcycles":"[car]","Health, Beauty & Hair":"[makeup]","Men's Clothing":"[shirt]","Bags & Shoes":"[bag]","Pet Supplies":"[paw]","Toys, Kids & Babies":"[toy]","Home Improvement":"[wrench]","Sports & Outdoors":"[ball]","Phones & Accessories":"[phone]","Consumer Electronics":"[headphones]","Other":"[box]"};
@@ -69,7 +70,7 @@ function renderSubcatGrid(cats, catData){
   g.innerHTML='';
   cats.sort(function(a,b){return (catData[b]&&catData[b].product_count||0)-(catData[a]&&catData[a].product_count||0)});
   for(var i=0;i<cats.length;i++){
-    var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||'[box'];
+    var c=cats[i],info=catData[c]||{},heroes=info.hero_images||[],e=C[c]||"[box]";
     var a=document.createElement('a');a.className='subcat-card fade-in';
     a.href='category.html?cat='+encodeURIComponent(c);
     var h='';
