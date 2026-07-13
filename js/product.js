@@ -180,7 +180,7 @@ function renderReviewList(){
   var shown=filtered.slice(0,reviewsShownCount);
   shown.forEach(function(r){
     var stars='';for(var i=1;i<=5;i++)stars+=i<=r.rating?'★':'☆';
-    var imgs='';if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+esc(src)+'" alt="" loading="lazy" onerror="this.parentElement.removeChild(this)">'});imgs+='</div>'}
+    var imgs='';if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+esc(src)+'" alt="Review photo" width="60" height="60" loading="lazy" onerror="this.parentElement.removeChild(this)">'});imgs+='</div>'}
     var verified=r.verified?'<span class="review-verified"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#10b981"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2"/></svg>Verified</span>':'';
     list.innerHTML+='<div class="review-item fade-in"><div class="review-header"><div class="review-avatar">'+esc(r.author.charAt(0))+'</div><div class="review-author"><div class="name">'+esc(r.author)+' '+verified+'</div><div class="date">'+r.date+'</div></div></div><div class="review-stars">'+stars+'</div><div class="review-text">'+esc(r.text)+'</div>'+imgs+'<div class="review-helpful"><button data-helpful="1">Helpful ('+r.helpful+')?</button></div></div>'
   });
@@ -248,7 +248,7 @@ function showProduct(){
     }else{var gp=document.getElementById('gallery-prev');if(gp)gp.style.display='none';var gn=document.getElementById('gallery-next');if(gn)gn.style.display='none'}}
     var gc=document.getElementById('gallery-count');if(gc){gc.textContent=imgs.length>1?'1/'+imgs.length:'';gc.style.display=imgs.length>1?'':'none'}
     var t=document.getElementById('prod-thumbs');if(t){t.innerHTML='';
-    imgs.forEach(function(src,i){var ii=document.createElement('img');ii.src=src;ii.className=i===0?'active':'';ii.onclick=function(){setImage(i)};t.appendChild(ii)})}
+    imgs.forEach(function(src,i){var ii=document.createElement('img');ii.src=src;ii.className=i===0?'active':'';ii.alt=p.title+' image '+(i+1);ii.loading='lazy';ii.width=52;ii.height=52;ii.onclick=function(){setImage(i)};t.appendChild(ii)})}
   }
 
   var pd=document.getElementById('product-desc');if(pd)pd.innerHTML=p.body_html||'No description available.';
