@@ -36,7 +36,7 @@
 </div>
 
 <div class="prod-img-gallery" id="gallery-block">
-  <img id="product-img" src="" alt="Product image" loading="eager" width="400" height="400" onerror="this.style.display='none'">
+  <img id="product-img" src="" alt="Product image" loading="eager" width="400" height="400" style="display:block;width:100%;height:100%;object-fit:contain">
   <div class="gallery-dots" id="gallery-dots"></div>
   <span class="gallery-count" id="gallery-count"></span>
   <button class="gallery-prev" id="gallery-prev" onclick="navigateImage(-1)">‹</button>
@@ -148,7 +148,7 @@
 </nav>
 
 <script src="js/currency.js?v=2"></script>
-<script src="js/product.js?v=5"></script>
+<script src="js/product.js?v=4"></script>
 <script>(function(){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
 </body>
