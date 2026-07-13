@@ -91,7 +91,7 @@ function renderSubcatGrid(cats, catData){
 function renderProds(prods){
   var g=document.getElementById('product-grid');
   g.innerHTML='';
-  if(!prods.length){g.innerHTML='<div class="loading-Text">No products found</div>';return}
+  if(!prods.length){g.innerHTML='<div class="loading-text">No products found</div>';return}
   for(var i=0;i<prods.length;i++){
     var p=prods[i],img=p.image||(p.images||[])[0]||'';
     var a=document.createElement('a');a.className='product-card fade-in';
@@ -100,7 +100,7 @@ function renderProds(prods){
     if(img){
       imgHtml='<img src="'+img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
     }else{
-      imgHtml='<div style="font-size:4rem;opacity:.2">'+C.Other+'</div>';
+      imgHtml='<div style="font-size:4rem;opacity:.15;display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f5f5f5;border-radius:12px">'+C.Other+'</div>';
     }
     var priceHtml;
     if(typeof BD!='undefined'){
