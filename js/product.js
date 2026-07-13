@@ -277,7 +277,7 @@ function showProduct(){
     if(p.product_type)specRows.push(['Type',p.product_type]);
     if(p.subcategory)specRows.push(['Subcategory',p.subcategory]);
     if(p.category)specRows.push(['Category',p.category]);
-    ((Array.isArray(p.tags)?p.tags:(p.tags||'').split(',')).filter(Boolean).slice(0,5)).forEach(function(tag,i){var parts=tag.split(':');if(parts.length===2)specRows.push([parts[0].trim(),parts[1].trim()]);else if(i<3)specRows.push(['Detail '+(i+1),tag.trim()])});
+    ((Array.isArray(p.tags)?p.tags.join(','):(p.tags||'')).split(',').filter(Boolean).slice(0,5)).forEach(function(tag,i){var parts=tag.split(':');if(parts.length===2)specRows.push([parts[0].trim(),parts[1].trim()]);else if(i<3)specRows.push(['Detail '+(i+1),tag.trim()])});
     if(specRows.length===0)specRows.push(['SKU',p.id||'—'],['Status','Active']);
     specRows.forEach(function(row){specBody.innerHTML+='<tr><th>'+esc(row[0])+'</th><td>'+esc(row[1])+'</td></tr>'})
   }
