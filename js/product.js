@@ -182,10 +182,12 @@ function renderReviewList(){
     var stars='';for(var i=1;i<=5;i++)stars+=i<=r.rating?'★':'☆';
     var imgs='';if(r.images&&r.images.length){imgs='<div class="review-images">';r.images.forEach(function(src){imgs+='<img src="'+esc(src)+'" alt="" loading="lazy" onerror="this.parentElement.removeChild(this)">'});imgs+='</div>'}
     var verified=r.verified?'<span class="review-verified"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#10b981"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2"/></svg>Verified</span>':'';
-    list.innerHTML+='<div class="review-item fade-in"><div class="review-header"><div class="review-avatar">'+esc(r.author.charAt(0))+'</div><div class="review-author"><div class="name">'+esc(r.author)+' '+verified+'</div><div class="date">'+r.date+'</div></div></div><div class="review-stars">'+stars+'</div><div class="review-text">'+esc(r.text)+'</div>'+imgs+'<div class="review-helpful"><button onclick="this.textContent=\'✓ Thanks!\';this.disabled=true">Helpful ('+r.helpful+')?</button></div></div>'
+    list.innerHTML+='<div class="review-item fade-in"><div class="review-header"><div class="review-avatar">'+esc(r.author.charAt(0))+'</div><div class="review-author"><div class="name">'+esc(r.author)+' '+verified+'</div><div class="date">'+r.date+'</div></div></div><div class="review-stars">'+stars+'</div><div class="review-text">'+esc(r.text)+'</div>'+imgs+'<div class="review-helpful"><button data-helpful="1">Helpful ('+r.helpful+')?</button></div></div>'
   });
   var loadMore=document.getElementById('load-more-reviews');
-  if(loadMore)loadMore.style.display=shown.length<filtered.length?'':'none'
+  if(loadMore)loadMore.style.display=shown.length<filtered.length?'':'none';
+  // Add click handlers for helpful buttons
+  list.querySelectorAll('[data-helpful]').forEach(function(btn){btn.onclick=function(){this.textContent='✓ Thanks!';this.disabled=true;this.style.color='var(--green)'}})
 }
 
 function loadMoreReviews(){reviewsShownCount+=10;renderReviewList()}
