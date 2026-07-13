@@ -1,2872 +1,722 @@
 {
+  "home-garden-furniture": {
+    "name": "Home, Garden & Furniture",
+    "product_count": 2993,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/77605a98-fa79-49d4-95af-32621de503f5.jpg?v=1783773494",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/70196dec-e711-407e-9063-5e6b211f266c.jpg?v=1783773884",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1e67bfb0-297a-4e71-bc8b-c5a116f6a03e_trans.jpg?v=1783773921",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/999_f1e6199c-fbfb-42c2-b25c-a961d61ba38a.svg?v=1783870872"
+    ],
+    "subcategories": {
+      "Furniture": 638,
+      "Classified: Home, Garden & Furniture": 116,
+      "Bedding Sets": 266,
+      "Home, Garden & Furniture > Furniture": 78,
+      "Home, Garden & Furniture": 7,
+      "Uncategorized": 609,
+      "classified:-home-garden-and-furniture": 1,
+      "Action & Toy Figures": 6,
+      "Kitchen Storage": 65,
+      "Home, Garden & Furniture > Classified: Home, Garden & Furniture": 62,
+      "Ceiling Lights": 1,
+      "Health, Beauty & Hair": 1,
+      "Bakeware": 1,
+      "CJ Dropshipping": 26,
+      "Solar Lamps": 231,
+      "Home, Garden & Furniture > Curtains": 2,
+      "Home Office Storage": 468,
+      "Event & Party Supplies": 12,
+      "Garden Tools": 5,
+      "LED Spotlights": 1,
+      "Kitchen Knives & Accessories": 6,
+      "Office & Stationery": 4,
+      "Smart Watches": 27,
+      "Home Appliance Parts": 4,
+      "Decorative Flowers & Wreaths": 4,
+      "Home & Garden": 9,
+      "Storage Bags & Cases & Boxes": 29,
+      "Musical Instruments": 1,
+      "Boy Clothing Sets": 37,
+      "Bathroom Storage": 51,
+      "Sports Accessories": 7,
+      "Fabric": 2,
+      "Creative Watches": 1,
+      "Home, Garden & Furniture > Home Office Storage": 69,
+      "Adult Wellness": 22,
+      "Towels": 15,
+      "Home, Garden & Furniture > Bathroom Storage": 3,
+      "Drinkware": 7,
+      "Kitchen & Dining": 6,
+      "Cushion Covers": 3,
+      "Christmas Decoration Supplies": 2,
+      "Home, Garden & Furniture > Decorative Flowers & Wreaths": 1,
+      "Home, Garden & Furniture > Kitchen Storage": 5,
+      "Cleaning Appliances": 7,
+      "Garden & Furniture > Home Storage > Home Office Storage": 4,
+      "Pillows": 2,
+      "Decor Paintings": 3,
+      "Personal Care Appliances": 1,
+      "Home, Garden & Furniture > Towels": 1,
+      "Body Care": 3,
+      "Patterned Cases": 1,
+      "Health Care Products": 9,
+      "Other Maintenance Products": 9,
+      "Kitchen Appliances": 1,
+      "Home Lighting": 1,
+      "Batteries": 1,
+      "Curtains": 5,
+      "Home, Garden & Furniture > Bedding Sets": 2,
+      "Cooking Tools": 2,
+      "Other Motorcycle Accessories": 5,
+      "Home, Garden & Furniture > Storage Bags & Cases & Boxes": 3,
+      "Smart Wearable Accessories": 6,
+      "Home Storage": 1,
+      "Curling Iron": 1,
+      "Pet Feeding Tools": 2,
+      "Home, Garden & Furniture > Drinkware": 1,
+      "Dinnerware": 1,
+      "Home, Garden & Furniture > Storage Bottles & Jars": 1,
+      "Storage Bottles & Jars": 1,
+      "Home, Garden & Furniture > Cushion Covers": 1,
+      "Home, Garden & Furniture > Event & Party Supplies": 1,
+      "Tablet Cases": 6
+    }
+  },
   "jewelry-watches": {
     "name": "Jewelry & Watches",
-    "slug": "jewelry-watches",
-    "product_count": 4071,
+    "product_count": 5478,
     "hero_images": [
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3b08fa4b-7fcc-46b8-9537-f5e546442e81.jpg?v=1783773442",
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3c140d64-5058-449b-839c-e653c8860a96.jpg?v=1783773461",
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/67bc3743-c386-47fe-8b15-fb354a1f323c.jpg?v=1783773925",
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/fd365211-c88c-4805-a829-9c30c92dec16.jpg?v=1783773936"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 944
-      },
-      {
-        "name": "Earrings",
-        "product_count": 859
-      },
-      {
-        "name": "Classified: Jewelry & Watches",
-        "product_count": 604
-      },
-      {
-        "name": "Bracelets & Bangles",
-        "product_count": 486
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 357
-      },
-      {
-        "name": "Necklace & Pendants",
-        "product_count": 272
-      },
-      {
-        "name": "925 Silver Jewelry",
-        "product_count": 204
-      },
-      {
-        "name": "Rings",
-        "product_count": 91
-      },
-      {
-        "name": "Charms",
-        "product_count": 62
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 21
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 19
-      },
-      {
-        "name": "Fashion Jewelry Sets",
-        "product_count": 19
-      },
-      {
-        "name": "Body Jewelry",
-        "product_count": 15
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 13
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 13
-      },
-      {
-        "name": "Keychains",
-        "product_count": 13
-      },
-      {
-        "name": "Mechanical Watches",
-        "product_count": 7
-      },
-      {
-        "name": "Watches & Wearables",
-        "product_count": 6
-      },
-      {
-        "name": "Dress Watches",
-        "product_count": 5
-      },
-      {
-        "name": "Other Maintenance Products",
-        "product_count": 5
-      },
-      {
-        "name": "Fashion Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Brooches",
-        "product_count": 4
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 4
-      },
-      {
-        "name": "Jewelry & Watches > Classified: Jewelry & Watches",
-        "product_count": 3
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 3
-      },
-      {
-        "name": "Cleaning Appliances",
-        "product_count": 3
-      },
-      {
-        "name": "Watch Accessories",
-        "product_count": 3
-      },
-      {
-        "name": "Home Office Storage",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Collars",
-        "product_count": 2
-      },
-      {
-        "name": "Automobiles",
-        "product_count": 2
-      },
-      {
-        "name": "Women's Bracelet Watches",
-        "product_count": 2
-      },
-      {
-        "name": "Smart Wristbands",
-        "product_count": 2
-      },
-      {
-        "name": "Creative Watches",
-        "product_count": 2
-      },
-      {
-        "name": "Consumer Electronics",
-        "product_count": 1
-      },
-      {
-        "name": "Scarves & Wraps",
-        "product_count": 1
-      },
-      {
-        "name": "Women's Crossbody Bags",
-        "product_count": 1
-      },
-      {
-        "name": "Sports & Outdoors",
-        "product_count": 1
-      },
-      {
-        "name": "Children's Watches",
-        "product_count": 1
-      },
-      {
-        "name": "Blouses & Shirts",
-        "product_count": 1
-      },
-      {
-        "name": "Jewelry & Watches > Necklace & Pendants",
-        "product_count": 1
-      },
-      {
-        "name": "Bras",
-        "product_count": 1
-      },
-      {
-        "name": "Wide Leg Pants",
-        "product_count": 1
-      },
-      {
-        "name": "Jewelry & Watches > Earrings",
-        "product_count": 1
-      },
-      {
-        "name": "Fine Earrings",
-        "product_count": 1
-      },
-      {
-        "name": "Bag Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Drinkware",
-        "product_count": 1
-      },
-      {
-        "name": "Jewelry & Watches > 925 Silver Jewelry",
-        "product_count": 1
-      },
-      {
-        "name": "Couple&Parent-Child Suits",
-        "product_count": 1
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Face Skin Care Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Fitness & Wellness",
-        "product_count": 1
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 1
-      },
-      {
-        "name": "Casual Shoes",
-        "product_count": 1
-      }
-    ]
-  },
-  "home-garden-furniture": {
-    "name": "Home, Garden & Furniture",
-    "slug": "home-garden-furniture",
-    "product_count": 3610,
-    "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/29214d3e-5bb6-421a-9333-6ef411b7e4c2.jpg?v=1783773477",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/77605a98-fa79-49d4-95af-32621de503f5.jpg?v=1783773494",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/70196dec-e711-407e-9063-5e6b211f266c.jpg?v=1783773884",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1e67bfb0-297a-4e71-bc8b-c5a116f6a03e_trans.jpg?v=1783773921"
-    ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 686
-      },
-      {
-        "name": "Furniture",
-        "product_count": 589
-      },
-      {
-        "name": "Solar Lamps",
-        "product_count": 527
-      },
-      {
-        "name": "Home Office Storage",
-        "product_count": 497
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 135
-      },
-      {
-        "name": "Classified: Home, Garden & Furniture",
-        "product_count": 114
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 91
-      },
-      {
-        "name": "Home, Garden & Furniture > Furniture",
-        "product_count": 78
-      },
-      {
-        "name": "Home, Garden & Furniture > Home Office Storage",
-        "product_count": 67
-      },
-      {
-        "name": "Home, Garden & Furniture > Classified: Home, Garden & Furniture",
-        "product_count": 62
-      },
-      {
-        "name": "Kitchen Storage",
-        "product_count": 55
-      },
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 41
-      },
-      {
-        "name": "CJ Dropshipping",
-        "product_count": 37
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 34
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 32
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 27
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 24
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 22
-      },
-      {
-        "name": "Event & Party Supplies",
-        "product_count": 21
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 21
-      },
-      {
-        "name": "Home Improvement",
-        "product_count": 19
-      },
-      {
-        "name": "Wide Leg Pants",
-        "product_count": 18
-      },
-      {
-        "name": "Towels",
-        "product_count": 15
-      },
-      {
-        "name": "Bathroom Storage",
-        "product_count": 15
-      },
-      {
-        "name": "Suits & Sets",
-        "product_count": 14
-      },
-      {
-        "name": "Blazers",
-        "product_count": 14
-      },
-      {
-        "name": "Home Appliance Parts",
-        "product_count": 13
-      },
-      {
-        "name": "Scarves & Wraps",
-        "product_count": 13
-      },
-      {
-        "name": "Headband & Hair Band & Hairpin",
-        "product_count": 13
-      },
-      {
-        "name": "Drinkware",
-        "product_count": 12
-      },
-      {
-        "name": "Blouses & Shirts",
-        "product_count": 12
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 11
-      },
-      {
-        "name": "Rings",
-        "product_count": 10
-      },
-      {
-        "name": "Nail Art Kits",
-        "product_count": 10
-      },
-      {
-        "name": "Garden Tools",
-        "product_count": 9
-      },
-      {
-        "name": "Women's Crossbody Bags",
-        "product_count": 9
-      },
-      {
-        "name": "Home & Garden",
-        "product_count": 9
-      },
-      {
-        "name": "Facial Care",
-        "product_count": 9
-      },
-      {
-        "name": "Other Maintenance Products",
-        "product_count": 9
-      },
-      {
-        "name": "Body Care",
-        "product_count": 8
-      },
-      {
-        "name": "Home, Garden & Furniture",
-        "product_count": 7
-      },
-      {
-        "name": "Wall Lamps",
-        "product_count": 7
-      },
-      {
-        "name": "Home Lighting",
-        "product_count": 7
-      },
-      {
-        "name": "Kitchen & Dining",
-        "product_count": 6
-      },
-      {
-        "name": "Health Care Products",
-        "product_count": 6
-      },
-      {
-        "name": "Kitchen Knives & Accessories",
-        "product_count": 5
-      },
-      {
-        "name": "Massage & Relaxation",
-        "product_count": 5
-      },
-      {
-        "name": "Home, Garden & Furniture > Kitchen Storage",
-        "product_count": 5
-      },
-      {
-        "name": "Sun Care",
-        "product_count": 5
-      },
-      {
-        "name": "Curtains",
-        "product_count": 5
-      },
-      {
-        "name": "Baby Rompers",
-        "product_count": 5
-      },
-      {
-        "name": "Watch Accessories",
-        "product_count": 5
-      },
-      {
-        "name": "Girl Accessories",
-        "product_count": 5
-      },
-      {
-        "name": "Decorative Flowers & Wreaths",
-        "product_count": 4
-      },
-      {
-        "name": "Eyewear & Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Networking Tools",
-        "product_count": 4
-      },
-      {
-        "name": "Decor Paintings",
-        "product_count": 4
-      },
-      {
-        "name": "Garden & Furniture > Home Storage > Home Office Storage",
-        "product_count": 4
-      },
-      {
-        "name": "Home Electronic Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Camping & Hiking",
-        "product_count": 3
-      },
-      {
-        "name": "Home, Garden & Furniture > Bathroom Storage",
-        "product_count": 3
-      },
-      {
-        "name": "Storage Bottles & Jars",
-        "product_count": 3
-      },
-      {
-        "name": "Automobiles",
-        "product_count": 3
-      },
-      {
-        "name": "Cooking Tools",
-        "product_count": 3
-      },
-      {
-        "name": "Home, Garden & Furniture > Storage Bags & Cases & Boxes",
-        "product_count": 3
-      },
-      {
-        "name": "Tool Sets",
-        "product_count": 3
-      },
-      {
-        "name": "Keychains",
-        "product_count": 3
-      },
-      {
-        "name": "Bakeware",
-        "product_count": 2
-      },
-      {
-        "name": "Home, Garden & Furniture > Curtains",
-        "product_count": 2
-      },
-      {
-        "name": "Fabric",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Socks",
-        "product_count": 2
-      },
-      {
-        "name": "Basic Jacket",
-        "product_count": 2
-      },
-      {
-        "name": "Cushion Covers",
-        "product_count": 2
-      },
-      {
-        "name": "Brooches",
-        "product_count": 2
-      },
-      {
-        "name": "Christmas Decoration Supplies",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 2
-      },
-      {
-        "name": "Scooters",
-        "product_count": 2
-      },
-      {
-        "name": "Office & Stationery",
-        "product_count": 2
-      },
-      {
-        "name": "Pillows",
-        "product_count": 2
-      },
-      {
-        "name": "Charms",
-        "product_count": 2
-      },
-      {
-        "name": "Casual Pants",
-        "product_count": 2
-      },
-      {
-        "name": "Bras",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 2
-      },
-      {
-        "name": "Home, Garden & Furniture > Bedding Sets",
-        "product_count": 2
-      },
-      {
-        "name": "Wool & Blend",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Sandals",
-        "product_count": 2
-      },
-      {
-        "name": "Bag Accessories",
-        "product_count": 2
-      },
-      {
-        "name": "Women's Camis",
-        "product_count": 2
-      },
-      {
-        "name": "Travel & Luggage",
-        "product_count": 2
-      },
-      {
-        "name": "Welding Equipment",
-        "product_count": 1
-      },
-      {
-        "name": "Ceiling Lights",
-        "product_count": 1
-      },
-      {
-        "name": "Other",
-        "product_count": 1
-      },
-      {
-        "name": "Welding & Soldering Supplies",
-        "product_count": 1
-      },
-      {
-        "name": "Flashlights & Torches",
-        "product_count": 1
-      },
-      {
-        "name": "LED Spotlights",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Collars",
-        "product_count": 1
-      },
-      {
-        "name": "Musical Instruments",
-        "product_count": 1
-      },
-      {
-        "name": "Automotive",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Bags",
-        "product_count": 1
-      },
-      {
-        "name": "Home, Garden & Furniture > Decorative Flowers & Wreaths",
-        "product_count": 1
-      },
-      {
-        "name": "False Eyelashes",
-        "product_count": 1
-      },
-      {
-        "name": "Belts & Cummerbunds",
-        "product_count": 1
-      },
-      {
-        "name": "Girl Clothing Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Body Jewelry",
-        "product_count": 1
-      },
-      {
-        "name": "Flats",
-        "product_count": 1
-      },
-      {
-        "name": "Personal Care Appliances",
-        "product_count": 1
-      },
-      {
-        "name": "Home, Garden & Furniture > Towels",
-        "product_count": 1
-      },
-      {
-        "name": "Man Prescription Glasses",
-        "product_count": 1
-      },
-      {
-        "name": "Air Conditioning Appliances",
-        "product_count": 1
-      },
-      {
-        "name": "Charger",
-        "product_count": 1
-      },
-      {
-        "name": "Kitchen Appliances",
-        "product_count": 1
-      },
-      {
-        "name": "Sleep & Lounge",
-        "product_count": 1
-      },
-      {
-        "name": "Bikini Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Slippers",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Prescription Glasses",
-        "product_count": 1
-      },
-      {
-        "name": "Man Slippers",
-        "product_count": 1
-      },
-      {
-        "name": "Pumps",
-        "product_count": 1
-      },
-      {
-        "name": "Dress Watches",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Glasses",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Shower Products",
-        "product_count": 1
-      },
-      {
-        "name": "Fashion Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Eyebrow Pencil",
-        "product_count": 1
-      },
-      {
-        "name": "Couple&Parent-Child Suits",
-        "product_count": 1
-      },
-      {
-        "name": "Smart Home Appliances",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Beds",
-        "product_count": 1
-      },
-      {
-        "name": "Home, Garden & Furniture > Drinkware",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Gloves & Mittens",
-        "product_count": 1
-      },
-      {
-        "name": "Dinnerware",
-        "product_count": 1
-      },
-      {
-        "name": "Home, Garden & Furniture > Storage Bottles & Jars",
-        "product_count": 1
-      },
-      {
-        "name": "Home, Garden & Furniture > Cushion Covers",
-        "product_count": 1
-      },
-      {
-        "name": "Cat Scratching Posts",
-        "product_count": 1
-      },
-      {
-        "name": "Home, Garden & Furniture > Event & Party Supplies",
-        "product_count": 1
-      }
-    ]
-  },
-  "automobiles-motorcycles": {
-    "name": "Automobiles & Motorcycles",
-    "slug": "automobiles-motorcycles",
-    "product_count": 2672,
-    "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5ed1b251-5286-49ec-b50f-96c800e7943b.jpg?v=1783783452",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/b86746ee-ad7e-4b4e-b267-f3701773f935.jpg?v=1783774973",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/0e6faf80-6f92-4baf-a844-caa934b13586.jpg?v=1783783516",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_a40ee9e4-8963-48d2-b6ce-a2e1508a3d3e.svg?v=1783862334"
-    ],
-    "subcategories": [
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 876
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 702
-      },
-      {
-        "name": "Classified: Automobiles & Motorcycles",
-        "product_count": 360
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 287
-      },
-      {
-        "name": "General",
-        "product_count": 277
-      },
-      {
-        "name": "Facial Care",
-        "product_count": 53
-      },
-      {
-        "name": "Automobiles",
-        "product_count": 28
-      },
-      {
-        "name": "Body Care",
-        "product_count": 20
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 12
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 10
-      },
-      {
-        "name": "Paint Care",
-        "product_count": 8
-      },
-      {
-        "name": "Interior Parts",
-        "product_count": 7
-      },
-      {
-        "name": "Scarves & Wraps",
-        "product_count": 6
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 4
-      },
-      {
-        "name": "Face Skin Care Tools",
-        "product_count": 3
-      },
-      {
-        "name": "Exterior Parts",
-        "product_count": 2
-      },
-      {
-        "name": "Automobiles & Motorcycles",
-        "product_count": 2
-      },
-      {
-        "name": "Other Maintenance Products",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 1
-      },
-      {
-        "name": "Furniture",
-        "product_count": 1
-      },
-      {
-        "name": "Automobiles & Motorcycles / Auto Replacement Parts / Other Replacement Parts",
-        "product_count": 1
-      },
-      {
-        "name": "Hand Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Automotive",
-        "product_count": 1
-      },
-      {
-        "name": "Blazers",
-        "product_count": 1
-      },
-      {
-        "name": "Vehicle GPS",
-        "product_count": 1
-      },
-      {
-        "name": "Computer Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Sweaters",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Care",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 1
-      },
-      {
-        "name": "Gaming & Entertainment",
-        "product_count": 1
-      },
-      {
-        "name": "Sports & Outdoors",
-        "product_count": 1
-      }
-    ]
-  },
-  "consumer-electronics": {
-    "name": "Consumer Electronics",
-    "slug": "consumer-electronics",
-    "product_count": 1061,
-    "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/e7dd9447-7128-4fea-bc77-f4bdb912f617.jpg?v=1783782682",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/2534163941782.jpg?v=1783774060",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d19ba8d9-053f-40a6-a04c-5d1cab02fafc.jpg?v=1783773549",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/79ee7627-4954-4e67-84dc-679453f4ccde.jpg?v=1783774147"
-    ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 420
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 213
-      },
-      {
-        "name": "Earphones & Headphones",
-        "product_count": 188
-      },
-      {
-        "name": "Consumer Electronics",
-        "product_count": 48
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 23
-      },
-      {
-        "name": "Smart Wearable Accessories",
-        "product_count": 15
-      },
-      {
-        "name": "Audio & Headphones",
-        "product_count": 11
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 11
-      },
-      {
-        "name": "Computer Accessories",
-        "product_count": 10
-      },
-      {
-        "name": "Electronics & Gadgets",
-        "product_count": 9
-      },
-      {
-        "name": "Digital Cameras",
-        "product_count": 8
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 8
-      },
-      {
-        "name": "Smart Remote Controls",
-        "product_count": 8
-      },
-      {
-        "name": "Charger",
-        "product_count": 7
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 6
-      },
-      {
-        "name": "LED & Lighting",
-        "product_count": 6
-      },
-      {
-        "name": "Home Electronic Accessories",
-        "product_count": 6
-      },
-      {
-        "name": "Smart Wristbands",
-        "product_count": 5
-      },
-      {
-        "name": "Speakers",
-        "product_count": 5
-      },
-      {
-        "name": "Vehicle Camera",
-        "product_count": 5
-      },
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 5
-      },
-      {
-        "name": "Furniture",
-        "product_count": 4
-      },
-      {
-        "name": "Cables & Converters",
-        "product_count": 4
-      },
-      {
-        "name": "Cables",
-        "product_count": 3
-      },
-      {
-        "name": "Watches & Wearables",
-        "product_count": 3
-      },
-      {
-        "name": "Fitness & Wellness",
-        "product_count": 3
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 2
-      },
-      {
-        "name": "Automotive",
-        "product_count": 2
-      },
-      {
-        "name": "Audio & Video",
-        "product_count": 2
-      },
-      {
-        "name": "Interior Parts",
-        "product_count": 2
-      },
-      {
-        "name": "Batteries",
-        "product_count": 2
-      },
-      {
-        "name": "Projectors",
-        "product_count": 2
-      },
-      {
-        "name": "Solar Lamps",
-        "product_count": 1
-      },
-      {
-        "name": "Power Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 1
-      },
-      {
-        "name": "Barking Control Equipments",
-        "product_count": 1
-      },
-      {
-        "name": "Fashion Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Toys & Entertainment",
-        "product_count": 1
-      },
-      {
-        "name": "Other",
-        "product_count": 1
-      },
-      {
-        "name": "CJ Dropshipping",
-        "product_count": 1
-      },
-      {
-        "name": "Office & Stationery",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Collars",
-        "product_count": 1
-      },
-      {
-        "name": "Gaming & Entertainment",
-        "product_count": 1
-      },
-      {
-        "name": "Smart Home Appliances",
-        "product_count": 1
-      },
-      {
-        "name": "Home Appliance Parts",
-        "product_count": 1
-      },
-      {
-        "name": "Tablet LCD Screens",
-        "product_count": 1
-      },
-      {
-        "name": "Computer & Office > Security & Protection > Alarm & Sensor",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Uncategorized": 889,
+      "Classified: Jewelry & Watches": 611,
+      "Smart Watches": 187,
+      "Health, Beauty & Hair": 1,
+      "Necklace & Pendants": 538,
+      "Bracelets & Bangles": 930,
+      "classified:-jewelry-and-watches": 1,
+      "Charms": 65,
+      "Necklace Pendants": 57,
+      "Earrings": 1226,
+      "Rings": 445,
+      "Watch Accessories": 56,
+      "Bracelets Bangles": 10,
+      "Body Jewelry": 28,
+      "Home Office Storage": 32,
+      "Solar Lamps": 16,
+      "Boy Clothing Sets": 23,
+      "Fashion Accessories": 4,
+      "Necklace and Pendants": 10,
+      "Adult Wellness": 35,
+      "Sports Accessories": 13,
+      "CJ Dropshipping": 12,
+      "Watches & Wearables": 1,
+      "Brooches": 6,
+      "Fashion Jewelry Sets": 24,
+      "Keychains": 16,
+      "Creative Watches": 4,
+      "Automobiles": 4,
+      "Eyewear & Accessories": 1,
+      "Smart Wristbands": 5,
+      "925 Silver Jewelry": 204,
+      "Mechanical Watches": 5,
+      "Jewelry & Watches > Classified: Jewelry & Watches": 3,
+      "Headband & Hair Band & Hairpin": 1,
+      "Women's Bracelet Watches": 1,
+      "Earphones & Headphones": 1,
+      "Jewelry & Watches > Necklace & Pendants": 1,
+      "Action & Toy Figures": 3,
+      "Home Storage": 2,
+      "Jewelry & Watches > Earrings": 1,
+      "Fine Earrings": 1,
+      "Home Lighting": 1,
+      "Jewelry & Watches > 925 Silver Jewelry": 1,
+      "Storage Bags & Cases & Boxes": 1,
+      "Smart Remote Controls": 1,
+      "Body Care": 1
+    }
   },
   "health-beauty-hair": {
     "name": "Health, Beauty & Hair",
-    "slug": "health-beauty-hair",
-    "product_count": 922,
+    "product_count": 735,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3958a8f3-757f-4ddd-b1f9-0ea5f9426262.jpg?v=1783774426",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/86e952a4-f880-4ae0-8e34-9b886817fbdd.jpg?v=1783774488",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6a99ed4b-7436-4f6d-8647-7f1402b0f3d8.jpg?v=1783773950",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1343cc5a-0e10-4143-882d-495e64553f06.jpg?v=1783774874"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/c5fd8fc7-0318-4fb5-98cd-b27c1b3c45ab.jpg?v=1783760273",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/150535870488.png?v=1783773563",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_170c1f88-d1c5-4605-8fe3-5e128245001e.svg?v=1783862360",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/9beeead0-6abb-4ac0-a871-3d5f92bb7b00_water.jpg?v=1783774178"
     ],
-    "subcategories": [
-      {
-        "name": "Adult Wellness",
-        "product_count": 290
-      },
-      {
-        "name": "General",
-        "product_count": 219
-      },
-      {
-        "name": "Facial Care",
-        "product_count": 138
-      },
-      {
-        "name": "Body Care",
-        "product_count": 62
-      },
-      {
-        "name": "Face Skin Care Tools",
-        "product_count": 38
-      },
-      {
-        "name": "Classified: Health, Beauty & Hair",
-        "product_count": 36
-      },
-      {
-        "name": "Essential Oil",
-        "product_count": 23
-      },
-      {
-        "name": "Health Care Products",
-        "product_count": 21
-      },
-      {
-        "name": "Massage & Relaxation",
-        "product_count": 13
-      },
-      {
-        "name": "Beauty & Personal Care",
-        "product_count": 12
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 11
-      },
-      {
-        "name": "Makeup Set",
-        "product_count": 10
-      },
-      {
-        "name": "Bathroom Storage",
-        "product_count": 9
-      },
-      {
-        "name": "Headband & Hair Band & Hairpin",
-        "product_count": 5
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 4
-      },
-      {
-        "name": "Nail Art Kits",
-        "product_count": 4
-      },
-      {
-        "name": "Health, Beauty & Hair",
-        "product_count": 3
-      },
-      {
-        "name": "Makeup Brushes",
-        "product_count": 3
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 3
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 3
-      },
-      {
-        "name": "Home Electronic Accessories",
-        "product_count": 2
-      },
-      {
-        "name": "Health, Beauty & Hair > Adult Wellness",
-        "product_count": 2
-      },
-      {
-        "name": "Synthetic Wigs",
-        "product_count": 1
-      },
-      {
-        "name": "Health, Beauty & Hair / Skin Care / Facial Care",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 1
-      },
-      {
-        "name": "Razor",
-        "product_count": 1
-      },
-      {
-        "name": "Face Masks",
-        "product_count": 1
-      },
-      {
-        "name": "Sun Care",
-        "product_count": 1
-      },
-      {
-        "name": "Smart Wearable Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 1
-      },
-      {
-        "name": "Car Aromatherapy",
-        "product_count": 1
-      },
-      {
-        "name": "Lipstick",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Synthetic Wigs": 1,
+      "Classified: Health, Beauty & Hair": 15,
+      "Health, Beauty & Hair / Skin Care / Facial Care": 1,
+      "Uncategorized": 224,
+      "Home Office Storage": 26,
+      "Essential Oil": 27,
+      "Beauty & Personal Care": 12,
+      "Smart Watches": 26,
+      "Facial Care": 219,
+      "Body Care": 57,
+      "Massage & Relaxation": 19,
+      "Boy Clothing Sets": 14,
+      "Home Electronic Accessories": 2,
+      "Razor": 1,
+      "Smart Wearable Accessories": 3,
+      "Adult Wellness": 28,
+      "False Eyelashes": 1,
+      "Makeup Brushes": 3,
+      "Face Skin Care Tools": 7,
+      "Nail Art Kits": 15,
+      "Sun Care": 6,
+      "Makeup Set": 12,
+      "Air Conditioning Appliances": 1,
+      "Home Appliance Parts": 6,
+      "Eyebrow Pencil": 1,
+      "Headband & Hair Band & Hairpin": 3,
+      "Car Aromatherapy": 1,
+      "Solar Lamps": 1,
+      "Lipstick": 1,
+      "Storage Bags & Cases & Boxes": 2
+    }
   },
-  "other": {
-    "name": "Other",
-    "slug": "other",
-    "product_count": 663,
+  "consumer-electronics": {
+    "name": "Consumer Electronics",
+    "product_count": 814,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/29441e99-86d9-4b68-9879-464e95817174.jpg?v=1783760668",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_7d7829b3-d167-4ac8-aa10-46e5f62a7c23.svg?v=1783863721",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_9279b258-4c99-49b9-9e71-4ba15b6c4bc7.svg?v=1783867151",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d9bc9578-58a7-4d96-9ea6-ff43c9d0d6c3.jpg?v=1783774457"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d19ba8d9-053f-40a6-a04c-5d1cab02fafc.jpg?v=1783773549",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/79ee7627-4954-4e67-84dc-679453f4ccde.jpg?v=1783774147"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 552
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 77
-      },
-      {
-        "name": "Event & Party Supplies",
-        "product_count": 9
-      },
-      {
-        "name": "Bathroom Storage",
-        "product_count": 8
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 6
-      },
-      {
-        "name": "Test",
-        "product_count": 5
-      },
-      {
-        "name": "Fashion Accessories",
-        "product_count": 2
-      },
-      {
-        "name": "Solid",
-        "product_count": 1
-      },
-      {
-        "name": "Drinkware",
-        "product_count": 1
-      },
-      {
-        "name": "Girl Clothing Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Belts & Cummerbunds",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Solar Lamps": 18,
+      "Charger": 8,
+      "Digital Cameras": 9,
+      "Consumer Electronics": 49,
+      "Earphones & Headphones": 223,
+      "Smart Watches": 95,
+      "Wall Lamps": 1,
+      "Smart Wristbands": 1,
+      "Audio & Headphones": 11,
+      "Home Office Storage": 14,
+      "Uncategorized": 304,
+      "Electronics & Gadgets": 9,
+      "LED & Lighting": 2,
+      "Adult Wellness": 2,
+      "Computer Accessories": 11,
+      "Home Electronic Accessories": 11,
+      "Speakers": 5,
+      "Vehicle Camera": 5,
+      "Smart Remote Controls": 5,
+      "Creative Watches": 1,
+      "Cables": 3,
+      "CJ Dropshipping": 4,
+      "Cables & Converters": 2,
+      "Audio & Video": 2,
+      "Interior Parts": 2,
+      "Smart Wearable Accessories": 3,
+      "Home Lighting": 1,
+      "Projectors": 2,
+      "Smart Home Appliances": 2,
+      "Home Appliance Parts": 3,
+      "Projectors & Acessories": 1,
+      "Power Bank": 3,
+      "Tablet LCD Screens": 1,
+      "Computer & Office > Security & Protection > Alarm & Sensor": 1
+    }
   },
-  "pet-supplies": {
-    "name": "Pet Supplies",
-    "slug": "pet-supplies",
-    "product_count": 877,
+  "automobiles-motorcycles": {
+    "name": "Automobiles & Motorcycles",
+    "product_count": 2706,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6d36ce4f-cd60-46ba-b351-9643eb7b7d53.jpg?v=1783762729",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/p_2789afc9-462e-4a8f-b0ac-7012a068321f.jpg?v=1783868408",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/00ce56b1-19e6-40f7-ae8d-7381c19fe6fc.jpg?v=1783862301",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/b70d0566-ecd4-48c0-978f-f60398bf5745.jpg?v=1783773791"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5ed1b251-5286-49ec-b50f-96c800e7943b.jpg?v=1783783452",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/95b830bc-4c6d-4c34-b420-d04e39cc4ca5.jpg?v=1783784038"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 245
-      },
-      {
-        "name": "Pet Collars",
-        "product_count": 242
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 81
-      },
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 66
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 60
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 12
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 11
-      },
-      {
-        "name": "Classified: Pet Supplies",
-        "product_count": 11
-      },
-      {
-        "name": "Women's Crossbody Bags",
-        "product_count": 11
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 8
-      },
-      {
-        "name": "Pet Toys",
-        "product_count": 8
-      },
-      {
-        "name": "Bathroom Storage",
-        "product_count": 8
-      },
-      {
-        "name": "Pet Hair Accessories",
-        "product_count": 7
-      },
-      {
-        "name": "Pet Snacks",
-        "product_count": 7
-      },
-      {
-        "name": "Pet Shower Products",
-        "product_count": 6
-      },
-      {
-        "name": "Kitchen Storage",
-        "product_count": 6
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 5
-      },
-      {
-        "name": "Pet Clothings",
-        "product_count": 5
-      },
-      {
-        "name": "Furniture",
-        "product_count": 4
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 4
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 4
-      },
-      {
-        "name": "Pet Feeding Tools",
-        "product_count": 4
-      },
-      {
-        "name": "Pet Chew Toys",
-        "product_count": 3
-      },
-      {
-        "name": "Pet Care",
-        "product_count": 3
-      },
-      {
-        "name": "Pet Chase Toys",
-        "product_count": 3
-      },
-      {
-        "name": "Pet Drinking Tools",
-        "product_count": 3
-      },
-      {
-        "name": "Blazers",
-        "product_count": 3
-      },
-      {
-        "name": "Drinkware",
-        "product_count": 3
-      },
-      {
-        "name": "Baseball Caps",
-        "product_count": 2
-      },
-      {
-        "name": "Fishing Lures",
-        "product_count": 2
-      },
-      {
-        "name": "Fishing Reels",
-        "product_count": 2
-      },
-      {
-        "name": "Fish Tank Decorations",
-        "product_count": 2
-      },
-      {
-        "name": "Other Maintenance Products",
-        "product_count": 2
-      },
-      {
-        "name": "Casual Shoes",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Harnesses",
-        "product_count": 2
-      },
-      {
-        "name": "Home Appliance Parts",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Sandals",
-        "product_count": 2
-      },
-      {
-        "name": "Bras",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Shorts",
-        "product_count": 2
-      },
-      {
-        "name": "Stuffed & Plush Animals",
-        "product_count": 2
-      },
-      {
-        "name": "Cooking Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Other",
-        "product_count": 1
-      },
-      {
-        "name": "Fish Tank Cleaning Supplies",
-        "product_count": 1
-      },
-      {
-        "name": "Basic Jacket",
-        "product_count": 1
-      },
-      {
-        "name": "Gaming & Entertainment",
-        "product_count": 1
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Muzzles",
-        "product_count": 1
-      },
-      {
-        "name": "Dog Stairs & Steps",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Scarves",
-        "product_count": 1
-      },
-      {
-        "name": "Storage Bottles & Jars",
-        "product_count": 1
-      },
-      {
-        "name": "Sleep & Lounge",
-        "product_count": 1
-      },
-      {
-        "name": "Suits & Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Home Electronic Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Men's Jackets",
-        "product_count": 1
-      },
-      {
-        "name": "Automobiles",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Glasses",
-        "product_count": 1
-      },
-      {
-        "name": "Sports & Outdoors",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Mats",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Beds",
-        "product_count": 1
-      },
-      {
-        "name": "Boy Accessories",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Motorcycle Accessories": 902,
+      "Exterior Parts": 2,
+      "Automobiles & Motorcycles": 3,
+      "Automobiles": 60,
+      "Other Replacement Parts": 818,
+      "Other Motorcycle Accessories": 344,
+      "Automobiles & Motorcycles / Auto Replacement Parts / Other Replacement Parts": 1,
+      "Automotive": 5,
+      "Uncategorized": 172,
+      "Solar Lamps": 4,
+      "Classified: Automobiles & Motorcycles": 364,
+      "Interior Parts": 7,
+      "Home Office Storage": 4,
+      "Boy Clothing Sets": 2,
+      "Paint Care": 7,
+      "Vehicle GPS": 1,
+      "Adult Wellness": 2,
+      "Other Maintenance Products": 2,
+      "Smart Watches": 4,
+      "Motorcycle": 1,
+      "Smart Wearable Accessories": 1
+    }
   },
   "home-improvement": {
     "name": "Home Improvement",
-    "slug": "home-improvement",
-    "product_count": 506,
+    "product_count": 1024,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_23e5a030-8f74-46f2-a95b-3eebf2de99f4.svg?v=1783867656",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/9b079885-62c9-4dfb-a3ed-a3e69c3c72ae.jpg?v=1783762218",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ab1cf738-7d9a-4a22-b261-772ccb59e722.png?v=1783764160",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/a410883e-3102-42fe-ad29-02003c66b67a.jpg?v=1783773776"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/29214d3e-5bb6-421a-9333-6ef411b7e4c2.jpg?v=1783773477",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/eed86a42-18f1-445b-8491-25f369b40d69.jpg?v=1783782909",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3958a8f3-757f-4ddd-b1f9-0ea5f9426262.jpg?v=1783774426",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/86e952a4-f880-4ae0-8e34-9b886817fbdd.jpg?v=1783774488"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 269
-      },
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 122
-      },
-      {
-        "name": "Furniture",
-        "product_count": 17
-      },
-      {
-        "name": "Solar Lamps",
-        "product_count": 11
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 8
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 6
-      },
-      {
-        "name": "Home Improvement",
-        "product_count": 6
-      },
-      {
-        "name": "Tool Sets",
-        "product_count": 5
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 4
-      },
-      {
-        "name": "Cleaning Appliances",
-        "product_count": 4
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 4
-      },
-      {
-        "name": "Tools Storage",
-        "product_count": 4
-      },
-      {
-        "name": "Bathroom Storage",
-        "product_count": 4
-      },
-      {
-        "name": "Power Tools",
-        "product_count": 3
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 3
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 3
-      },
-      {
-        "name": "Cooking Tools",
-        "product_count": 2
-      },
-      {
-        "name": "Hand Tools",
-        "product_count": 2
-      },
-      {
-        "name": "Women's Crossbody Bags",
-        "product_count": 2
-      },
-      {
-        "name": "Casual Pants",
-        "product_count": 2
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 2
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 2
-      },
-      {
-        "name": "Tops & Tees",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Nail Polishers",
-        "product_count": 1
-      },
-      {
-        "name": "Baseball Caps",
-        "product_count": 1
-      },
-      {
-        "name": "Networking Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Wide Leg Pants",
-        "product_count": 1
-      },
-      {
-        "name": "Couple&Parent -Child Jackets",
-        "product_count": 1
-      },
-      {
-        "name": "Face Skin Care Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Sandals",
-        "product_count": 1
-      },
-      {
-        "name": "Home Office Storage",
-        "product_count": 1
-      },
-      {
-        "name": "Home Appliance Parts",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Drinking Tools",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Leashes",
-        "product_count": 1
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 1
-      },
-      {
-        "name": "Shoulder Bags",
-        "product_count": 1
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 1
-      },
-      {
-        "name": "Flats",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "cj-dropshipping": 1,
+      "Home Office Storage": 67,
+      "Face Skin Care Tools": 56,
+      "Uncategorized": 282,
+      "Adult Wellness": 18,
+      "Other Replacement Parts": 420,
+      "Power Tools": 4,
+      "Welding Equipment": 1,
+      "Patterned Cases": 2,
+      "Welding & Soldering Supplies": 1,
+      "Event & Party Supplies": 21,
+      "Garden Tools": 4,
+      "Cooking Tools": 3,
+      "Tool Sets": 8,
+      "Hand Tools": 3,
+      "Solar Lamps": 25,
+      "Smart Watches": 3,
+      "Boy Clothing Sets": 28,
+      "Casual Pants": 1,
+      "Home Improvement": 25,
+      "Cables & Converters": 2,
+      "Blazers": 6,
+      "Networking Tools": 5,
+      "Decor Paintings": 1,
+      "Home Appliance Parts": 1,
+      "Tools Storage": 5,
+      "Wide Leg Pants": 7,
+      "Body Care": 3,
+      "Other Maintenance Products": 8,
+      "LED & Lighting": 1,
+      "Classified: Health, Beauty & Hair": 2,
+      "Other Motorcycle Accessories": 1,
+      "Pet Drinking Tools": 2,
+      "Pet Feeding Tools": 1,
+      "Sports Accessories": 1,
+      "Smart Wearable Accessories": 1,
+      "Paint Care": 1,
+      "Scarves & Wraps": 1,
+      "Wall Lamps": 1,
+      "Health Care Products": 1
+    }
   },
   "sports-outdoors": {
     "name": "Sports & Outdoors",
-    "slug": "sports-outdoors",
-    "product_count": 733,
+    "product_count": 1224,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/999_c1dec53d-74cf-4331-a34f-58d879188bdd.svg?v=1783870854",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ba796773-6753-4818-97ca-45d14f97672b.png?v=1783760861",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/48b8f22f-a73d-4bb4-a589-6b013ee429e6.jpg?v=1783783297",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_ae8c0460-8f41-4a7d-81e9-c54cec16d9c0.svg?v=1783861816",
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_03a56f48-a607-4125-92cf-1689bff8c97c.svg?v=1783862347",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffd40eb9-5441-40cc-965c-41340763bce1.jpg?v=1783774258"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_c4deb5a2-1efd-48f2-a1f1-93f0921ba02c.jpg?v=1783870443"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 292
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 92
-      },
-      {
-        "name": "Sports & Outdoors",
-        "product_count": 28
-      },
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 25
-      },
-      {
-        "name": "Solar Lamps",
-        "product_count": 23
-      },
-      {
-        "name": "Face Skin Care Tools",
-        "product_count": 23
-      },
-      {
-        "name": "Suits & Sets",
-        "product_count": 22
-      },
-      {
-        "name": "Women's Short-Sleeved Shirts",
-        "product_count": 18
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 18
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 13
-      },
-      {
-        "name": "Skirts",
-        "product_count": 12
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 10
-      },
-      {
-        "name": "Outdoor & Sports",
-        "product_count": 9
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 8
-      },
-      {
-        "name": "Bras",
-        "product_count": 8
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 7
-      },
-      {
-        "name": "Man Slippers",
-        "product_count": 7
-      },
-      {
-        "name": "Camping & Hiking",
-        "product_count": 6
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 6
-      },
-      {
-        "name": "Rompers",
-        "product_count": 6
-      },
-      {
-        "name": "Blazers",
-        "product_count": 6
-      },
-      {
-        "name": "Bicycle Helmets",
-        "product_count": 6
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 4
-      },
-      {
-        "name": "Woman Socks",
-        "product_count": 4
-      },
-      {
-        "name": "Fashion Backpacks",
-        "product_count": 4
-      },
-      {
-        "name": "Women's Camis",
-        "product_count": 4
-      },
-      {
-        "name": "Baseball Caps",
-        "product_count": 3
-      },
-      {
-        "name": "Bags & Shoes",
-        "product_count": 3
-      },
-      {
-        "name": "Home Office Storage",
-        "product_count": 3
-      },
-      {
-        "name": "Furniture",
-        "product_count": 3
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 3
-      },
-      {
-        "name": "Casual Pants",
-        "product_count": 3
-      },
-      {
-        "name": "Print",
-        "product_count": 3
-      },
-      {
-        "name": "Casual Shoes",
-        "product_count": 3
-      },
-      {
-        "name": "Facial Care",
-        "product_count": 3
-      },
-      {
-        "name": "Kitchen Storage",
-        "product_count": 3
-      },
-      {
-        "name": "Bicycle Lights",
-        "product_count": 3
-      },
-      {
-        "name": "Body Care",
-        "product_count": 2
-      },
-      {
-        "name": "Baby Clothing Sets",
-        "product_count": 2
-      },
-      {
-        "name": "Health Care Products",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Shorts",
-        "product_count": 2
-      },
-      {
-        "name": "Couple&Parent -Child Jackets",
-        "product_count": 2
-      },
-      {
-        "name": "Pants & Capris",
-        "product_count": 2
-      },
-      {
-        "name": "Drinkware",
-        "product_count": 2
-      },
-      {
-        "name": "Classified: Women's Clothing",
-        "product_count": 1
-      },
-      {
-        "name": "LED & Lighting",
-        "product_count": 1
-      },
-      {
-        "name": "Earrings",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Slippers",
-        "product_count": 1
-      },
-      {
-        "name": "Belts & Cummerbunds",
-        "product_count": 1
-      },
-      {
-        "name": "Golf",
-        "product_count": 1
-      },
-      {
-        "name": "Fitness & Wellness",
-        "product_count": 1
-      },
-      {
-        "name": "Tops & Tees",
-        "product_count": 1
-      },
-      {
-        "name": "Fishing Lures",
-        "product_count": 1
-      },
-      {
-        "name": "Mens Shirts",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Mats",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Harnesses",
-        "product_count": 1
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 1
-      },
-      {
-        "name": "Creative Watches",
-        "product_count": 1
-      },
-      {
-        "name": "Womens Crossbody Bags",
-        "product_count": 1
-      },
-      {
-        "name": "LED Spotlights",
-        "product_count": 1
-      },
-      {
-        "name": "Smart Wristbands",
-        "product_count": 1
-      },
-      {
-        "name": "Fashion Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Fitness & Bodybuilding",
-        "product_count": 1
-      },
-      {
-        "name": "Classified: Men's Clothing",
-        "product_count": 1
-      },
-      {
-        "name": "Men's Backpacks",
-        "product_count": 1
-      },
-      {
-        "name": "Fashion & Footwear",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Boots",
-        "product_count": 1
-      },
-      {
-        "name": "Batteries",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Sports Accessories": 209,
+      "Other": 1,
+      "Sports & Outdoors": 33,
+      "Smart Watches": 105,
+      "Classified: Women's Clothing": 2,
+      "Other Motorcycle Accessories": 6,
+      "Flashlights & Torches": 1,
+      "Uncategorized": 481,
+      "Solar Lamps": 169,
+      "Home Office Storage": 46,
+      "Outdoor & Sports": 9,
+      "Adult Wellness": 57,
+      "Boy Clothing Sets": 29,
+      "LED & Lighting": 4,
+      "Camping & Hiking": 9,
+      "Face Masks": 1,
+      "Face Skin Care Tools": 4,
+      "Watches & Wearables": 2,
+      "Health Care Products": 2,
+      "Bakeware": 1,
+      "Action & Toy Figures": 3,
+      "Fishing Lures": 3,
+      "Fishing Reels": 2,
+      "Fitness & Wellness": 5,
+      "Golf": 1,
+      "Patterned Cases": 1,
+      "Body Care": 5,
+      "Tops & Tees": 3,
+      "Blazers": 2,
+      "Home Lighting": 1,
+      "Kitchen Storage": 3,
+      "Drinkware": 3,
+      "Bicycle Helmets": 6,
+      "Classified: Health, Beauty & Hair": 1,
+      "LED Spotlights": 1,
+      "Bicycle Lights": 3,
+      "Fashion Accessories": 1,
+      "Fitness & Bodybuilding": 1,
+      "Classified: Men's Clothing": 1,
+      "Casual Shoes": 1,
+      "Headband & Hair Band & Hairpin": 4,
+      "Batteries": 2
+    }
   },
-  "mens-clothing": {
-    "name": "Men's Clothing",
-    "slug": "mens-clothing",
-    "product_count": 3070,
+  "pet-supplies": {
+    "name": "Pet Supplies",
+    "product_count": 1190,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_5ba330dc-2cc8-44bf-9b8a-406b77789562.jpg?v=1783865552",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/c6a54f1c-7a18-49dc-b789-438b8633e078.jpg?v=1783773714",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_9bed22de-70be-43d6-8386-e9ce0c6f1901.svg?v=1783868046",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/53168ec4-dbf2-469d-8dd4-ed7bea335b8e.jpg?v=1783760763"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/2534163941782.jpg?v=1783774060",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6d36ce4f-cd60-46ba-b351-9643eb7b7d53.jpg?v=1783762729",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/p_2789afc9-462e-4a8f-b0ac-7012a068321f.jpg?v=1783868408",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/00ce56b1-19e6-40f7-ae8d-7381c19fe6fc.jpg?v=1783862301"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 1067
-      },
-      {
-        "name": "Suits & Sets",
-        "product_count": 290
-      },
-      {
-        "name": "Mens Shirts",
-        "product_count": 250
-      },
-      {
-        "name": "Mens T-Shirts",
-        "product_count": 250
-      },
-      {
-        "name": "Blazers",
-        "product_count": 199
-      },
-      {
-        "name": "Other Replacement Parts",
-        "product_count": 129
-      },
-      {
-        "name": "Men's Clothing",
-        "product_count": 85
-      },
-      {
-        "name": "Women's Short-Sleeved Shirts",
-        "product_count": 73
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 71
-      },
-      {
-        "name": "Wide Leg Pants",
-        "product_count": 60
-      },
-      {
-        "name": "Classified: Men's Clothing",
-        "product_count": 57
-      },
-      {
-        "name": "Woman Shorts",
-        "product_count": 42
-      },
-      {
-        "name": "Woman Hoodies & Sweatshirts",
-        "product_count": 36
-      },
-      {
-        "name": "Women's Long-Sleeved Shirts",
-        "product_count": 36
-      },
-      {
-        "name": "Basic Jacket",
-        "product_count": 34
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 27
-      },
-      {
-        "name": "Classified: Women's Clothing",
-        "product_count": 24
-      },
-      {
-        "name": "Blouses & Shirts",
-        "product_count": 19
-      },
-      {
-        "name": "Men's Shirts",
-        "product_count": 16
-      },
-      {
-        "name": "Sweaters",
-        "product_count": 16
-      },
-      {
-        "name": "Rings",
-        "product_count": 15
-      },
-      {
-        "name": "Print",
-        "product_count": 14
-      },
-      {
-        "name": "Woman Jeans",
-        "product_count": 13
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 13
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 11
-      },
-      {
-        "name": "Men's Suits",
-        "product_count": 11
-      },
-      {
-        "name": "Casual Pants",
-        "product_count": 11
-      },
-      {
-        "name": "Men's Jackets",
-        "product_count": 10
-      },
-      {
-        "name": "Women's Vests",
-        "product_count": 10
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 9
-      },
-      {
-        "name": "Woman Trench",
-        "product_count": 9
-      },
-      {
-        "name": "Man Shorts",
-        "product_count": 9
-      },
-      {
-        "name": "Panties",
-        "product_count": 8
-      },
-      {
-        "name": "Girl Accessories",
-        "product_count": 8
-      },
-      {
-        "name": "Man Hoodies & Sweatshirts",
-        "product_count": 7
-      },
-      {
-        "name": "Pants & Capris",
-        "product_count": 7
-      },
-      {
-        "name": "Down Jackets",
-        "product_count": 7
-      },
-      {
-        "name": "Casual Shoes",
-        "product_count": 7
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 6
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 6
-      },
-      {
-        "name": "Cargo Pants",
-        "product_count": 6
-      },
-      {
-        "name": "Leggings",
-        "product_count": 6
-      },
-      {
-        "name": "Suits & Blazer",
-        "product_count": 6
-      },
-      {
-        "name": "Home Office Storage",
-        "product_count": 6
-      },
-      {
-        "name": "Mens Jackets",
-        "product_count": 6
-      },
-      {
-        "name": "Shorts",
-        "product_count": 6
-      },
-      {
-        "name": "Solid",
-        "product_count": 5
-      },
-      {
-        "name": "Sleep & Lounge",
-        "product_count": 5
-      },
-      {
-        "name": "Ladies Short Sleeve",
-        "product_count": 4
-      },
-      {
-        "name": "Men's Sweaters",
-        "product_count": 4
-      },
-      {
-        "name": "Women's Camis",
-        "product_count": 4
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Men's Long-Sleeved",
-        "product_count": 3
-      },
-      {
-        "name": "Headband & Hair Band & Hairpin",
-        "product_count": 3
-      },
-      {
-        "name": "Body Care",
-        "product_count": 2
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 2
-      },
-      {
-        "name": "Man Trench",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Supplies",
-        "product_count": 2
-      },
-      {
-        "name": "Pet Clothings",
-        "product_count": 2
-      },
-      {
-        "name": "Office & Stationery",
-        "product_count": 1
-      },
-      {
-        "name": "Womens Crossbody Bags",
-        "product_count": 1
-      },
-      {
-        "name": "Bracelets & Bangles",
-        "product_count": 1
-      },
-      {
-        "name": "Tools Storage",
-        "product_count": 1
-      },
-      {
-        "name": "Man Jeans",
-        "product_count": 1
-      },
-      {
-        "name": "Gaming & Entertainment",
-        "product_count": 1
-      },
-      {
-        "name": "Baby Clothing Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Furniture",
-        "product_count": 1
-      },
-      {
-        "name": "Baseball Caps",
-        "product_count": 1
-      },
-      {
-        "name": "Hoodies & Sweatshirts",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Prescription Glasses",
-        "product_count": 1
-      },
-      {
-        "name": "Men's Ties",
-        "product_count": 1
-      },
-      {
-        "name": "Man Slippers",
-        "product_count": 1
-      },
-      {
-        "name": "Makeup Set",
-        "product_count": 1
-      },
-      {
-        "name": "Belts",
-        "product_count": 1
-      },
-      {
-        "name": "Pet Harnesses",
-        "product_count": 1
-      },
-      {
-        "name": "Scarves & Wraps",
-        "product_count": 1
-      },
-      {
-        "name": "Classified: Pet Supplies",
-        "product_count": 1
-      },
-      {
-        "name": "Wall Lamps",
-        "product_count": 1
-      },
-      {
-        "name": "Earrings",
-        "product_count": 1
-      }
-    ]
-  },
-  "phones-accessories": {
-    "name": "Phones & Accessories",
-    "slug": "phones-accessories",
-    "product_count": 591,
-    "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/800_e32becc4-f7b1-45fb-9b24-b6ba0723417f.jpg?v=1783868894",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/2116848018912.jpg?v=1783783768",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1534128480186-TIM_E6_88_AA_E5_9B_BE20180813104754.png?v=1783773764",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/bd20625b-1f6f-4bf0-9a7d-244b8989925d.png?v=1783762180"
-    ],
-    "subcategories": [
-      {
-        "name": "Phone Cases",
-        "product_count": 345
-      },
-      {
-        "name": "General",
-        "product_count": 112
-      },
-      {
-        "name": "Patterned Cases",
-        "product_count": 49
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 15
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 10
-      },
-      {
-        "name": "Holders & Stands",
-        "product_count": 6
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 6
-      },
-      {
-        "name": "Phone Accessories",
-        "product_count": 6
-      },
-      {
-        "name": "Tablet Accessories",
-        "product_count": 6
-      },
-      {
-        "name": "Tablet Cases",
-        "product_count": 6
-      },
-      {
-        "name": "Earphones & Headphones",
-        "product_count": 5
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Silicone Cases",
-        "product_count": 3
-      },
-      {
-        "name": "Power Bank",
-        "product_count": 3
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 2
-      },
-      {
-        "name": "Classified: Automobiles & Motorcycles",
-        "product_count": 2
-      },
-      {
-        "name": "Automobiles",
-        "product_count": 2
-      },
-      {
-        "name": "Phones & Accessories",
-        "product_count": 2
-      },
-      {
-        "name": "Musical Instruments",
-        "product_count": 2
-      },
-      {
-        "name": "Solar Lamps",
-        "product_count": 1
-      },
-      {
-        "name": "Classified: Home, Garden & Furniture",
-        "product_count": 1
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Automotive",
-        "product_count": 1
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 1
-      }
-    ]
-  },
-  "toys-kids-babies": {
-    "name": "Toys, Kids & Babies",
-    "slug": "toys-kids-babies",
-    "product_count": 347,
-    "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d373eb1c-4fca-459a-9198-d15546a25f16.jpg?v=1783774164",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6a43b5af-5068-4cee-9c76-76ddac46b4fc.jpg?v=1783764166",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5f6fb28a-3645-449b-8a85-720b9a1aae08.jpg?v=1783764168",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ff518e2c-5f37-4833-a48a-3a54627a3224.jpg?v=1783777282"
-    ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 150
-      },
-      {
-        "name": "Action & Toy Figures",
-        "product_count": 32
-      },
-      {
-        "name": "Toys Kids & Babies",
-        "product_count": 30
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 19
-      },
-      {
-        "name": "Girl Accessories",
-        "product_count": 13
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 12
-      },
-      {
-        "name": "Furniture",
-        "product_count": 11
-      },
-      {
-        "name": "Boy Accessories",
-        "product_count": 9
-      },
-      {
-        "name": "Toys, Kids & Babies",
-        "product_count": 7
-      },
-      {
-        "name": "Motorcycle Accessories",
-        "product_count": 7
-      },
-      {
-        "name": "Girls' Pants",
-        "product_count": 6
-      },
-      {
-        "name": "Children's Watches",
-        "product_count": 6
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 5
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 5
-      },
-      {
-        "name": "Tops & Tees",
-        "product_count": 5
-      },
-      {
-        "name": "Toys & Entertainment",
-        "product_count": 4
-      },
-      {
-        "name": "Other Motorcycle Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Baby & Kids",
-        "product_count": 3
-      },
-      {
-        "name": "Baby Clothing Sets",
-        "product_count": 3
-      },
-      {
-        "name": "Pet Training and Educational Toys",
-        "product_count": 3
-      },
-      {
-        "name": "Stuffed & Plush Animals",
-        "product_count": 3
-      },
-      {
-        "name": "Pet Toys",
-        "product_count": 2
-      },
-      {
-        "name": "Uncategorized",
-        "product_count": 2
-      },
-      {
-        "name": "Blocks",
-        "product_count": 1
-      },
-      {
-        "name": "Classified: Automobiles & Motorcycles",
-        "product_count": 1
-      },
-      {
-        "name": "Digital Cameras",
-        "product_count": 1
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 1
-      },
-      {
-        "name": "Home Office Storage",
-        "product_count": 1
-      },
-      {
-        "name": "Automobiles",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Uncategorized": 348,
+      "Cooking Tools": 1,
+      "Pet Collars": 476,
+      "Other": 1,
+      "Fish Tank Cleaning Supplies": 1,
+      "Pet Supplies": 95,
+      "Pet Nail Polishers": 1,
+      "Pet Chew Toys": 3,
+      "Cat Scratching Posts": 2,
+      "CJ Dropshipping": 1,
+      "Pet Shower Products": 7,
+      "Pet Toys": 121,
+      "Home Office Storage": 19,
+      "Pet Care": 4,
+      "Boy Clothing Sets": 10,
+      "Pet Bags": 1,
+      "Pet Hair Accessories": 8,
+      "Pet Snacks": 7,
+      "Classified: Pet Supplies": 12,
+      "Pet Chase Toys": 3,
+      "Pet Training and Educational Toys": 1,
+      "Sports Accessories": 2,
+      "Pet Clothings": 8,
+      "Pet Muzzles": 1,
+      "Dog Stairs & Steps": 1,
+      "Pet Drinking Tools": 3,
+      "Pet Scarves": 1,
+      "Fish Tank Decorations": 2,
+      "Adult Wellness": 14,
+      "Solar Lamps": 9,
+      "Smart Watches": 4,
+      "Pet Harnesses": 4,
+      "Automobiles": 1,
+      "Pet Glasses": 2,
+      "Home Appliance Parts": 2,
+      "Pet Mats": 3,
+      "Pet Feeding Tools": 1,
+      "Storage Bags & Cases & Boxes": 1,
+      "Blouses & Shirts": 1,
+      "Pet Leashes": 1,
+      "Pet Beds": 2,
+      "Blazers": 1,
+      "Boy Accessories": 2,
+      "Action & Toy Figures": 2
+    }
   },
   "womens-clothing": {
     "name": "Women's Clothing",
-    "slug": "womens-clothing",
-    "product_count": 2272,
+    "product_count": 2666,
     "hero_images": [
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d868b04e-0dda-4f54-8b7f-4db690a2e3c4_39ea75d6-1b6c-4b12-98be-4204ef9eab18.jpg?v=1783860542",
       "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/b10df402-6efc-4bf4-8a45-773d85fa404b.jpg?v=1783773770",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6a9614d0-7f71-4dc9-bfc8-7a99d39167c7.jpg?v=1783774198",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/b5109800-ce34-4bcc-9a46-66313df9850d.jpg?v=1783861691"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6a9614d0-7f71-4dc9-bfc8-7a99d39167c7.jpg?v=1783774198"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 1055
-      },
-      {
-        "name": "Lady Dresses",
-        "product_count": 445
-      },
-      {
-        "name": "Womens Crossbody Bags",
-        "product_count": 159
-      },
-      {
-        "name": "Classified: Women's Clothing",
-        "product_count": 81
-      },
-      {
-        "name": "Rompers",
-        "product_count": 74
-      },
-      {
-        "name": "Blouses & Shirts",
-        "product_count": 56
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 51
-      },
-      {
-        "name": "Skirts",
-        "product_count": 49
-      },
-      {
-        "name": "Suits & Sets",
-        "product_count": 43
-      },
-      {
-        "name": "Bracelets & Bangles",
-        "product_count": 35
-      },
-      {
-        "name": "Blazers",
-        "product_count": 29
-      },
-      {
-        "name": "Scarves & Wraps",
-        "product_count": 28
-      },
-      {
-        "name": "Sleep & Lounge",
-        "product_count": 16
-      },
-      {
-        "name": "Women's Short-Sleeved Shirts",
-        "product_count": 15
-      },
-      {
-        "name": "Bikini Sets",
-        "product_count": 14
-      },
-      {
-        "name": "Women's Crossbody Bags",
-        "product_count": 13
-      },
-      {
-        "name": "Woman Hats & Caps",
-        "product_count": 12
-      },
-      {
-        "name": "Women's Long-Sleeved Shirts",
-        "product_count": 12
-      },
-      {
-        "name": "Intimates",
-        "product_count": 10
-      },
-      {
-        "name": "Jumpsuits",
-        "product_count": 10
-      },
-      {
-        "name": "Bras",
-        "product_count": 8
-      },
-      {
-        "name": "Dress Watches",
-        "product_count": 8
-      },
-      {
-        "name": "Woman Socks",
-        "product_count": 8
-      },
-      {
-        "name": "Women's Camis",
-        "product_count": 7
-      },
-      {
-        "name": "Leggings",
-        "product_count": 4
-      },
-      {
-        "name": "Woman Slippers",
-        "product_count": 4
-      },
-      {
-        "name": "Sweaters",
-        "product_count": 3
-      },
-      {
-        "name": "Smart Watches",
-        "product_count": 3
-      },
-      {
-        "name": "Flats",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Trench",
-        "product_count": 2
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 2
-      },
-      {
-        "name": "Woman Prescription Glasses",
-        "product_count": 2
-      },
-      {
-        "name": "Women's Vests",
-        "product_count": 2
-      },
-      {
-        "name": "Bedding Sets",
-        "product_count": 1
-      },
-      {
-        "name": "Headband & Hair Band & Hairpin",
-        "product_count": 1
-      },
-      {
-        "name": "Women's Padded Jackets",
-        "product_count": 1
-      },
-      {
-        "name": "Man Prescription Glasses",
-        "product_count": 1
-      },
-      {
-        "name": "Basic Jacket",
-        "product_count": 1
-      },
-      {
-        "name": "Bathroom Storage",
-        "product_count": 1
-      },
-      {
-        "name": "Baby Rompers",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Boots",
-        "product_count": 1
-      },
-      {
-        "name": "Fashion Backpacks",
-        "product_count": 1
-      },
-      {
-        "name": "Classified: Men's Clothing",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Lady Dresses": 664,
+      "Classified: Women's Clothing": 70,
+      "Suits Sets": 6,
+      "Uncategorized": 1161,
+      "Bras": 22,
+      "Home Office Storage": 6,
+      "Rompers": 114,
+      "Adult Wellness": 154,
+      "Boy Clothing Sets": 27,
+      "Skirts": 61,
+      "Blouses & Shirts": 68,
+      "Eyewear & Accessories": 2,
+      "Blazers": 117,
+      "Leggings": 6,
+      "Dress Watches": 14,
+      "Headband & Hair Band & Hairpin": 4,
+      "Sleep & Lounge": 20,
+      "CJ Dropshipping": 4,
+      "Suits & Sets": 39,
+      "Scarves & Wraps": 7,
+      "Women's Bracelet Watches": 1,
+      "Smart Watches": 30,
+      "Women's Camis": 17,
+      "Intimates": 8,
+      "Smart Wristbands": 1,
+      "Bikini Sets": 16,
+      "Classified: Health, Beauty & Hair": 2,
+      "Creative Watches": 3,
+      "Baby Rompers": 6,
+      "Sweaters": 1,
+      "Jumpsuits": 10,
+      "Action & Toy Figures": 1,
+      "Women's Vests": 2,
+      "Dresses": 1,
+      "Classified: Men's Clothing": 1
+    }
+  },
+  "toys-kids-babies": {
+    "name": "Toys, Kids & Babies",
+    "product_count": 1092,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/800_922521fa-dc16-4219-833b-88d733cb4019.jpg?v=1783865823",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1ac24ef1-af3c-4319-97db-a11968c1d525.jpg?v=1783783711",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/800_71020ef6-4cbc-4e08-80ce-d109852e2911.jpg?v=1783865617"
+    ],
+    "subcategories": {
+      "Action & Toy Figures": 472,
+      "Baby Clothing Sets": 248,
+      "Blocks": 1,
+      "Home Office Storage": 8,
+      "Uncategorized": 153,
+      "Toys Kids & Babies": 55,
+      "Boy Clothing Sets": 68,
+      "Toys, Kids & Babies": 7,
+      "Baby & Kids": 3,
+      "Toys & Entertainment": 5,
+      "Boy Accessories": 6,
+      "Smart Watches": 10,
+      "Sports Accessories": 2,
+      "Adult Wellness": 14,
+      "Children's Watches": 7,
+      "Pet Training and Educational Toys": 4,
+      "Scooters": 2,
+      "Girl Accessories": 9,
+      "Couple&Parent -Child Jackets": 3,
+      "Watches & Wearables": 1,
+      "Storage Bags & Cases & Boxes": 1,
+      "Boby Clothing Sets": 1,
+      "Bedding Sets": 1,
+      "Health, Beauty & Hair > Adult Wellness": 1,
+      "Tops & Tees": 5,
+      "Stuffed & Plush Animals": 5
+    }
   },
   "bags-shoes": {
     "name": "Bags & Shoes",
-    "slug": "bags-shoes",
-    "product_count": 287,
+    "product_count": 3348,
     "hero_images": [
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/p_63b1204c-07b4-4b64-8000-1570c198d66b.jpg?v=1783869410",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_26a534d0-95d8-4015-96be-d3df09657a8e.svg?v=1783869310",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/78855cf6-3dd9-42d5-b44e-158044406028.jpg?v=1783774601",
-      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6e10cddb-91ea-482d-8fd5-14925514e279.jpg?v=1783777206"
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ffffff_1f3d2aac-1179-4ff3-ae61-3da36363d183.svg?v=1783862341",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/p_63b1204c-07b4-4b64-8000-1570c198d66b.jpg?v=1783869410"
     ],
-    "subcategories": [
-      {
-        "name": "General",
-        "product_count": 145
-      },
-      {
-        "name": "Bags & Shoes",
-        "product_count": 30
-      },
-      {
-        "name": "Classified: Bags & Shoes",
-        "product_count": 21
-      },
-      {
-        "name": "Women's Crossbody Bags",
-        "product_count": 17
-      },
-      {
-        "name": "Casual Shoes",
-        "product_count": 11
-      },
-      {
-        "name": "Flats",
-        "product_count": 10
-      },
-      {
-        "name": "Woman Slippers",
-        "product_count": 8
-      },
-      {
-        "name": "Woman Sandals",
-        "product_count": 6
-      },
-      {
-        "name": "Totes",
-        "product_count": 5
-      },
-      {
-        "name": "Fashion Accessories",
-        "product_count": 4
-      },
-      {
-        "name": "Man Slippers",
-        "product_count": 4
-      },
-      {
-        "name": "Adult Wellness",
-        "product_count": 3
-      },
-      {
-        "name": "Sports Accessories",
-        "product_count": 3
-      },
-      {
-        "name": "Fashion & Footwear",
-        "product_count": 3
-      },
-      {
-        "name": "Pumps",
-        "product_count": 3
-      },
-      {
-        "name": "Storage Bags & Cases & Boxes",
-        "product_count": 3
-      },
-      {
-        "name": "Womens Crossbody Bags",
-        "product_count": 3
-      },
-      {
-        "name": "Fashion Backpacks",
-        "product_count": 2
-      },
-      {
-        "name": "Evening Bags",
-        "product_count": 2
-      },
-      {
-        "name": "Travel & Luggage",
-        "product_count": 2
-      },
-      {
-        "name": "Bag Accessories",
-        "product_count": 1
-      },
-      {
-        "name": "Woman Boots",
-        "product_count": 1
-      }
-    ]
+    "subcategories": {
+      "Health Care Products": 1,
+      "Women's Crossbody Bags": 2029,
+      "Uncategorized": 231,
+      "Flats": 14,
+      "Casual Shoes": 709,
+      "Woman Slippers": 9,
+      "Womens Crossbody Bags": 164,
+      "Bags & Shoes": 63,
+      "Solar Lamps": 1,
+      "Home Office Storage": 21,
+      "Boy Clothing Sets": 7,
+      "Woman Sandals": 11,
+      "Fashion Accessories": 5,
+      "Storage Bags & Cases & Boxes": 15,
+      "Adult Wellness": 3,
+      "Sports Accessories": 3,
+      "CJ Dropshipping": 1,
+      "Fashion Backpacks": 7,
+      "Totes": 5,
+      "Fashion & Footwear": 4,
+      "Classified: Bags & Shoes": 21,
+      "Creative Watches": 1,
+      "Evening Bags": 2,
+      "Travel & Luggage": 4,
+      "Pumps": 6,
+      "Man Slippers": 1,
+      "Bag Accessories": 4,
+      "Bag & Shoes / Women's Shoes / Woman Slippers": 2,
+      "Shoulder Bags": 1,
+      "Men's Backpacks": 1,
+      "Smart Watches": 1,
+      "Woman Boots": 1
+    }
+  },
+  "phones-accessories": {
+    "name": "Phones & Accessories",
+    "product_count": 635,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/800_e32becc4-f7b1-45fb-9b24-b6ba0723417f.jpg?v=1783868894",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1534128480186-TIM_E6_88_AA_E5_9B_BE20180813104754.png?v=1783773764",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/bd20625b-1f6f-4bf0-9a7d-244b8989925d.png?v=1783762180"
+    ],
+    "subcategories": {
+      "Solar Lamps": 1,
+      "Uncategorized": 117,
+      "Holders & Stands": 6,
+      "Phones & Accessories": 62,
+      "Phone Cases": 346,
+      "Smart Watches": 18,
+      "Patterned Cases": 45,
+      "Other Motorcycle Accessories": 5,
+      "Automobiles": 2,
+      "Home Office Storage": 9,
+      "Adult Wellness": 6,
+      "Sports Accessories": 2,
+      "Silicone Cases": 3,
+      "Phone Accessories": 6,
+      "Tablet Accessories": 6,
+      "Boy Clothing Sets": 1
+    }
+  },
+  "mens-clothing": {
+    "name": "Men's Clothing",
+    "product_count": 5052,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1343cc5a-0e10-4143-882d-495e64553f06.jpg?v=1783774874",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/f8db1875-77dd-482b-8c62-079bbb655186_fd91db11-bdbe-4f54-8e5c-5f8a4b7887ce.jpg?v=1783861122",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_5ba330dc-2cc8-44bf-9b8a-406b77789562.jpg?v=1783865552"
+    ],
+    "subcategories": {
+      "Boy Clothing Sets": 176,
+      "Health, Beauty & Hair": 1,
+      "Health Care Products": 8,
+      "Mens Shirts": 493,
+      "Classified: Men's Clothing": 57,
+      "Uncategorized": 1630,
+      "Other Replacement Parts": 78,
+      "Solar Lamps": 20,
+      "Adult Wellness": 101,
+      "Suits Sets": 24,
+      "Classified: Women's Clothing": 35,
+      "Suits & Sets": 357,
+      "Women's Short-Sleeved Shirts": 108,
+      "Scarves & Wraps": 39,
+      "Baseball Caps": 10,
+      "Woman Hats & Caps": 61,
+      "Mens T-Shirts": 501,
+      "Mens Casual Pants": 349,
+      "Home Office Storage": 35,
+      "Men's Shirts": 36,
+      "Barking Control Equipments": 1,
+      "Smart Watches": 57,
+      "Woman Hoodies Sweatshirts": 30,
+      "Wide Leg Pants": 79,
+      "Blazers": 133,
+      "Basic Jacket": 39,
+      "Woman Hoodies & Sweatshirts": 37,
+      "Men's Suits": 11,
+      "Ladies Short Sleeve": 4,
+      "Cargo Pants": 6,
+      "Man Hoodies & Sweatshirts": 7,
+      "Classified: Health, Beauty & Hair": 2,
+      "Mens Clothing": 28,
+      "Blouses & Shirts": 21,
+      "Woman Trench": 11,
+      "Men's Sweaters": 4,
+      "Girls' Pants": 6,
+      "Woman Socks": 14,
+      "Suits & Blazer": 6,
+      "Sweaters": 20,
+      "Gaming & Entertainment": 4,
+      "Woman Jeans": 13,
+      "Pants & Capris": 10,
+      "Woman Shorts": 46,
+      "Down Jackets": 7,
+      "Belts & Cummerbunds": 3,
+      "Women's Long-Sleeved Shirts": 53,
+      "Man Jeans": 1,
+      "Casual Pants": 17,
+      "Woman Slippers": 7,
+      "Body Care": 2,
+      "Print": 18,
+      "Women's Padded Jackets": 1,
+      "Leggings": 4,
+      "Storage Bags & Cases & Boxes": 2,
+      "Sports Accessories": 4,
+      "Man Prescription Glasses": 2,
+      "CJ Dropshipping": 4,
+      "Sleep & Lounge": 3,
+      "Man Slippers": 12,
+      "Men's Clothing": 85,
+      "Solid": 5,
+      "Hoodies & Sweatshirts": 1,
+      "Man Shorts": 9,
+      "Woman Prescription Glasses": 4,
+      "Men's Ties": 1,
+      "Men's Long-Sleeved": 3,
+      "Man Trench": 2,
+      "Casual Shoes": 6,
+      "Mens Jackets": 6,
+      "Men's Jackets": 11,
+      "Mechanical Watches": 2,
+      "Headband & Hair Band & Hairpin": 9,
+      "Panties": 8,
+      "Wool & Blend": 2,
+      "Belts": 1,
+      "Creative Watches": 3,
+      "Health, Beauty & Hair > Adult Wellness": 1,
+      "Musical Instruments": 2,
+      "Women's Vests": 10,
+      "Shorts": 6,
+      "Couple&Parent-Child Suits": 2,
+      "Girl Accessories": 18,
+      "Woman Gloves & Mittens": 1,
+      "Boy Accessories": 2,
+      "Intimates": 2,
+      "Woman Boots": 2
+    }
+  },
+  "other": {
+    "name": "Other",
+    "product_count": 1228,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_9af48adb-3525-40ce-a8b7-25685360b150.jpg?v=1783870243",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_a7e2c522-a3aa-49b3-9660-8ac97b15b78a.jpg?v=1783870238",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_ffd136af-e7d4-4d99-a156-03be1fa00717.jpg?v=1783870236",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/product_f5109313-25bb-4b6e-bed7-88310aa245be.jpg?v=1783870235"
+    ],
+    "subcategories": {
+      "$p1_type": 1,
+      "$p2_type": 1,
+      "$p3_type": 1,
+      "$p4_type": 1,
+      "$p5_type": 1,
+      "$p6_type": 1,
+      "$p7_type": 1,
+      "$p8_type": 1,
+      "$p9_type": 1,
+      "Smart Watches": 120,
+      "Boy Clothing Sets": 89,
+      "Home Office Storage": 121,
+      "Home Appliance Parts": 1,
+      "Uncategorized": 617,
+      "Solar Lamps": 93,
+      "Solid": 1,
+      "Blazers": 22,
+      "Adult Wellness": 44,
+      "Test": 6,
+      "Watches & Wearables": 5,
+      "Home Lighting": 3,
+      "CJ Dropshipping": 6,
+      "Drinkware": 10,
+      "Eyewear & Accessories": 2,
+      "Body Care": 31,
+      "Classified: Health, Beauty & Hair": 14,
+      "Scarves & Wraps": 2,
+      "Girl Clothing Sets": 2,
+      "Storage Bottles & Jars": 3,
+      "Health Care Products": 10,
+      "Smart Wearable Accessories": 2,
+      "Other": 1,
+      "Smart Remote Controls": 2,
+      "Fashion Accessories": 3,
+      "Headband & Hair Band & Hairpin": 2,
+      "Wall Lamps": 6,
+      "Smart Wristbands": 1
+    }
   }
 }
