@@ -1,1 +1,501 @@
-{"Home, Garden & Furniture": {"product_count": 1771, "hero_images": [], "subcategories": [{"title": "Furniture", "count": 733, "image": ""}, {"title": "Home Office Storage", "count": 573, "image": ""}, {"title": "Storage Bags & Cases & Boxes", "count": 58, "image": ""}, {"title": "Kitchen Storage", "count": 63, "image": ""}, {"title": "Bathroom Storage", "count": 64, "image": ""}, {"title": "Bedding Sets", "count": 269, "image": ""}, {"title": "Bakeware", "count": 25, "image": ""}, {"title": "Cleaning Appliances", "count": 13, "image": ""}, {"title": "Curtains", "count": 5, "image": ""}, {"title": "Event & Party Supplies", "count": 41, "image": ""}, {"title": "Towels", "count": 15, "image": ""}, {"title": "Drinkware", "count": 25, "image": ""}, {"title": "Cooking Tools", "count": 13, "image": ""}, {"title": "More...", "count": 71, "image": ""}]}, "Jewelry & Watches": {"product_count": 4589, "hero_images": [], "subcategories": [{"title": "Earrings", "count": 1279, "image": ""}, {"title": "Smart Watches", "count": 755, "image": ""}, {"title": "Bracelets & Bangles", "count": 950, "image": ""}, {"title": "Necklace & Pendants", "count": 544, "image": ""}, {"title": "Rings", "count": 447, "image": ""}, {"title": "925 Silver Jewelry", "count": 204, "image": ""}, {"title": "Charms", "count": 66, "image": ""}, {"title": "Watch Accessories", "count": 56, "image": ""}, {"title": "Classified: Jewelry & Watches", "count": 614, "image": ""}, {"title": "More...", "count": 174, "image": ""}]}, "Health, Beauty & Hair": {"product_count": 998, "hero_images": [], "subcategories": [{"title": "Adult Wellness", "count": 502, "image": ""}, {"title": "Facial Care", "count": 244, "image": ""}, {"title": "Face Skin Care Tools", "count": 73, "image": ""}, {"title": "Body Care", "count": 110, "image": ""}, {"title": "More...", "count": 69, "image": ""}]}, "Consumer Electronics": {"product_count": 337, "hero_images": [], "subcategories": [{"title": "Earphones & Headphones", "count": 228, "image": ""}, {"title": "Consumer Electronics", "count": 54, "image": ""}, {"title": "Home Electronic Accessories", "count": 14, "image": ""}, {"title": "Computer Accessories", "count": 14, "image": ""}, {"title": "Smart Wearable Accessories", "count": 18, "image": ""}, {"title": "More...", "count": 9, "image": ""}]}, "Automobiles & Motorcycles": {"product_count": 3222, "hero_images": [], "subcategories": [{"title": "Other Replacement Parts", "count": 1388, "image": ""}, {"title": "Motorcycle Accessories", "count": 1057, "image": ""}, {"title": "Classified: Automobiles & Motorcycles", "count": 371, "image": ""}, {"title": "Other Motorcycle Accessories", "count": 406, "image": ""}]}, "Home Improvement": {"product_count": 600, "hero_images": [], "subcategories": [{"title": "Solar Lamps", "count": 600, "image": ""}]}, "Sports & Outdoors": {"product_count": 285, "hero_images": [], "subcategories": [{"title": "Sports Accessories", "count": 248, "image": ""}, {"title": "Sports & Outdoors", "count": 37, "image": ""}]}, "Pet Supplies": {"product_count": 739, "hero_images": [], "subcategories": [{"title": "Pet Collars", "count": 503, "image": ""}, {"title": "Pet Supplies", "count": 103, "image": ""}, {"title": "Pet Toys", "count": 121, "image": ""}, {"title": "Pet Shower Products", "count": 7, "image": ""}, {"title": "More...", "count": 5, "image": ""}]}, "Women's Clothing": {"product_count": 1748, "hero_images": [], "subcategories": [{"title": "Lady Dresses", "count": 682, "image": ""}, {"title": "Suits & Sets", "count": 406, "image": ""}, {"title": "Blazers", "count": 280, "image": ""}, {"title": "Rompers", "count": 117, "image": ""}, {"title": "Blouses & Shirts", "count": 92, "image": ""}, {"title": "Wide Leg Pants", "count": 88, "image": ""}, {"title": "Skirts", "count": 63, "image": ""}, {"title": "More...", "count": 20, "image": ""}]}, "Toys, Kids & Babies": {"product_count": 1291, "hero_images": [], "subcategories": [{"title": "Action & Toy Figures", "count": 528, "image": ""}, {"title": "Boy Clothing Sets", "count": 511, "image": ""}, {"title": "Baby Clothing Sets", "count": 250, "image": ""}, {"title": "Girl Clothing Sets", "count": 2, "image": ""}]}, "Bags & Shoes": {"product_count": 2866, "hero_images": [], "subcategories": [{"title": "Casual Shoes", "count": 706, "image": ""}, {"title": "Women's Crossbody Bags", "count": 2059, "image": ""}, {"title": "Woman Slippers", "count": 17, "image": ""}, {"title": "Backpacks", "count": 17, "image": ""}, {"title": "Bags & Shoes", "count": 63, "image": ""}, {"title": "More...", "count": 4, "image": ""}]}, "Phones & Accessories": {"product_count": 352, "hero_images": [], "subcategories": [{"title": "Phone Cases", "count": 352, "image": ""}]}, "Men's Clothing": {"product_count": 1109, "hero_images": [], "subcategories": [{"title": "Mens T-Shirts", "count": 501, "image": ""}, {"title": "Men's Clothing (unclassified)", "count": 608, "image": ""}]}, "Other": {"product_count": 11191, "hero_images": [], "subcategories": [{"title": "Uncategorized & Miscellaneous", "count": 11191, "image": ""}]}}
+{
+  "Home, Garden & Furniture": {
+    "product_count": 1771,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/e118b649-33d4-4141-9010-06322f26b90a.jpg?v=1781974442",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/82916fd3-9e4e-40d2-a9d7-fac41609f66f.jpg?v=1781974564",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d03eed70-268b-44b5-8910-58c01ff0b4b2_trans.jpg?v=1781974596",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/bb5291e6-4b90-4e8c-8ccc-d261153ce2f9_fine.jpg?v=1782119707"
+    ],
+    "subcategories": [
+      {
+        "title": "Furniture",
+        "count": 733,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3b1a2062-d25d-4e28-a4c7-e3c3100d6fdd.jpg?v=1782121032"
+      },
+      {
+        "title": "Home Office Storage",
+        "count": 573,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/bb5291e6-4b90-4e8c-8ccc-d261153ce2f9_fine.jpg?v=1782119707"
+      },
+      {
+        "title": "Storage Bags & Cases & Boxes",
+        "count": 58,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/34b40fa7-e282-47fb-8b67-90d1e520639e_trans.jpg?v=1782125518"
+      },
+      {
+        "title": "Kitchen Storage",
+        "count": 63,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/25158ccf-7b6d-4225-8e9f-9dcb6daf1400.jpg?v=1782121019"
+      },
+      {
+        "title": "Bathroom Storage",
+        "count": 64,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/504c5caa-f93c-4f4e-818e-abd9bff3897a.jpg?v=1782129597"
+      },
+      {
+        "title": "Bedding Sets",
+        "count": 269,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/538afa9d-bb5f-4803-9aa4-dfe92cc90c0a.jpg?v=1782120508"
+      },
+      {
+        "title": "Bakeware",
+        "count": 25,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/c3309c49-dd9a-4a98-8390-abfc19aa6309.jpg?v=1782382624"
+      },
+      {
+        "title": "Cleaning Appliances",
+        "count": 13,
+        "image": ""
+      },
+      {
+        "title": "Curtains",
+        "count": 5,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/758a3756-3135-4b43-800e-0b2099aee1c8.jpg?v=1782128555"
+      },
+      {
+        "title": "Event & Party Supplies",
+        "count": 41,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/a0567f96-a605-494c-ab8f-e2953072eda3.jpg?v=1782127235"
+      },
+      {
+        "title": "Towels",
+        "count": 15,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/c15d6156-95cb-4b4c-97ac-e1eae4e7452a.jpg?v=1782183424"
+      },
+      {
+        "title": "Drinkware",
+        "count": 25,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/91bf9191-24a1-447a-9a2d-ea14f8885475.jpg?v=1782371242"
+      },
+      {
+        "title": "Cooking Tools",
+        "count": 13,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/e273d9ae-1fff-4f17-8032-2c20fbd9291b.jpg?v=1782380122"
+      },
+      {
+        "title": "More...",
+        "count": 71,
+        "image": ""
+      }
+    ]
+  },
+  "Jewelry & Watches": {
+    "product_count": 4589,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/92c3a3e8-007c-458b-b59a-4d48e634c136.jpg?v=1781974520",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1616502318420.jpg?v=1781974528",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/f1944000-4c8c-4026-9bb2-59623cf5626b.jpg?v=1781974561",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/eab33957-63b7-44fd-ab41-d11748554bfc.jpg?v=1781974585"
+    ],
+    "subcategories": [
+      {
+        "title": "Earrings",
+        "count": 1279,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/92c3a3e8-007c-458b-b59a-4d48e634c136.jpg?v=1781974520"
+      },
+      {
+        "title": "Smart Watches",
+        "count": 755,
+        "image": ""
+      },
+      {
+        "title": "Bracelets & Bangles",
+        "count": 950,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/8e36a8be-197b-4628-a748-7a7b7745abd1.jpg?v=1782119729"
+      },
+      {
+        "title": "Necklace & Pendants",
+        "count": 544,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/734ee3d2-9305-47cb-999d-de9622d7ba2c.jpg?v=1782119877"
+      },
+      {
+        "title": "Rings",
+        "count": 447,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ae5c7a2c-630f-4475-a8bb-2820fd2a65ac.jpg?v=1782119797"
+      },
+      {
+        "title": "925 Silver Jewelry",
+        "count": 204,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/442bcb84-8635-41f2-8d91-e6a9ed8e30a1.jpg?v=1782120539"
+      },
+      {
+        "title": "Charms",
+        "count": 66,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/fc9a1336-c3e2-476d-9366-31bee7508631.jpg?v=1782120491"
+      },
+      {
+        "title": "Watch Accessories",
+        "count": 56,
+        "image": ""
+      },
+      {
+        "title": "Classified: Jewelry & Watches",
+        "count": 614,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1616502318420.jpg?v=1781974528"
+      },
+      {
+        "title": "More...",
+        "count": 174,
+        "image": ""
+      }
+    ]
+  },
+  "Health, Beauty & Hair": {
+    "product_count": 998,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/38c2cad8-3147-4ecf-8d04-3a6e2c5b4c85_fine.jpg?v=1782119869",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/0b3c9c11-81af-462c-b541-d37bb0788d92_fine.jpg?v=1782119907",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/307b0353-74d1-46a0-92a0-a41d31ea1aba_water.jpg?v=1782120330",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6495fd32-41b9-45da-9076-0fe37fb790b5.jpg?v=1782120586"
+    ],
+    "subcategories": [
+      {
+        "title": "Adult Wellness",
+        "count": 502,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1c60f05e-a43c-456e-adb8-b9f683741bb1.jpg?v=1782604199"
+      },
+      {
+        "title": "Facial Care",
+        "count": 244,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6495fd32-41b9-45da-9076-0fe37fb790b5.jpg?v=1782120586"
+      },
+      {
+        "title": "Face Skin Care Tools",
+        "count": 73,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/0c18976b-38a0-4957-94c9-91acbd8aeb5f.jpg?v=1782128179"
+      },
+      {
+        "title": "Body Care",
+        "count": 110,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/0d2cfb69-df4f-4d9a-bbfc-1c12c0f429be.jpg?v=1782126221"
+      },
+      {
+        "title": "More...",
+        "count": 69,
+        "image": ""
+      }
+    ]
+  },
+  "Consumer Electronics": {
+    "product_count": 337,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1616644285395.jpg?v=1781974545",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/23fab4cb-cebe-4f00-a4ee-946e71e70c10.jpg?v=1782119290",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5f7f8494-d3aa-4d0e-91d7-1c24590ffd90.jpg?v=1782119747",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/258244bd-1afb-482d-a0c9-920071e22530.jpg?v=1782120243"
+    ],
+    "subcategories": [
+      {
+        "title": "Earphones & Headphones",
+        "count": 228,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/23fab4cb-cebe-4f00-a4ee-946e71e70c10.jpg?v=1782119290"
+      },
+      {
+        "title": "Consumer Electronics",
+        "count": 54,
+        "image": "https://cf.cjdropshipping.com/1615861967054.jpg"
+      },
+      {
+        "title": "Home Electronic Accessories",
+        "count": 14,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/7c5959ff-1ffc-4e27-bac0-1813a50026d5.jpg?v=1782706522"
+      },
+      {
+        "title": "Computer Accessories",
+        "count": 14,
+        "image": "https://cf.cjdropshipping.com/54504e74-a7f1-4c19-a2a4-c9859249359a.jpg"
+      },
+      {
+        "title": "Smart Wearable Accessories",
+        "count": 18,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/725c0fe7-887c-4473-9322-99b0f111755f.jpg?v=1782713355"
+      },
+      {
+        "title": "More...",
+        "count": 9,
+        "image": ""
+      }
+    ]
+  },
+  "Automobiles & Motorcycles": {
+    "product_count": 3222,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1618638333694.jpg?v=1781974486",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/fd92f094-130d-4642-a859-8a6bb6bf7df3_trans.jpg?v=1781974536",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/aca351e1-6b18-47c3-b12c-1902adfa7bce.jpg?v=1782120549",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/05e3e3b7-91b2-444f-9df9-1c236b1e515b.jpg?v=1782120561"
+    ],
+    "subcategories": [
+      {
+        "title": "Other Replacement Parts",
+        "count": 1388,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/fd92f094-130d-4642-a859-8a6bb6bf7df3_trans.jpg?v=1781974536"
+      },
+      {
+        "title": "Motorcycle Accessories",
+        "count": 1057,
+        "image": ""
+      },
+      {
+        "title": "Classified: Automobiles & Motorcycles",
+        "count": 371,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3468220c-a52c-4f9a-8d7d-853a0e01a5d8_trans.jpg?v=1782121467"
+      },
+      {
+        "title": "Other Motorcycle Accessories",
+        "count": 406,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1618638333694.jpg?v=1781974486"
+      }
+    ]
+  },
+  "Home Improvement": {
+    "product_count": 600,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5018cb34-325c-4f23-8d6c-0019469a9411.png?v=1781972367",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/a578d87e-3242-41f2-901e-43d41456389c_fine.jpg?v=1782120417",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/190d3b6c-407f-45d8-b4ac-fa7170ed01e3.jpg?v=1782123478",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/84abff49-b253-44cc-b2f4-71f426c32764.jpg?v=1782123633"
+    ],
+    "subcategories": [
+      {
+        "title": "Solar Lamps",
+        "count": 600,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/190d3b6c-407f-45d8-b4ac-fa7170ed01e3.jpg?v=1782123478"
+      }
+    ]
+  },
+  "Sports & Outdoors": {
+    "product_count": 285,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/4146e4fa-0d6b-4dae-add8-eac4e386235a.jpg?v=1782120055",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/781a769c-cb41-406c-a2ae-1ef1cde7245c.jpg?v=1782120569",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/75ae41d5-67bf-4e30-9afa-b0993d6a6e1f.jpg?v=1782121028",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/fb134f00-abcb-4909-b53f-3961e2118de1.jpg?v=1782123937"
+    ],
+    "subcategories": [
+      {
+        "title": "Sports Accessories",
+        "count": 248,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/22c9864e-81e3-47f8-ba08-e7852573521c.jpg?v=1782388083"
+      },
+      {
+        "title": "Sports & Outdoors",
+        "count": 37,
+        "image": "https://cf.cjdropshipping.com/e295a452-1f47-4d30-b48d-0af059042457.jpg"
+      }
+    ]
+  },
+  "Pet Supplies": {
+    "product_count": 739,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/8f1ef47a-1212-4199-a10e-2ab0d2d661b3.jpg?v=1782119648",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/bcd00d10-0147-4fd1-b52a-883d80846744.jpg?v=1782119805",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/0ea31836-b306-4fd1-a235-254bc39fa9e1.png?v=1782121023",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/4faae8ae-f866-4fb1-b7e3-31542f28ce13.jpg?v=1782122589"
+    ],
+    "subcategories": [
+      {
+        "title": "Pet Collars",
+        "count": 503,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/8f1ef47a-1212-4199-a10e-2ab0d2d661b3.jpg?v=1782119648"
+      },
+      {
+        "title": "Pet Supplies",
+        "count": 103,
+        "image": "https://cf.cjdropshipping.com/0585386d-878d-4eff-af84-4879a7f2acb3.jpg"
+      },
+      {
+        "title": "Pet Toys",
+        "count": 121,
+        "image": ""
+      },
+      {
+        "title": "Pet Shower Products",
+        "count": 7,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/419f679a-b6cb-4f4a-9598-7945f3993f96.jpg?v=1782371480"
+      },
+      {
+        "title": "More...",
+        "count": 5,
+        "image": ""
+      }
+    ]
+  },
+  "Women's Clothing": {
+    "product_count": 1748,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1612523084645.jpg?v=1781974309",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/3246d168-502f-4370-b86f-373df477b3ef.jpg?v=1781974321",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/87ca4ba9-44ec-4edc-a5d3-93a54c28877e.jpg?v=1781974334",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/9f28be71-63b0-440c-873e-e1541e587424.jpg?v=1781974336"
+    ],
+    "subcategories": [
+      {
+        "title": "Lady Dresses",
+        "count": 682,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/31cb1883-043c-4c04-a8ac-c98445737e70.jpg?v=1781974458"
+      },
+      {
+        "title": "Suits & Sets",
+        "count": 406,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/f5aa94c3-2ce1-4168-a81d-62bccc9eca8e.jpg?v=1781974501"
+      },
+      {
+        "title": "Blazers",
+        "count": 280,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/34e7e7ff-d05e-4f96-a314-360af1898259.jpg?v=1781974394"
+      },
+      {
+        "title": "Rompers",
+        "count": 117,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/d1128993-99f8-4663-bf0f-d6068df72082.jpg?v=1782119674"
+      },
+      {
+        "title": "Blouses & Shirts",
+        "count": 92,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/56d47840-e7e0-45cd-b9a1-56f374f5e569.jpg?v=1782119924"
+      },
+      {
+        "title": "Wide Leg Pants",
+        "count": 88,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/06531f9e-e880-40c4-b51c-12e10387caf5.jpg?v=1782122818"
+      },
+      {
+        "title": "Skirts",
+        "count": 63,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/a300f384-4381-4430-8e62-c31f29a0e510.jpg?v=1782119896"
+      },
+      {
+        "title": "More...",
+        "count": 20,
+        "image": ""
+      }
+    ]
+  },
+  "Toys, Kids & Babies": {
+    "product_count": 1291,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/56380966-6af4-4a6f-91e9-37ab262a6842.jpg?v=1782119960",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5f85b94d-e940-47a5-8b8f-14b89a85bc06.jpg?v=1782120379",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/22fe6531-a90e-42b8-9da0-a2f5a2884cd4_trans.jpg?v=1782121087",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/cceb1b07-9f83-4f83-b43c-5098b6ebcfea.jpg?v=1782121095"
+    ],
+    "subcategories": [
+      {
+        "title": "Action & Toy Figures",
+        "count": 528,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/5f85b94d-e940-47a5-8b8f-14b89a85bc06.jpg?v=1782120379"
+      },
+      {
+        "title": "Boy Clothing Sets",
+        "count": 511,
+        "image": ""
+      },
+      {
+        "title": "Baby Clothing Sets",
+        "count": 250,
+        "image": ""
+      },
+      {
+        "title": "Girl Clothing Sets",
+        "count": 2,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/97880e5d-0da1-44d8-91f4-de404c9c3766.jpg?v=1782179613"
+      }
+    ]
+  },
+  "Bags & Shoes": {
+    "product_count": 2866,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/439bedb3-de6d-4513-a0e9-56d17b597d1e.jpg?v=1781974468",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/2903bdb5-9134-4ced-816c-7afb1e8a2904.jpg?v=1782119683",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ec87ba09-05a3-46b0-9e54-5fc930d2bcd3.jpg?v=1782120010",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/43e54c82-464d-441c-93e9-368061e892fd.jpg?v=1782120073"
+    ],
+    "subcategories": [
+      {
+        "title": "Casual Shoes",
+        "count": 706,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ec87ba09-05a3-46b0-9e54-5fc930d2bcd3.jpg?v=1782120010"
+      },
+      {
+        "title": "Women's Crossbody Bags",
+        "count": 2059,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/164e4ff6-e82f-454d-975d-6971154b89be.jpg?v=1782128151"
+      },
+      {
+        "title": "Woman Slippers",
+        "count": 17,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6810bf7a-cfa3-469c-a9b4-a28064625462.jpg?v=1782121819"
+      },
+      {
+        "title": "Backpacks",
+        "count": 17,
+        "image": ""
+      },
+      {
+        "title": "Bags & Shoes",
+        "count": 63,
+        "image": "https://cf.cjdropshipping.com/16016544/2026690307562.jpg"
+      },
+      {
+        "title": "More...",
+        "count": 4,
+        "image": ""
+      }
+    ]
+  },
+  "Phones & Accessories": {
+    "product_count": 352,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/e6aba30f-c4b4-4ffa-b258-87b97bcb4a55.jpg?v=1782120441",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6465f2c2-4f8e-4309-9fc0-9eccf6aca11e.jpg?v=1782121686",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/a0f82260-81fe-47dc-aec5-2df5aa7ac4a8_trans.jpg?v=1782125985",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/ce41689c-0f4d-4dc4-9cb8-c54698faac66.jpg?v=1782128463"
+    ],
+    "subcategories": [
+      {
+        "title": "Phone Cases",
+        "count": 352,
+        "image": ""
+      }
+    ]
+  },
+  "Men's Clothing": {
+    "product_count": 1109,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1735226787189.jpg?v=1781974291",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/7a9300cc-9816-4034-b5bc-65234409372f.jpg?v=1781974298",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/2f4b04c2-1718-4e90-b3e9-0f2f76b7b71e.jpg?v=1781974321",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/76ba11af-b2d6-4f04-af45-fb5654d0ac26.jpg?v=1781974345"
+    ],
+    "subcategories": [
+      {
+        "title": "Mens T-Shirts",
+        "count": 501,
+        "image": ""
+      },
+      {
+        "title": "Men's Clothing (unclassified)",
+        "count": 608,
+        "image": ""
+      }
+    ]
+  },
+  "Other": {
+    "product_count": 11191,
+    "hero_images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/413abad7-0d7b-49ce-bd15-0c6a7d5a1016_trans.jpg?v=1782120225",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/931d5b9f-2cc9-4f67-85b8-1cc1658b89a8.jpg?v=1782707179",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/488756616348.jpg?v=1782708185",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/36b4718b-c01d-49bc-9ec6-1f2d1c281c92.jpg?v=1782714074"
+    ],
+    "subcategories": [
+      {
+        "title": "Uncategorized & Miscellaneous",
+        "count": 11191,
+        "image": ""
+      }
+    ]
+  }
+}
