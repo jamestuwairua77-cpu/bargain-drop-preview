@@ -1,47 +1,78 @@
-// Product lookup API — returns single product by ID
+// Product lookup API — fetches product by ID
 // GET /api/product-lookup?id=9115605336195
-import { readFileSync } from 'fs';
-import { join } from 'path';
+// Loads data from deployed static files, not bundled in function
 
-let cachedData = null; // v2 — supports both idx and index keys
+let cachedData = null;
 let cachedIndex = null;
+let cacheTime = 0;
 
-function loadData() {
-  if (cachedData && cachedIndex) return { data: cachedData, index: cachedIndex };
-  cachedData = JSON.parse(readFileSync(join(process.cwd(), 'categories-data.json'), 'utf-8'));
-  cachedIndex = JSON.parse(readFileSync(join(process.cwd(), 'products-index.json'), 'utf-8'));
+async function loadData() {
+  // Refresh cache every 5 minutes
+  const now = Date.now();
+  if (cachedData && cachedIndex && (now - cacheTime) < 300000) {
+    return { data: cachedData, index: cachedIndex };
+  }
+
+  const base = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}`
+    : 'https://bargain-drop.online';
+
+  try {
+    const [dataResp, idxResp] = await Promise.all([
+      fetch(`${base}/categories-data.json`, {
+        headers: { 'Accept-Encoding': 'br' },
+        cache: 'no-cache'
+      }),
+      fetch(`${base}/products-index.json`, {
+        headers: { 'Accept-Encoding': 'br' },
+        cache: 'no-cache'
+      })
+    ]);
+
+    cachedData = await dataResp.json();
+    cachedIndex = await idxResp.json();
+    cacheTime = now;
+  } catch (e) {
+    // Fall back to whatever is cached (or null)
+    console.error('Failed to load data:', e.message);
+  }
+
   return { data: cachedData, index: cachedIndex };
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const { id } = req.query;
-  if (!id) return res.status(400).json({ error: 'Missing product id' });
+
+  if (!id) {
+    return res.status(400).json({ error: 'Missing product id' });
+  }
 
   try {
-    const { data, index } = loadData();
-    const entry = index[String(id)];
+    const { data, index } = await loadData();
 
-    if (entry) {
-      // Support both 'idx' and 'index' field names
-      const idx = entry.idx !== undefined ? entry.idx : entry.index;
-      const category = data[entry.category];
-      if (category?.products && idx !== undefined) {
-        const product = category.products[idx];
-        if (product && String(product.id) === String(id)) {
-          res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          return res.status(200).json({ product, category: entry.category });
+    // Try index lookup first
+    if (index) {
+      const entry = index[String(id)];
+      if (entry) {
+        const idx = entry.idx !== undefined ? entry.idx : entry.index;
+        const category = data[entry.category];
+        if (category && idx !== undefined) {
+          const product = category[idx];
+          if (product && String(product.id || product.id) === String(id)) {
+            return res.status(200).json({ product, category: entry.category });
+          }
         }
       }
     }
 
     // Fallback: linear search
-    for (const [catName, catData] of Object.entries(data)) {
-      const product = (catData.products || []).find(p => String(p.id) === String(id));
-      if (product) {
-        res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        return res.status(200).json({ product, category: catName });
+    if (data) {
+      for (const [catName, catData] of Object.entries(data)) {
+        const products = Array.isArray(catData) ? catData : (catData.products || []);
+        const product = products.find(p => String(p.id) === String(id));
+        if (product) {
+          return res.status(200).json({ product, category: catName });
+        }
       }
     }
 
