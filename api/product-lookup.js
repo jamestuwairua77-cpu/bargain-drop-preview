@@ -59,6 +59,8 @@ export default async function handler(req, res) {
         if (category && idx !== undefined) {
           const product = category[idx];
           if (product && String(product.id || product.id) === String(id)) {
+            // Normalize tags: convert array to comma-separated string for frontend compatibility
+            if (Array.isArray(product.tags)) product.tags = product.tags.join(',');
             return res.status(200).json({ product, category: entry.category });
           }
         }
@@ -71,7 +73,9 @@ export default async function handler(req, res) {
         const products = Array.isArray(catData) ? catData : (catData.products || []);
         const product = products.find(p => String(p.id) === String(id));
         if (product) {
-          return res.status(200).json({ product, category: catName });
+          // Normalize tags
+            if (Array.isArray(product.tags)) product.tags = product.tags.join(',');
+            return res.status(200).json({ product, category: catName });
         }
       }
     }
