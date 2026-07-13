@@ -219,7 +219,7 @@ function renderRelatedProducts(){
       related.forEach(function(p){
         var a=document.createElement('a');a.className='related-card fade-in';a.href='product.html?id='+p.id;
         var ri=p.image||(p.images||[])[0]||'';
-        if(ri){a.innerHTML='<img src="'+esc(ri)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="related-info"><div class="related-title">'+esc(p.title)+'</div><div class="related-price">'+money(p.price||0)+'</div></div>'}
+        if(ri){a.innerHTML='<img src="'+esc(ri)+'" alt="'+esc(p.title)+'" width="56" height="56" loading="lazy" onerror="this.style.display=\'none\'"><div class="related-info"><div class="related-title">'+esc(p.title)+'</div><div class="related-price">'+money(p.price||0)+'</div></div>'}
         else{a.innerHTML='<div class="related-placeholder">📦</div><div class="related-info"><div class="related-title">'+esc(p.title)+'</div><div class="related-price">'+money(p.price||0)+'</div></div>'}
         grid.appendChild(a)
       })
@@ -231,6 +231,24 @@ function renderRelatedProducts(){
 function showProduct(){
   if(!product)return;var p=product;
   document.title=p.title+' — Bargain Drop';
+  // Update meta tags dynamically for SEO
+  var metaDesc=document.querySelector('meta[name="description"]');
+  if(metaDesc)metaDesc.setAttribute('content',p.title+' — only '+money(p.price)+' at Bargain Drop. '+(p.body_html||'').replace(/<[^>]*>/g,'').substring(0,150)+'...');
+  var ogTitle=document.querySelector('meta[property="og:title"]');if(ogTitle)ogTitle.setAttribute('content',p.title+' — Bargain Drop');
+  var ogDesc=document.querySelector('meta[property="og:description"]');if(ogDesc)ogDesc.setAttribute('content','Shop '+p.title+' for only '+money(p.price)+' at Bargain Drop. Fast shipping, best prices.');
+  var ogImage=document.querySelector('meta[property="og:image"]');if(!ogImage){ogImage=document.createElement('meta');ogImage.setAttribute('property','og:image');document.head.appendChild(ogImage)}ogImage.setAttribute('content',p.image||(p.images||[])[0]||'');
+  var canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.setAttribute('href','https://bargain-drop.online/product.html?id='+p.id);
+  // Inject Product schema
+  var existing=document.getElementById('product-schema');if(existing)existing.remove();
+  var schema=document.createElement('script');schema.type='application/ld+json';schema.id='product-schema';
+  schema.textContent=JSON.stringify({
+    '@context':'https://schema.org','@type':'Product',
+    'name':p.title,'description':(p.body_html||'').replace(/<[^>]*>/g,'').substring(0,200),
+    'image':p.image||(p.images||[])[0]||'',
+    'offers':{'@type':'Offer','price':p.price,'priceCurrency':'AUD','availability':'https://schema.org/InStock'},
+    'sku':String(p.id)
+  });
+  document.head.appendChild(schema);
   var pt=document.getElementById('product-title');if(pt)pt.textContent=p.title;
   var pp=document.getElementById('product-price');if(pp)pp.textContent=money(p.price);
   if(p.compare_at_price&&p.compare_at_price>p.price){
