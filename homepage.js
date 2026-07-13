@@ -4,9 +4,10 @@ var C={"Women's Clothing":"[dress]","Home, Garden & Furniture":"[home]","Jewelry
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 var ALL=[];
 
+// Load categories from local (same domain — freshly updated)
 (function loadCats(){
 var x=new XMLHttpRequest();
-x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-index.json',true);
+x.open('GET','/categories-index.json',true);
 x.timeout=10000;
 x.onload=function(){
   if(x.status>=200&&x.status<400){
@@ -16,10 +17,14 @@ x.onload=function(){
     renderSubcatGrid(cats,d);
   }
 };
-x.onerror=function(){document.getElementById('subcat-slider').innerHTML='<div class="loading-text">Subcategories unavailable</div>';document.getElementById('subcat-scroll-wrap').innerHTML='<div class="loading-text">Categories unavailable</div>'};
+x.onerror=function(){
+  document.getElementById('subcat-slider').innerHTML='<div class="loading-text">Subcategories loading...</div>';
+  document.getElementById('subcat-scroll-wrap').innerHTML='<div class="loading-text">Categories loading...</div>';
+};
 x.send();
 })();
 
+// Load trending products from CDN (first category)
 (function loadProds(){
 var x=new XMLHttpRequest();
 x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/data/home-garden-furniture.json',true);
@@ -57,7 +62,7 @@ function renderSubcatSlider(cats, catData){
     var it=items[k];
     var a=document.createElement('a');a.className='subcat-btn fade-in';
     a.href='category.html?cat='+encodeURIComponent(it.parent)+'&sub='+encodeURIComponent(it.title);
-    var imgHtml=it.image?'<img src="'+it.image+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'';
+    var imgHtml=it.image?'<img src="'+it.image+'" alt="'+esc(it.title)+'" width="40" height="40" loading="lazy" onerror="this.style.display=\'none\'">':'<span class="subcat-emoji-sm">📦</span>';
     a.innerHTML=imgHtml+esc(it.title)+'<span class="subcat-count">'+it.count+'</span>';
     g.appendChild(a);
   }
@@ -77,13 +82,13 @@ function renderSubcatGrid(cats, catData){
       h='<div class="subcat-hero">';
       for(var j=0;j<4&&j<heroes.length;j++){
         var heroStyle = j===0?' style="grid-row:1/3"':'';
-        h+='<img src="'+heroes[j]+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"'+heroStyle+'>';
+        h+='<img src="'+heroes[j]+'" alt="'+esc(c)+' product" width="80" height="80" loading="lazy" onerror="this.style.display=\'none\'"'+heroStyle+'>';
       }
       h+='</div>';
     }else{
       h='<div class="subcat-hero"><span class="subcat-emoji">'+e+'</span><div class="subcat-empty"></div><div class="subcat-empty"></div><div class="subcat-empty"></div></div>';
     }
-    a.innerHTML=h+'<div class="subcat-info"><div class="subcat-label">'+esc(c)+'</div><div class="subcat-count-text">'+(info.product_count||0).toLocaleString()+'</div></div>';
+    a.innerHTML=h+'<div class="subcat-info"><div class="subcat-label">'+esc(c)+'</div><div class="subcat-count-text">'+(info.product_count||0).toLocaleString()+' products</div></div>';
     g.appendChild(a);
   }
 }
@@ -98,9 +103,9 @@ function renderProds(prods){
     a.href='product.html?id='+p.id;
     var imgHtml;
     if(img){
-      imgHtml='<img src="'+img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+      imgHtml='<img src="'+img+'" alt="'+esc(p.title)+'" width="200" height="200" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=prod-img-placeholder>📦</div>\'">';
     }else{
-      imgHtml='<div style="font-size:4rem;opacity:.15;display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f5f5f5;border-radius:12px">'+C.Other+'</div>';
+      imgHtml='<div class="prod-img-placeholder">📦</div>';
     }
     var priceHtml;
     if(typeof BD!='undefined'){
@@ -108,7 +113,8 @@ function renderProds(prods){
     }else{
       priceHtml='A$'+(p.price||0).toFixed(2);
     }
-    a.innerHTML='<div class="prod-img">'+imgHtml+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+priceHtml+'</span></div></div>';
+    var pc=p.compare_at_price&&p.compare_at_price>p.price?'<span class="prod-compare">A$'+(p.compare_at_price||0).toFixed(2)+'</span>':'';
+    a.innerHTML='<div class="prod-img">'+imgHtml+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+priceHtml+'</span>'+pc+'</div></div>';
     g.appendChild(a);
   }
 }
@@ -117,18 +123,20 @@ var searchTimeout;
 function doSearch(){
   var q=document.getElementById('search-input').value.toLowerCase().trim();
   var clr=document.getElementById('search-clear');
-  clr.style.display=q?'flex':'none';
+  if(clr)clr.style.display=q?'flex':'none';
   clearTimeout(searchTimeout);
   searchTimeout=setTimeout(function(){
     if(q){
       document.getElementById('subcat-slider-wrap').style.display='none';
       document.getElementById('cat-section').style.display='none';
       document.getElementById('trending-title').style.display='none';
-      document.getElementById('search-title').style.display='flex';
+      var st=document.getElementById('search-title');if(st)st.style.display='flex';
+      var sc=document.getElementById('search-count');if(sc)sc.textContent=q?all.length.toLocaleString()+' results':'';
       var x=new XMLHttpRequest();
       x.open('GET','/api/search-products?limit=50&q='+encodeURIComponent(q),true);
       x.timeout=10000;
-      x.onload=function(){if(x.status>=200&&x.status<400){var d=JSON.parse(x.responseText);document.getElementById('search-count').textContent='';renderProds(d.products||[]);}};
+      x.onload=function(){if(x.status>=200&&x.status<400){var d=JSON.parse(x.responseText);renderProds(d.products||[]);}};
+      x.onerror=function(){renderProds(ALL.slice(0,50))};
       x.send();
     }else{
       document.getElementById('subcat-slider-wrap').style.display='';
