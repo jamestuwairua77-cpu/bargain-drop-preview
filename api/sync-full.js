@@ -1,4 +1,4 @@
-const SHOPIFY_TOKEN = process.env.SHOPIFY_TOKEN || '';
+const SHOPIFY_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || '';
 const SHOPIFY_DOMAIN = 'bargain-drop-8194.myshopify.com';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_REPO = 'jamestuwairua77-cpu/bargain-drop-preview';
