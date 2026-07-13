@@ -3,43 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Product — Bargain Drop v10</title>
+<title>Product — Bargain Drop</title>
 <link rel="stylesheet" href="css/product.css">
 </head>
 <body>
-<div class="top-bar"><a href="javascript:history.back()">← Back</a></div>
+<div class="loading-overlay" id="loading-overlay"><span class="loading-text" id="loading-text">Loading...</span></div>
 
-<div id="not-found" style="display:none">
-  <div style="text-align:center;padding:40px">
-    <h2>Product not found</h2>
-    <p>The product you are looking for does not exist or has been removed.</p>
-    <a href="/" class="btn">Go Home</a>
-  </div>
+<div class="top-bar">
+  <a class="back" href="javascript:history.back()">← Back</a>
+  <span class="top-bar-title" id="product-title">Product</span>
+  <button id="wishlist-btn" onclick="toggleWishlist()" style="margin-left:auto">♡</button>
 </div>
 
-<div id="product-detail">
-  <div class="image-stack" id="image-stack">
-    <div class="main-image" id="main-image"></div>
-    <div class="thumbs" id="thumbs"></div>
+<div class="prod-img-gallery" id="gallery-block">
+  <img id="product-img" src="" alt="" onerror="this.style.display='none'">
+  <div class="gallery-dots" id="gallery-dots"></div>
+  <span class="gallery-count" id="gallery-count"></span>
+</div>
+
+<div class="prod-thumbs" id="prod-thumbs"></div>
+
+<div class="product-info">
+  <div class="rating-summary" id="rating-summary">
+    <div class="stars" id="header-stars"></div>
+    <span class="rating-num" id="rating-num">—</span>
+    <span class="rating-count" id="rating-count" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">0 reviews</span>
+    <span class="sold-count" id="sold-count"></span>
   </div>
-  <div class="product-info">
-    <h1 id="prod-title">Loading...</h1>
+
+  <div class="price-section" id="price-section">
     <div class="price-row">
-      <span class="price" id="prod-price"></span>
-      <span class="old-price" id="prod-old-price"></span>
-      <span class="discount-badge" id="prod-discount"></span>
+      <span class="current-price" id="product-price">$0.00</span>
     </div>
-    <div id="prod-variants"></div>
-    <div class="qty-row">
-      <button class="qty-btn" onclick="changeQty(-1)">−</button>
-      <span id="qty-val">1</span>
-      <button class="qty-btn" onclick="changeQty(1)">℡</button>
-    </div>
-    <button class="add-to-cart" id="add-to-cart">Add to Cart</button>
-    <button class="buy-now" id="buy-now">Buy Now</button>
-    <p id="prod-desc">Loading description...</p>
+    <div class="savings" id="savings" style="display:none"></div>
   </div>
+
+  <div class="variant-block" id="color-block" style="display:none">
+    <div class="variant-label"><span>Color</span><span class="variant-selected" id="color-selected"></span></div>
+    <div class="variant-options" id="color-options"></div>
+  </div>
+  <div class="variant-block" id="size-block" style="display:none">
+    <div class="variant-label"><span>Size</span><span class="variant-selected" id="size-selected"></span></div>
+    <div class="variant-options" id="size-options"></div>
+  </div>
+  <div class="variant-block" id="model-block" style="display:none">
+    <div class="variant-label"><span>Model</span><span class="variant-selected" id="model-selected"></span></div>
+    <div class="variant-options" id="model-options"></div>
+  </div>
+
+  <div class="qty-block">
+    <span class="qty-label">Quantity</span>
+    <div class="qty-control">
+      <button class="qty-btn" id="qty-minus" onclick="changeQty(-1)">−</button>
+      <span class="qty-value" id="qty-value">1</span>
+      <button class="qty-btn" id="qty-plus" onclick="changeQty(1)">+</button>
+    </div>
+    <span class="stock-info" id="stock-info">● In stock</span>
+  </div>
+
+  <button class="cta-btn cta-primary" id="add-to-cart" onclick="addToCart()">Add to Cart</button>
+  <button class="cta-btn cta-secondary" id="buy-now" onclick="buyNow()">Buy Now</button>
 </div>
+
+<div class="desc-block">
+  <h3>Description</h3>
+  <div class="desc-text" id="product-desc">Loading description...</div>
+</div>
+
+<div class="specs-section">
+  <h3>Specifications</h3>
+  <table class="specs-table"><tbody id="spec-body"></tbody></table>
+</div>
+
+<div class="reviews-section" id="reviews-section">
+  <h3>Customer Reviews</h3>
+  <div class="review-summary-card">
+    <div class="review-big-score">
+      <div class="big-num" id="big-rating">—</div>
+      <div class="big-stars" id="big-stars"></div>
+      <div class="big-total" id="big-total"></div>
+    </div>
+    <div class="review-bars" id="reviews-bars"></div>
+  </div>
+  <div class="review-filters">
+    <button class="review-filter active" data-filter="all">All</button>
+    <button class="review-filter" data-filter="verified">Verified</button>
+    <button class="review-filter" data-filter="photos">With photos</button>
+    <button class="review-filter" data-filter="5">5★</button>
+    <button class="review-filter" data-filter="4">4★</button>
+    <button class="review-filter" data-filter="3">3★</button>
+  </div>
+  <div class="reviews-list" id="reviews-list"></div>
+  <button class="load-more-btn" id="load-more-reviews" onclick="loadMoreReviews()">Load More Reviews</button>
+</div>
+
+<div class="related-section">
+  <h3>Related Products</h3>
+  <div class="related-grid" id="related-grid"></div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <nav class="bottom-nav">
 <a href="/"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
@@ -47,12 +110,12 @@
 <a href="categories.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="#777" stroke-width="2"/></svg>Categories</a>
 <a href="wishlist.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#777" stroke-width="1.5" fill="none"/></svg>Wishlist</a>
 <a href="cart.html" style="position:relative"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:#e60023;color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
-<a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
+<a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 000-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Ne</a>
 </nav>
 
 <script src="js/currency.js?v=2"></script>
 <script src="js/product.js"></script>
-
-<script>(function(){var b=document.getElementById("nav-cart-count");if(b){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);b.textContent=n;b.style.display=n>0?"":"none"}catch(e){}}})();</script>
+<script>(function(){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
-</body></html>
+</body>
+</html>
