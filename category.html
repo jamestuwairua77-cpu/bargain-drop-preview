@@ -6,21 +6,27 @@
 .page-header{padding:20px 16px 4px}
 .page-header h1{font-size:1.15rem;font-weight:800;letter-spacing:-.01em;color:var(--fg)}
 .page-header p{font-size:.7rem;color:var(--meta);margin-top:4px}
-.subcat-bar{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:6px;padding:0 16px 10px;scrollbar-width:none}
+.subcat-bar{display:flex;overflow-x:auto;gap:8px;padding:10px 16px;scrollbar-width:none}
 .subcat-bar::-webkit-scrollbar{display:none}
-.subcat-chip{flex-shrink:0;scroll-snap-align:start;padding:7px 16px;border-radius:var(--pill);border:1.5px solid var(--line);background:#fff;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s}
-.subcat-chip:hover{border-color:var(--meta)}
-.subcat-chip.active{background:var(--fg);color:#fff;border-color:var(--fg)}
+.subcat-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;border:none;border-radius:var(--radius);background:none;font-size:.65rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s;width:72px}
+.subcat-chip:hover{color:var(--fg)}
+.subcat-chip.active{color:var(--fg)}
+.subcat-chip-img{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--line2);border:2px solid transparent;transition:all .15s}
+.subcat-chip.active .subcat-chip-img,.subcat-chip:hover .subcat-chip-img{border-color:var(--lilac);transform:scale(1.05)}
+.subcat-chip-placeholder{width:56px;height:56px;border-radius:50%;background:var(--line2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;opacity:.4}
+.subcat-chip-label{font-size:.62rem;text-align:center;line-height:1.2;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:72px;word-break:break-word}
 .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:6px 16px 20px}@media(min-width:768px){.product-grid{grid-template-columns:repeat(4,1fr);max-width:1024px;margin:0 auto;gap:14px}}
 .product-card{border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--line);background:#fff;transition:all .2s;display:flex;flex-direction:column}
 .product-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.07);border-color:var(--lilac)}
 .product-card:hover .prod-img img{transform:scale(1.06)}
 .prod-img{aspect-ratio:1;background:#f8f8f8;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .prod-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.prod-img-placeholder{font-size:2.5rem;opacity:.15;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
 .prod-info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .prod-title{font-size:.72rem;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:var(--fg)}
 .prod-price-row{display:flex;align-items:baseline;gap:6px;margin-top:auto}
 .prod-price{font-size:.9rem;font-weight:800;color:var(--fg)}
+.prod-compare{font-size:.65rem;color:var(--meta);text-decoration:line-through}
 .pagination{display:flex;justify-content:center;align-items:center;gap:6px;padding:0 16px 20px;flex-wrap:wrap}
 .pagination button{padding:8px 14px;border-radius:var(--pill);border:1.5px solid var(--line);background:#fff;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s}
 .pagination button:hover:not(:disabled){border-color:var(--meta)}
@@ -48,33 +54,92 @@
 </nav>
 <script>
 function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-var all=[],display=[],pageSize=50,current=1,cat='',sub='';
+function fmtPrice(p){return typeof BD!=='undefined'?BD.formatMoneyCompact(p||0):'A$'+(p||0).toFixed(2)}
+
+var all=[],display=[],pageSize=50,current=1,cat='',sub='',catIndex=null;
 var p=new URLSearchParams(location.search);cat=p.get('cat')||'';
+
+// Category name -> data file mapping
 var catFiles={"Home, Garden & Furniture":"home-garden-furniture.json","Jewelry & Watches":"jewelry-watches.json","Health, Beauty & Hair":"health-beauty-hair.json","Consumer Electronics":"consumer-electronics.json","Automobiles & Motorcycles":"automobiles-motorcycles.json","Home Improvement":"home-improvement.json","Sports & Outdoors":"sports-outdoors.json","Pet Supplies":"pet-supplies.json","Women's Clothing":"womens-clothing.json","Toys, Kids & Babies":"toys-kids-babies.json","Bags & Shoes":"bags-shoes.json","Phones & Accessories":"phones-accessories.json","Men's Clothing":"mens-clothing.json","Other":"other.json"};
-(function load(){
-  var fname=catFiles[cat],url=fname?'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/data/'+fname:'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json';
+
+function loadCategory(){
+  // First load the category index for subcategory images
+  var idxReq=new XMLHttpRequest();
+  idxReq.open('GET','/categories-index.json',true);
+  idxReq.timeout=10000;
+  idxReq.onload=function(){
+    try{
+      if(idxReq.status>=200&&idxReq.status<400){
+        catIndex=JSON.parse(idxReq.responseText);
+        loadProducts();
+      }else{loadProducts()}
+    }catch(e){loadProducts()}
+  };
+  idxReq.onerror=function(){loadProducts()};
+  idxReq.send();
+}
+
+function loadProducts(){
+  var url=catFiles[cat]?'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/data/'+catFiles[cat]:'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/categories-data.json';
   var x=new XMLHttpRequest();x.open('GET',url,true);x.timeout=20000;
   x.onload=function(){
     if(x.status>=200&&x.status<400){
-      var d=JSON.parse(x.responseText);
-      if(catFiles[cat]){all=d.products||[]}else{all=[];for(var k in d)all=all.concat(d[k].products||[])}
+      try{
+        var d=JSON.parse(x.responseText);
+        if(catFiles[cat]){all=d.products||[]}else{all=[];for(var k in d)all=all.concat(d[k].products||[])}
+      }catch(e){all=d.products||[]}
       display=all.slice();buildSubcats();filterSub('')
     }else{document.getElementById('product-grid').innerHTML='<div class="loading-text">Failed to load category</div>'}
   };
   x.onerror=function(){document.getElementById('product-grid').innerHTML='<div class="loading-text">Connection error. Please refresh.</div>'};
-  x.send()
-})();
+  x.send();
+}
+
 function buildSubcats(){
-  var bar=document.getElementById('subcat-bar'),subs={};
-  all.forEach(function(p){var s=p.subcategory||'All';subs[s]=(subs[s]||0)+1});
+  var bar=document.getElementById('subcat-bar'),subs={},subImages={};
+  // Collect subcategory info from catIndex
+  if(catIndex&&catIndex[cat]){
+    var scList=catIndex[cat].subcategories||[];
+    scList.forEach(function(sc){
+      subs[sc.title]=sc.count||0;
+      if(sc.image)subImages[sc.title]=sc.image;
+    });
+  }
+  // Also collect from actual products in case index is stale
+  all.forEach(function(p){
+    var s=p.subcategory||'All';
+    if(!subs[s])subs[s]=0;
+    subs[s]=(subs[s]||0)+1;
+    if(!subImages[s]){
+      subImages[s]=p.image||(p.images||[])[0]||'';
+    }
+  });
+  
   var keys=Object.keys(subs).sort(function(a,b){return subs[b]-subs[a]});
   bar.innerHTML='';
-  var ab=document.createElement('button');ab.className='subcat-chip active';ab.textContent='All ('+display.length+')';ab.onclick=function(){filterSub('')};bar.appendChild(ab);
-  keys.forEach(function(k){var b=document.createElement('button');b.className='subcat-chip';b.textContent=esc(k)+' ('+subs[k]+')';b.onclick=function(){filterSub(k)};bar.appendChild(b)});
+  // All button
+  var ab=document.createElement('button');ab.className='subcat-chip active';
+  ab.innerHTML='<div class="subcat-chip-placeholder">📋</div><div class="subcat-chip-label">All ('+display.length+')</div>';
+  ab.onclick=function(){filterSub('')};bar.appendChild(ab);
+  
+  keys.forEach(function(k){
+    var b=document.createElement('button');b.className='subcat-chip';
+    var img=subImages[k]||'';
+    var ih=img?'<img class="subcat-chip-img" src="'+esc(img)+'" loading="lazy" onerror="this.style.display=\'none\'" alt="">':'<div class="subcat-chip-placeholder">📦</div>';
+    b.innerHTML=ih+'<div class="subcat-chip-label">'+esc(k)+' ('+subs[k]+')</div>';
+    b.onclick=function(){filterSub(k)};bar.appendChild(b);
+  });
   document.getElementById('cat-name').textContent=cat||'All Categories';
-  document.getElementById('cat-title').textContent=cat||'All Categories'
+  document.getElementById('cat-title').textContent=cat||'All Categories';
 }
-function filterSub(s){sub=s;current=1;display=s?all.filter(function(p){return p.subcategory===s}):all.slice();renderPage(1);renderPagination()}
+
+function filterSub(s){sub=s;current=1;display=s?all.filter(function(p){return p.subcategory===s}):all.slice();renderPage(1);renderPagination();highlightActiveChip()}
+function highlightActiveChip(){
+  document.querySelectorAll('.subcat-chip').forEach(function(b,i){
+    b.classList.toggle('active',i===0?!sub:b.querySelector('.subcat-chip-label')&&b.querySelector('.subcat-chip-label').textContent.startsWith(sub+' ('));
+  });
+}
+
 function renderPage(pn){
   var g=document.getElementById('product-grid');g.innerHTML='';
   var start=(pn-1)*pageSize,slice=display.slice(start,start+pageSize);
@@ -83,24 +148,28 @@ function renderPage(pn){
   slice.forEach(function(p){
     var a=document.createElement('a');a.className='product-card fade-in';a.href='product.html?id='+p.id;
     var ci=p.image||(p.images||[])[0]||'';
-    var priceStr=typeof BD!=='undefined'?BD.formatMoneyCompact(p.price||0):'A$'+(p.price||0).toFixed(2);
-    var ih=ci?'<img src="'+esc(ci)+'" loading="lazy" onerror="this.style.display=\'none\'" alt="">':'<span style="font-size:2.5rem;opacity:.15;display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f5f5f5;border-radius:12px">📦</span>';
-    a.innerHTML='<div class="prod-img">'+ih+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+priceStr+'</span></div></div>';
-    g.appendChild(a)
+    var ih=ci?'<img src="'+esc(ci)+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=prod-img-placeholder>📦</div>\'" alt="">':'<div class="prod-img-placeholder">📦</div>';
+    var pc=p.compare_at_price&&p.compare_at_price>p.price?'<span class="prod-compare">'+fmtPrice(p.compare_at_price)+'</span>':'';
+    a.innerHTML='<div class="prod-img">'+ih+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+fmtPrice(p.price)+'</span>'+pc+'</div></div>';
+    g.appendChild(a);
   });
-  window.scrollTo({top:0,behavior:'smooth'})
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+
 function renderPagination(){
   var el=document.getElementById('pagination'),tp=Math.ceil(display.length/pageSize);
   if(tp<=1){el.innerHTML='';return}
   var h='';h+='<button onclick="goPage('+(current-1)+')" '+(current===1?'disabled':'')+'>Prev</button>';
   var s=Math.max(1,current-2),e=Math.min(tp,current+2);
   if(s>1){h+='<button onclick="goPage(1)">1</button>';if(s>2)h+='<span>...</span>'}
-  for(var p=s;p<=e;p++)h+='<button class="'+(p===current?'active':'')+'" onclick="goPage('+p+')">'+p+'</button>'
+  for(var p=s;p<=e;p++)h+='<button class="'+(p===current?'active':'')+'" onclick="goPage('+p+')">'+p+'</button>';
   if(e<tp){if(e<tp-1)h+='<span>...</span>';h+='<button onclick="goPage('+tp+')">'+tp+'</button>'}
-  h+='<button onclick="goPage('+(current+1)+')" '+(current===tp?'disabled':'')+'>Next</button>';el.innerHTML=h
+  h+='<button onclick="goPage('+(current+1)+')" '+(current===tp?'disabled':'')+'>Next</button>';el.innerHTML=h;
 }
+
 function goPage(n){var tp=Math.ceil(display.length/pageSize);if(n<1||n>tp||n===current)return;current=n;renderPage(n);renderPagination()}
+
+loadCategory();
 </script>
 <script>(function(){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
