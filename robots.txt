@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /checkout.html
+Disallow: /cart.html
+
+Sitemap: https://bargain-drop.online/sitemap.xml
