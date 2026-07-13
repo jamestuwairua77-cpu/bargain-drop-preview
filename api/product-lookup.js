@@ -3,7 +3,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-let cachedData = null;
+let cachedData = null; // v2 — supports both idx and index keys
 let cachedIndex = null;
 
 function loadData() {
