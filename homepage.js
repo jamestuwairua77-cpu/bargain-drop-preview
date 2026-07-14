@@ -27,7 +27,7 @@ x.send();
 // Load trending products from CDN (first category)
 (function loadProds(){
 var x=new XMLHttpRequest();
-x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@0356e2c043b0114e2476c4a277aad2757e19ffba/data/home-garden-furniture.json',true);
+x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@f352b5463eb3047f4e1e436f736e62af75adfc06/data/home-garden-furniture.json',true);
 x.timeout=15000;
 x.onload=function(){
   if(x.status>=200&&x.status<400){
