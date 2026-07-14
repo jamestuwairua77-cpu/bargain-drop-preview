@@ -80,7 +80,7 @@ function loadCategory(){
 }
 
 function loadProducts(){
-  var url=catFiles[cat]?'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@0356e2c043b0114e2476c4a277aad2757e19ffba/data/'+catFiles[cat]:'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@0356e2c043b0114e2476c4a277aad2757e19ffba/categories-data.json';
+  var url=catFiles[cat]?'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@f352b5463eb3047f4e1e436f736e62af75adfc06/data/'+catFiles[cat]:'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@f352b5463eb3047f4e1e436f736e62af75adfc06/categories-data.json';
   var x=new XMLHttpRequest();x.open('GET',url,true);x.timeout=20000;
   x.onload=function(){
     if(x.status>=200&&x.status<400){
