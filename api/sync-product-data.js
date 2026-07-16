@@ -1,6 +1,4 @@
-// CJ to Shopify product data sync: Fix SKU matching.
-// Uses CJ product/list?productSku= (NOT queryByVid).
-
+// CJ to Shopify product data sync
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
@@ -38,11 +36,22 @@ export default async function handler(req, res) {
 
   async function cj(path, opts = {}) {
     if (!ct) await cjAuth();
-    const r = await fetch(CB + path, {
-      ...opts,
-      headers: { 'CJ-Access-Token': ct, 'Content-Type': 'application/json', ...(opts.headers || {}) },
-    });
-    return r.json();
+    const url = CB + path;
+    // CJ rate limit: 1 req/sec. Retry on 429 with backoff.
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const r = await fetch(url, {
+        ...opts,
+        headers: { 'CJ-Access-Token': ct, 'Content-Type': 'application/json', ...(opts.headers || {}) },
+      });
+      const j = await r.json();
+      if (j?.code === 1600200) {
+        // Rate limited — wait and retry
+        await sleep(2000 * (attempt + 1));
+        continue;
+      }
+      return j;
+    }
+    return { result: false };
   }
 
   if (req.method === 'GET') {
@@ -51,8 +60,8 @@ export default async function handler(req, res) {
   }
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  const { limit = 50 } = req.body || {};
-  const R = { sc: 0, cj: 0, no: 0, w: 0, s: 0, d: 0, t: 0 };
+  const { limit = 30 } = req.body || {};
+  const R = { sc: 0, cj: 0, no: 0, w: 0, d: 0, t: 0 };
   const start = Date.now();
 
   try {
@@ -85,8 +94,8 @@ export default async function handler(req, res) {
       const sku = (sv?.sku || '').trim();
       if (!sku) { R.no++; continue; }
 
-      // CJ match by productSku
-      await sleep(1100);
+      // CJ match by productSku — with 2s gap for rate limiting
+      await sleep(2000);
       const cl = await cj('/product/list?pageNum=1&pageSize=1&productSku=' + encodeURIComponent(sku));
       const cp = cl?.data?.list?.[0];
       if (!cp) { R.no++; continue; }
@@ -96,16 +105,13 @@ export default async function handler(req, res) {
       const ct = (cp.categoryName || '').trim();
       const cd = (cp.remark || '').replace(/<[^>]+>/g, '').trim();
 
-      // Update weight for each variant (only if grams=0)
       for (const v of vv) {
         if (v.requires_shipping !== false && !v.grams) {
           await sf('/variants/' + v.id + '.json', {
             method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: cw, weight: cw / 1000, weight_unit: 'kg' } }),
-          }); R.w++; await sleep(150);
+          }); R.w++; await sleep(250);
         }
       }
-
-      // Update product description and type
       const pud = {};
       const cb = (p.body_html || '').replace(/<[^>]+>/g, '').trim();
       if (cd && (!cb || cb.length < 20)) { pud.body_html = '<p>' + cd + '</p>'; R.d++; }
@@ -113,7 +119,7 @@ export default async function handler(req, res) {
       if (Object.keys(pud).length) {
         await sf('/products/' + p.id + '.json', {
           method: 'PUT', body: JSON.stringify({ product: { id: p.id, ...pud } }),
-        }); await sleep(150);
+        }); await sleep(250);
       }
     }
 
