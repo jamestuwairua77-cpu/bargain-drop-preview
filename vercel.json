@@ -10,6 +10,7 @@
     "api/search-products.js": { "memory": 512, "maxDuration": 30 },
     "api/shopify-order.js": { "memory": 256, "maxDuration": 30 },
     "api/sync-products.js": { "memory": 256, "maxDuration": 30 },
+    "api/sync-product-data.js": { "memory": 512, "maxDuration": 60 },
     "api/setup-shopify.js": { "memory": 128, "maxDuration": 10 },
     "api/shopify-webhook.js": { "memory": 256, "maxDuration": 30 },
     "api/sync-inventory.js": { "memory": 512, "maxDuration": 60 },
@@ -181,7 +182,7 @@
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
         { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+       { "key": "Expires", "value": "0" }
       ]
     },
     {
@@ -197,7 +198,7 @@
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
         { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+       { "key": "Expires", "value": "0" }
       ]
     },
     {
