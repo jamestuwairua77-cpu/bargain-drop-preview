@@ -53,11 +53,11 @@
 <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
 <script>
-function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function fmtPrice(p){return typeof BD!=='undefined'?BD.formatMoneyCompact(p||0):'A$'+(p||0).toFixed(2)}
+function esc(t){return(t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function fmtPrice(p){return typeof BD!=="undefined"?BD.formatMoneyCompact(p||0):"A$"+(p||0).toFixed(2)}
 
-var all=[],display=[],pageSize=50,current=1,cat='',sub='',catIndex=null;
-var p=new URLSearchParams(location.search);cat=p.get('cat')||'';
+var all=[],display=[],pageSize=50,current=1,cat="",sub="",catIndex=null;
+var p=new URLSearchParams(location.search);cat=p.get("cat")||"";
 
 // Category name -> data file mapping
 var catFiles={"Home, Garden & Furniture":"home-garden-furniture.json","Jewelry & Watches":"jewelry-watches.json","Health, Beauty & Hair":"health-beauty-hair.json","Consumer Electronics":"consumer-electronics.json","Automobiles & Motorcycles":"automobiles-motorcycles.json","Home Improvement":"home-improvement.json","Sports & Outdoors":"sports-outdoors.json","Pet Supplies":"pet-supplies.json","Women's Clothing":"womens-clothing.json","Toys, Kids & Babies":"toys-kids-babies.json","Bags & Shoes":"bags-shoes.json","Phones & Accessories":"phones-accessories.json","Men's Clothing":"mens-clothing.json","Other":"other.json"};
@@ -65,7 +65,7 @@ var catFiles={"Home, Garden & Furniture":"home-garden-furniture.json","Jewelry &
 function loadCategory(){
   // First load the category index for subcategory images
   var idxReq=new XMLHttpRequest();
-  idxReq.open('GET','/categories-index.json',true);
+  idxReq.open("GET","/categories-index.json",true);
   idxReq.timeout=10000;
   idxReq.onload=function(){
     try{
@@ -80,23 +80,23 @@ function loadCategory(){
 }
 
 function loadProducts(){
-  var url=catFiles[cat]?'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@312d8650f66b8587f14173ab7ab23c4fb0c4f9b6/data/'+catFiles[cat]:'https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@312d8650f66b8587f14173ab7ab23c4fb0c4f9b6/categories-data.json';
-  var x=new XMLHttpRequest();x.open('GET',url,true);x.timeout=20000;
+  var url=catFiles[cat]?"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@312d8650f66b8587f14173ab7ab23c4fb0c4f9b6/data/"+catFiles[cat]:"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@312d8650f66b8587f14173ab7ab23c4fb0c4f9b6/categories-data.json";
+  var x=new XMLHttpRequest();x.open("GET",url,true);x.timeout=20000;
   x.onload=function(){
     if(x.status>=200&&x.status<400){
       try{
         var d=JSON.parse(x.responseText);
         if(catFiles[cat]){all=d.products||[]}else{all=[];for(var k in d)all=all.concat(d[k].products||[])}
       }catch(e){all=d.products||[]}
-      display=all.slice();buildSubcats();filterSub('')
-    }else{document.getElementById('product-grid').innerHTML='<div class="loading-text">Failed to load category</div>'}
+      display=all.slice();buildSubcats();filterSub("")
+    }else{document.getElementById("product-grid").innerHTML="<div class=\"loading-text\">Failed to load category</div>"}
   };
-  x.onerror=function(){document.getElementById('product-grid').innerHTML='<div class="loading-text">Connection error. Please refresh.</div>'};
+  x.onerror=function(){document.getElementById("product-grid").innerHTML="<div class=\"loading-text\">Connection error. Please refresh.</div>"};
   x.send();
 }
 
 function buildSubcats(){
-  var bar=document.getElementById('subcat-bar'),subs={},subImages={};
+  var bar=document.getElementById("subcat-bar"),subs={},subImages={};
   // Collect subcategory info from catIndex
   if(catIndex&&catIndex[cat]){
     var scList=catIndex[cat].subcategories||[];
@@ -107,64 +107,66 @@ function buildSubcats(){
   }
   // Also collect from actual products in case index is stale
   all.forEach(function(p){
-    var s=p.subcategory||'All';
+    var s=p.subcategory||"All";
     if(!subs[s])subs[s]=0;
     subs[s]=(subs[s]||0)+1;
     if(!subImages[s]){
-      subImages[s]=p.image||(p.images||[])[0]||'';
+      var rawImg = p.image || (p.images || [])[0] || "";
+      subImages[s] = typeof rawImg === "object" ? (rawImg.src || "") : rawImg;
     }
   });
   
   var keys=Object.keys(subs).sort(function(a,b){return subs[b]-subs[a]});
-  bar.innerHTML='';
+  bar.innerHTML="";
   // All button
-  var ab=document.createElement('button');ab.className='subcat-chip active';
-  ab.innerHTML='<div class="subcat-chip-placeholder">📋</div><div class="subcat-chip-label">All ('+display.length+')</div>';
-  ab.onclick=function(){filterSub('')};bar.appendChild(ab);
+  var ab=document.createElement("button");ab.className="subcat-chip active";
+  ab.innerHTML="<div class=\"subcat-chip-placeholder\">📋</div><div class=\"subcat-chip-label\">All ("+display.length+")</div>";
+  ab.onclick=function(){filterSub("")};bar.appendChild(ab);
   
   keys.forEach(function(k){
-    var b=document.createElement('button');b.className='subcat-chip';
-    var img=subImages[k]||'';
-    var ih=img?'<img class="subcat-chip-img" src="'+esc(img)+'" loading="lazy" onerror="this.style.display=\'none\'" alt="">':'<div class="subcat-chip-placeholder">📦</div>';
-    b.innerHTML=ih+'<div class="subcat-chip-label">'+esc(k)+' ('+subs[k]+')</div>';
+    var b=document.createElement("button");b.className="subcat-chip";
+    var img=subImages[k]||"";
+    var ih=img?"<img class=\"subcat-chip-img\" src=\""+esc(img)+"\" loading=\"lazy\" onerror=\"this.style.display='none'\" alt=\"\">":"<div class=\"subcat-chip-placeholder\">📦</div>";
+    b.innerHTML=ih+"<div class=\"subcat-chip-label\">"+esc(k)+" ("+subs[k]+")</div>";
     b.onclick=function(){filterSub(k)};bar.appendChild(b);
   });
-  document.getElementById('cat-name').textContent=cat||'All Categories';
-  document.getElementById('cat-title').textContent=cat||'All Categories';
+  document.getElementById("cat-name").textContent=cat||"All Categories";
+  document.getElementById("cat-title").textContent=cat||"All Categories";
 }
 
 function filterSub(s){sub=s;current=1;display=s?all.filter(function(p){return p.subcategory===s}):all.slice();renderPage(1);renderPagination();highlightActiveChip()}
 function highlightActiveChip(){
-  document.querySelectorAll('.subcat-chip').forEach(function(b,i){
-    b.classList.toggle('active',i===0?!sub:b.querySelector('.subcat-chip-label')&&b.querySelector('.subcat-chip-label').textContent.startsWith(sub+' ('));
+  document.querySelectorAll(".subcat-chip").forEach(function(b,i){
+    b.classList.toggle("active",i===0?!sub:b.querySelector(".subcat-chip-label")&&b.querySelector(".subcat-chip-label").textContent.startsWith(sub+" ("));
   });
 }
 
 function renderPage(pn){
-  var g=document.getElementById('product-grid');g.innerHTML='';
+  var g=document.getElementById("product-grid");g.innerHTML="";
   var start=(pn-1)*pageSize,slice=display.slice(start,start+pageSize);
-  document.getElementById('result-count').textContent=display.length.toLocaleString()+' products';
-  if(!slice.length){g.innerHTML='<div class="loading-text">No products found.</div>';return}
+  document.getElementById("result-count").textContent=display.length.toLocaleString()+" products";
+  if(!slice.length){g.innerHTML="<div class=\"loading-text\">No products found.</div>";return}
   slice.forEach(function(p){
-    var a=document.createElement('a');a.className='product-card fade-in';a.href='product.html?id='+p.id;
-    var ci=p.image||(p.images||[])[0]||'';
-    var ih=ci?'<img src="'+esc(ci)+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=prod-img-placeholder>📦</div>\'" alt="">':'<div class="prod-img-placeholder">📦</div>';
-    var pc=p.compare_at_price&&p.compare_at_price>p.price?'<span class="prod-compare">'+fmtPrice(p.compare_at_price)+'</span>':'';
-    a.innerHTML='<div class="prod-img">'+ih+'</div><div class="prod-info"><div class="prod-title">'+esc(p.title)+'</div><div class="prod-price-row"><span class="prod-price">'+fmtPrice(p.price)+'</span>'+pc+'</div></div>';
+    var a=document.createElement("a");a.className="product-card fade-in";a.href="product.html?id="+p.id;
+    var rawImg = p.image || (p.images || [])[0] || "";
+    var ci = typeof rawImg === "object" ? (rawImg.src || "") : rawImg;
+    var ih=ci?"<img src=\""+esc(ci)+"\" loading=\"lazy\" onerror=\"this.parentElement.innerHTML='<div class=prod-img-placeholder>📦</div>'\" alt=\"\">":"<div class=\"prod-img-placeholder\">📦</div>";
+    var pc=p.compare_at_price&&p.compare_at_price>p.price?"<span class=\"prod-compare\">"+fmtPrice(p.compare_at_price)+"</span>":"";
+    a.innerHTML="<div class=\"prod-img\">"+ih+"</div><div class=\"prod-info\"><div class=\"prod-title\">"+esc(p.title)+"</div><div class=\"prod-price-row\"><span class=\"prod-price\">"+fmtPrice(p.price)+"</span>"+pc+"</div></div>";
     g.appendChild(a);
   });
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function renderPagination(){
-  var el=document.getElementById('pagination'),tp=Math.ceil(display.length/pageSize);
-  if(tp<=1){el.innerHTML='';return}
-  var h='';h+='<button onclick="goPage('+(current-1)+')" '+(current===1?'disabled':'')+'>Prev</button>';
+  var el=document.getElementById("pagination"),tp=Math.ceil(display.length/pageSize);
+  if(tp<=1){el.innerHTML="";return}
+  var h="";h+="<button onclick=\"goPage("+(current-1)+")\" "+(current===1?"disabled":"")+">Prev</button>";
   var s=Math.max(1,current-2),e=Math.min(tp,current+2);
-  if(s>1){h+='<button onclick="goPage(1)">1</button>';if(s>2)h+='<span>...</span>'}
-  for(var p=s;p<=e;p++)h+='<button class="'+(p===current?'active':'')+'" onclick="goPage('+p+')">'+p+'</button>';
-  if(e<tp){if(e<tp-1)h+='<span>...</span>';h+='<button onclick="goPage('+tp+')">'+tp+'</button>'}
-  h+='<button onclick="goPage('+(current+1)+')" '+(current===tp?'disabled':'')+'>Next</button>';el.innerHTML=h;
+  if(s>1){h+="<button onclick=\"goPage(1)\">1</button>";if(s>2)h+="<span>...</span>"}
+  for(var p=s;p<=e;p++)h+="<button class=\""+(p===current?"active":"")+"\" onclick=\"goPage("+p+")\">"+p+"</button>";
+  if(e<tp){if(e<tp-1)h+="<span>...</span>";h+="<button onclick=\"goPage("+tp+")\">"+tp+"</button>"}
+  h+="<button onclick=\"goPage("+(current+1)+")\" "+(current===tp?"disabled":"")+">Next</button>";el.innerHTML=h;
 }
 
 function goPage(n){var tp=Math.ceil(display.length/pageSize);if(n<1||n>tp||n===current)return;current=n;renderPage(n);renderPagination()}
