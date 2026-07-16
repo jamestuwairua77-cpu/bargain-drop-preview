@@ -1,52 +1,47 @@
-// Full CJ → Shopify product data sync: stock, weight, description, SKU, product type.
-// NO EXTERNAL IMPORTS - fully self-contained for Vercel.
+// CJ → Shopify product data sync: weight, stock, description, SKU, type.
+// POST { action: "cycle", limit?: N } — fetches N products, queries CJ, writes Shopify.
+// Uses the CJ product/list?productSku= endpoint (NOT queryByVid — different ID space).
 
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // --- CONFIG ---
-  const DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
-  const TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || process.env.SHOPIFY_TOKEN || '';
-  const CJKEY = process.env.CJ_ACCESS_TOKEN || '';
-  const API = `https://${DOMAIN}/admin/api/2024-10`;
+  const SHOPIFY_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || '';
+  const CJ_API_KEY    = process.env.CJ_ACCESS_TOKEN     || '';
+  const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN     || 'bargain-drop-8194.myshopify.com';
+  const SHOPIFY_API = `https://${SHOPIFY_DOMAIN}/admin/api/2024-10`;
 
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-  // --- SHOPIFY FETCH ---
   async function sf(path, opts = {}) {
-    if (!TOKEN) throw new Error('SHOPIFY_ACCESS_TOKEN missing');
-    const r = await fetch(API + path, {
+    if (!SHOPIFY_TOKEN) throw new Error('SHOPIFY_ACCESS_TOKEN missing');
+    const r = await fetch(SHOPIFY_API + path, {
       ...opts,
-      headers: {'X-Shopify-Access-Token': TOKEN, 'Content-Type': 'application/json', ...(opts.headers || {})},
+      headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN, 'Content-Type': 'application/json', ...(opts.headers || {}) },
     });
     const t = await r.text();
     let b; try { b = JSON.parse(t); } catch { b = { raw: t }; }
     return { ok: r.ok, status: r.status, body: b };
   }
 
-  // --- CJ AUTH ---
-  let _tok = null;
   async function cjAuth() {
-    if (!CJKEY) throw new Error('CJ_ACCESS_TOKEN missing');
+    if (!CJ_API_KEY) throw new Error('CJ_ACCESS_TOKEN missing');
     const r = await fetch('https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ apiKey: CJKEY }),
+      body: JSON.stringify({ apiKey: CJ_API_KEY }),
     });
     const j = await r.json();
     const tok = j?.data?.accessToken;
     if (!tok) throw new Error('CJ auth failed: ' + (j?.message || ''));
-    _tok = tok;
     return tok;
   }
 
-  // --- CJ FETCH ---
+  let _tok = null;
   async function cj(path, opts = {}) {
-    if (!_tok) await cjAuth();
+    if (!_tok) _tok = await cjAuth();
     const r = await fetch('https://developers.cjdropshipping.com/api2.0/v1' + path, {
       ...opts,
       headers: { 'CJ-Access-Token': _tok, 'Content-Type': 'application/json', ...(opts.headers || {}) },
@@ -54,125 +49,125 @@ export default async function handler(req, res) {
     return r.json();
   }
 
-  // --- GET ---
+  // GET — status check
   if (req.method === 'GET') {
-    try {
-      await cjAuth();
-      return res.status(200).json({ configured: true, hint: 'POST { action: "cycle", limit?: 50 }' });
-    } catch (e) {
-      return res.status(200).json({ configured: false, error: e.message });
-    }
+    try { await cjAuth(); return res.status(200).json({ configured: true, hint: 'POST { action: "cycle", limit?: 50 }' }); }
+    catch (e) { return res.status(200).json({ configured: false, error: e.message }); }
   }
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  // --- POST ---
   const { action, limit = 50 } = req.body || {};
-  const R = { sc: 0, ok: 0, noCJ: 0, w: 0, s: 0, d: 0, sk: 0, t: 0, err: [] };
+  const results = { scanned: 0, matched_cj: 0, missing_cj: 0, weight: 0, stock: 0, desc: 0, sku: 0, type: 0, errors: [] };
   const start = Date.now();
 
   try {
-    // Location
-    const lr = await sf('/locations.json');
-    const locId = lr.body?.locations?.[0]?.id;
+    // Resolve location
+    const locR = await sf('/locations.json');
+    const locId = locR.body?.locations?.[0]?.id;
     if (!locId) throw new Error('No location');
 
-    // Fetch products needing data
-    let sid = 0, prods = [];
-    while (prods.length < limit) {
-      const ps = Math.min(250, limit - prods.length);
-      const r = await sf(`/products.json?limit=${ps}&since_id=${sid}&fields=id,title,status,variants,body_html,product_type&status=active`);
+    // Fetch products needing data — cycle through active products with issues
+    let sinceId = 0, products = [];
+    while (products.length < limit) {
+      const ps = Math.min(250, limit - products.length);
+      const r = await sf(`/products.json?limit=${ps}&since_id=${sinceId}&fields=id,title,status,variants,body_html,product_type&status=active`);
       const batch = r.body?.products || [];
       if (!batch.length) break;
-      sid = batch[batch.length - 1].id;
+      sinceId = batch[batch.length - 1].id;
       for (const p of batch) {
         const body = (p.body_html || '').replace(/<[^>]+>/g, '').trim();
-        const nd = !body || body.length < 30;
-        const nt = !(p.product_type || '').trim();
-        const vv = p.variants || [];
-        const ns = vv.some(v => !(v.sku || '').trim());
-        const nw = vv.some(v => v.requires_shipping !== false && !v.grams);
-        if (nd || nt || ns || nw) {
-          prods.push(p);
-          if (prods.length >= limit) break;
+        const needsDesc = !body || body.length < 30;
+        const needsType = !(p.product_type || '').trim();
+        const vars = p.variants || [];
+        const needsSku = vars.some(v => !(v.sku || '').trim());
+        const needsWeight = vars.some(v => v.requires_shipping !== false && !v.grams);
+        if (needsDesc || needsType || needsSku || needsWeight) {
+          products.push(p);
+          if (products.length >= limit) break;
         }
       }
     }
 
-    for (const p of prods) {
-      R.sc++;
-      const vv = p.variants || [];
-      const skuV = vv.find(v => (v.sku || '').trim()) || vv[0];
-      const sku = (skuV?.sku || '').trim();
-      if (!sku) { R.noCJ++; continue; }
+    for (const p of products) {
+      results.scanned++;
+      const variants = p.variants || [];
+      const skuVar = variants.find(v => (v.sku || '').trim()) || variants[0];
+      const sku = (skuVar?.sku || '').trim();
+      if (!sku) { results.missing_cj++; continue; }
 
-      // CJ lookup
-      const stk = await cj(`/product/stock/queryByVid?vid=${encodeURIComponent(sku)}`, { method: 'GET' });
-      const stkD = stk?.data?.[0] || stk?.data;
-      if (!stkD) { R.noCJ++; continue; }
-      R.ok++;
+      // CJ lookup by productSku (NOT queryByVid — different ID space)
+      await sleep(1000); // CJ rate limit: 1 req/sec
+      const cjList = await cj(`/product/list?pageNum=1&pageSize=1&productSku=${encodeURIComponent(sku)}`);
+      const cjProd = cjList?.data?.list?.[0];
+      if (!cjProd) { results.missing_cj++; continue; }
+      results.matched_cj++;
 
-      let det = null;
-      if (stkD.pid) {
-        const d = await cj(`/product/queryByPid?pid=${encodeURIComponent(stkD.pid)}`, { method: 'GET' });
-        det = d?.data;
+      const cjWeight = Number(cjProd.productWeight) || 500;
+      const cjType = (cjProd.categoryName || '').trim();
+      const cjDesc = (cjProd.remark || '').replace(/<[^>]+>/g, '').trim();
+      const cjSku = cjProd.productSku;
+      const cjPid = cjProd.pid;
+
+      // Get stock via product stock endpoint
+      let cjStock = null;
+      await sleep(500);
+      if (cjPid) {
+        try {
+          const stockR = await cj(`/product/stock/queryByVid?vid=${encodeURIComponent(cjPid)}`);
+          cjStock = stockR?.data?.[0] || stockR?.data;
+        } catch {}
       }
 
-      const cjD = (det?.description || det?.enDescription || '').trim();
-      const cjT = (det?.categoryName || det?.productType || '').trim();
-      const cjW = det?.weight || stkD?.weight || 500;
-
-      // Variant updates
-      for (const v of vv) {
-        // Stock
-        if (v.inventory_item_id && stkD.stockNum != null) {
-          await sf('/inventory_levels/set.json', {
-            method: 'POST',
-            body: JSON.stringify({ location_id: locId, inventory_item_id: v.inventory_item_id, available: Math.max(0, Math.min(9999, Number(stkD.stockNum))) }),
-          });
-          R.s++;
-          await sleep(200);
-        }
-        // Weight
+      // Update variants: weight, SKU, stock
+      for (const v of variants) {
         if (v.requires_shipping !== false && !v.grams) {
           await sf(`/variants/${v.id}.json`, {
-            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: Number(cjW), weight: Number(cjW) / 1000, weight_unit: 'kg' } }),
+            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: cjWeight, weight: cjWeight / 1000, weight_unit: 'kg' } }),
           });
-          R.w++;
+          results.weight++;
           await sleep(150);
         }
-        // SKU
-        if (!(v.sku || '').trim() && stkD.vid) {
+        if (!(v.sku || '').trim() && cjSku) {
           await sf(`/variants/${v.id}.json`, {
-            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, sku: String(stkD.vid) } }),
+            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, sku: cjSku } }),
           });
-          R.sk++;
+          results.sku++;
           await sleep(150);
+        }
+        if (v.inventory_item_id && cjStock?.stockNum != null) {
+          const qty = Math.max(0, Math.min(9999, Number(cjStock.stockNum)));
+          await sf('/inventory_levels/set.json', {
+            method: 'POST', body: JSON.stringify({ location_id: locId, inventory_item_id: v.inventory_item_id, available: qty }),
+          });
+          results.stock++;
+          await sleep(250);
         }
       }
 
-      // Product level
-      if (cjD && !(p.body_html || '').trim()) {
+      // Product-level: description, type
+      const pUpd = {};
+      const curBody = (p.body_html || '').replace(/<[^>]+>/g, '').trim();
+      if (cjDesc && (!curBody || curBody.length < 30)) {
+        pUpd.body_html = `<p>${cjDesc}</p>`;
+        results.desc++;
+      }
+      if (cjType && !(p.product_type || '').trim()) {
+        pUpd.product_type = cjType;
+        results.type++;
+      }
+      if (Object.keys(pUpd).length) {
         await sf(`/products/${p.id}.json`, {
-          method: 'PUT', body: JSON.stringify({ product: { id: p.id, body_html: `<p>${cjD}</p>` } }),
+          method: 'PUT', body: JSON.stringify({ product: { id: p.id, ...pUpd } }),
         });
-        R.d++;
         await sleep(150);
       }
-      if (cjT && !(p.product_type || '').trim()) {
-        await sf(`/products/${p.id}.json`, {
-          method: 'PUT', body: JSON.stringify({ product: { id: p.id, product_type: cjT } }),
-        });
-        R.t++;
-        await sleep(150);
-      }
-
-      await sleep(80);
+      await sleep(500);
     }
 
-    const sec = ((Date.now() - start) / 1000).toFixed(1);
-    res.status(200).json({ success: true, results: R, elapsed_sec: sec });
+    const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+    res.status(200).json({ success: true, results, elapsed_sec: elapsed });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message, results: R });
+    res.status(500).json({ success: false, error: e.message, results });
   }
 }
