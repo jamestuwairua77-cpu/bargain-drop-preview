@@ -1,5 +1,6 @@
-// CJ → Shopify product data sync: weight, stock, description, SKU, product type.
-// POST { action: "cycle", limit?: N } — fetches N products needing fixes, queries CJ, writes to Shopify.
+// CJ → Shopify product data sync: weight, stock, description, SKU, type.
+// POST { action: "cycle", limit?: N } — fetches N products, queries CJ, writes Shopify.
+// Uses the CJ product/list?productSku= endpoint (NOT queryByVid — different ID space).
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -7,10 +8,9 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // ─── Inline CJ + Shopify helpers ───
   const SHOPIFY_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || '';
-  const CJ_API_KEY = process.env.CJ_ACCESS_TOKEN || '';
-  const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
+  const CJ_API_KEY    = process.env.CJ_ACCESS_TOKEN     || '';
+  const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN     || 'bargain-drop-8194.myshopify.com';
   const SHOPIFY_API = `https://${SHOPIFY_DOMAIN}/admin/api/2024-10`;
 
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -49,14 +49,10 @@ export default async function handler(req, res) {
     return r.json();
   }
 
-  // ─── GET: status check ───
+  // GET — status check
   if (req.method === 'GET') {
-    try {
-      await cjAuth();
-      return res.status(200).json({ configured: true, hint: 'POST { action: "cycle", limit?: 50 }' });
-    } catch (e) {
-      return res.status(200).json({ configured: false, error: e.message });
-    }
+    try { await cjAuth(); return res.status(200).json({ configured: true, hint: 'POST { action: "cycle", limit?: 50 }' }); }
+    catch (e) { return res.status(200).json({ configured: false, error: e.message }); }
   }
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -100,43 +96,47 @@ export default async function handler(req, res) {
       const sku = (skuVar?.sku || '').trim();
       if (!sku) { results.missing_cj++; continue; }
 
-      // CJ lookup
-      const stk = await cj(`/product/stock/queryByVid?vid=${encodeURIComponent(sku)}`, { method: 'GET' });
-      const stkData = stk?.data?[0] || stk?.data;
-      if (!stkData) { results.missing_cj++; continue; }
+      // CJ lookup by productSku (NOT queryByVid — different ID space)
+      await sleep(1000); // CJ rate limit: 1 req/sec
+      const cjList = await cj(`/product/list?pageNum=1&pageSize=1&productSku=${encodeURIComponent(sku)}`);
+      const cjProd = cjList?.data?.list?.[0];
+      if (!cjProd) { results.missing_cj++; continue; }
       results.matched_cj++;
 
-      let detail = null;
-      if (stkData.pid) {
-        const d = await cj(`/product/queryByPid?pid=${encodeURIComponent(stkData.pid)}`, { method: 'GET' });
-        detail = d?.data;
-      }
+      const cjWeight = Number(cjProd.productWeight) || 500;
+      const cjType = (cjProd.categoryName || '').trim();
+      const cjDesc = (cjProd.remark || '').replace(/<[^>]+>/g, '').trim();
+      const cjSku = cjProd.productSku;
+      const cjPid = cjProd.pid;
 
-      const cjDesc = (detail?.description || detail?.enDescription || '').trim();
-      const cjType = (detail?.categoryName || detail?.productType || '').trim();
-      const cjWeight = detail?.weight || stkData?.weight || 500;
+      // Get stock via product stock endpoint
+      let cjStock = null;
+      await sleep(500);
+      if (cjPid) {
+        try {
+          const stockR = await cj(`/product/stock/queryByVid?vid=${encodeURIComponent(cjPid)}`);
+          cjStock = stockR?.data?.[0] || stockR?.data;
+        } catch {}
+      }
 
       // Update variants: weight, SKU, stock
       for (const v of variants) {
-        // Weight
         if (v.requires_shipping !== false && !v.grams) {
           await sf(`/variants/${v.id}.json`, {
-            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: Number(cjWeight), weight: Number(cjWeight) / 1000, weight_unit: 'kg' } }),
+            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: cjWeight, weight: cjWeight / 1000, weight_unit: 'kg' } }),
           });
           results.weight++;
           await sleep(150);
         }
-        // SKU
-        if (!(v.sku || '').trim() && stkData.vid) {
+        if (!(v.sku || '').trim() && cjSku) {
           await sf(`/variants/${v.id}.json`, {
-            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, sku: String(stkData.vid) } }),
+            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, sku: cjSku } }),
           });
           results.sku++;
           await sleep(150);
         }
-        // Stock
-        if (v.inventory_item_id && stkData.stockNum != null) {
-          const qty = Math.max(0, Math.min(9999, Number(stkData.stockNum)));
+        if (v.inventory_item_id && cjStock?.stockNum != null) {
+          const qty = Math.max(0, Math.min(9999, Number(cjStock.stockNum)));
           await sf('/inventory_levels/set.json', {
             method: 'POST', body: JSON.stringify({ location_id: locId, inventory_item_id: v.inventory_item_id, available: qty }),
           });
@@ -145,28 +145,29 @@ export default async function handler(req, res) {
         }
       }
 
-      // Product-level: description, product_type
-      if (cjDesc && !(p.body_html || '').trim()) {
-        await sf(`/products/${p.id}.json`, {
-          method: 'PUT', body: JSON.stringify({ product: { id: p.id, body_html: `<p>${cjDesc}</p>` } }),
-        });
+      // Product-level: description, type
+      const pUpd = {};
+      const curBody = (p.body_html || '').replace(/<[^>]+>/g, '').trim();
+      if (cjDesc && (!curBody || curBody.length < 30)) {
+        pUpd.body_html = `<p>${cjDesc}</p>`;
         results.desc++;
-        await sleep(150);
       }
       if (cjType && !(p.product_type || '').trim()) {
-        await sf(`/products/${p.id}.json`, {
-          method: 'PUT', body: JSON.stringify({ product: { id: p.id, product_type: cjType } }),
-        });
+        pUpd.product_type = cjType;
         results.type++;
+      }
+      if (Object.keys(pUpd).length) {
+        await sf(`/products/${p.id}.json`, {
+          method: 'PUT', body: JSON.stringify({ product: { id: p.id, ...pUpd } }),
+        });
         await sleep(150);
       }
-
-      await sleep(50);
+      await sleep(500);
     }
 
-    const sec = ((Date.now() - start) / 1000).toFixed(1);
-    return res.status(200).json({ success: true, results, elapsed_sec: sec });
+    const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+    res.status(200).json({ success: true, results, elapsed_sec: elapsed });
   } catch (e) {
-    return res.status(500).json({ success: false, error: e.message, results });
+    res.status(500).json({ success: false, error: e.message, results });
   }
 }
