@@ -1,6 +1,5 @@
-// CJ → Shopify product data sync: weight, stock, description, SKU, type.
-// POST { action: "cycle", limit?: N } — fetches N products, queries CJ, writes Shopify.
-// Uses the CJ product/list?productSku= endpoint (NOT queryByVid — different ID space).
+// CJ → Shopify product data sync: stock, weight, description, SKU, type.
+// Uses CJ product/list?productSku= for matching (NOT queryByVid — different ID space).
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,166 +7,140 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const SHOPIFY_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || '';
-  const CJ_API_KEY    = process.env.CJ_ACCESS_TOKEN     || '';
-  const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN     || 'bargain-drop-8194.myshopify.com';
-  const SHOPIFY_API = `https://${SHOPIFY_DOMAIN}/admin/api/2024-10`;
-
+  const DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
+  const TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || process.env.SHOPIFY_TOKEN || '';
+  const CJKEY = process.env.CJ_ACCESS_TOKEN || '';
+  const API = `https://${DOMAIN}/admin/api/2024-10`;
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   async function sf(path, opts = {}) {
-    if (!SHOPIFY_TOKEN) throw new Error('SHOPIFY_ACCESS_TOKEN missing');
-    const r = await fetch(SHOPIFY_API + path, {
+    if (!TOKEN) throw new Error('SHOPIFY_ACCESS_TOKEN missing');
+    const r = await fetch(API + path, {
       ...opts,
-      headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN, 'Content-Type': 'application/json', ...(opts.headers || {}) },
+      headers: {'X-Shopify-Access-Token': TOKEN, 'Content-Type': 'application/json', ...(opts.headers || {})}
     });
     const t = await r.text();
     let b; try { b = JSON.parse(t); } catch { b = { raw: t }; }
     return { ok: r.ok, status: r.status, body: b };
   }
 
+  let _tok = null;
   async function cjAuth() {
-    if (!CJ_API_KEY) throw new Error('CJ_ACCESS_TOKEN missing');
+    if (!CJKEY) throw new Error('CJ_ACCESS_TOKEN missing');
     const r = await fetch('https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ apiKey: CJ_API_KEY }),
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey: CJKEY }),
     });
     const j = await r.json();
     const tok = j?.data?.accessToken;
     if (!tok) throw new Error('CJ auth failed: ' + (j?.message || ''));
-    return tok;
+    _tok = tok; return tok;
   }
 
-  let _tok = null;
   async function cj(path, opts = {}) {
-    if (!_tok) _tok = await cjAuth();
+    if (!_tok) await cjAuth();
     const r = await fetch('https://developers.cjdropshipping.com/api2.0/v1' + path, {
       ...opts,
-      headers: { 'CJ-Access-Token': _tok, 'Content-Type': 'application/json', ...(opts.headers || {}) },
+      headers: { 'CJ-Access-Token': _tok, 'Content-Type': 'application/json', ...(opts.headers || {}) }
     });
     return r.json();
   }
 
-  // GET — status check
   if (req.method === 'GET') {
     try { await cjAuth(); return res.status(200).json({ configured: true, hint: 'POST { action: "cycle", limit?: 50 }' }); }
     catch (e) { return res.status(200).json({ configured: false, error: e.message }); }
   }
-
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
   const { action, limit = 50 } = req.body || {};
-  const results = { scanned: 0, matched_cj: 0, missing_cj: 0, weight: 0, stock: 0, desc: 0, sku: 0, type: 0, errors: [] };
+  const R = { sc: 0, ok: 0, noCJ: 0, w: 0, s: 0, d: 0, sk: 0, t: 0, err: [] };
   const start = Date.now();
 
   try {
-    // Resolve location
-    const locR = await sf('/locations.json');
-    const locId = locR.body?.locations?.[0]?.id;
+    const lr = await sf('/locations.json');
+    const locId = lr.body?.locations?.[0]?.id;
     if (!locId) throw new Error('No location');
 
-    // Fetch products needing data — cycle through active products with issues
-    let sinceId = 0, products = [];
-    while (products.length < limit) {
-      const ps = Math.min(250, limit - products.length);
-      const r = await sf(`/products.json?limit=${ps}&since_id=${sinceId}&fields=id,title,status,variants,body_html,product_type&status=active`);
+    let sid = 0, prods = [];
+    while (prods.length < limit) {
+      const ps = Math.min(250, limit - prods.length);
+      const r = await sf(`/products.json?limit=${ps}&since_id=${sid}&fields=id,title,status,variants,body_html,product_type&status=active`);
       const batch = r.body?.products || [];
       if (!batch.length) break;
-      sinceId = batch[batch.length - 1].id;
+      sid = batch[batch.length - 1].id;
       for (const p of batch) {
         const body = (p.body_html || '').replace(/<[^>]+>/g, '').trim();
-        const needsDesc = !body || body.length < 30;
-        const needsType = !(p.product_type || '').trim();
-        const vars = p.variants || [];
-        const needsSku = vars.some(v => !(v.sku || '').trim());
-        const needsWeight = vars.some(v => v.requires_shipping !== false && !v.grams);
-        if (needsDesc || needsType || needsSku || needsWeight) {
-          products.push(p);
-          if (products.length >= limit) break;
-        }
+        const nd = !body || body.length < 30;
+        const nt = !(p.product_type || '').trim();
+        const vv = p.variants || [];
+        const ns = vv.some(v => !(v.sku || '').trim());
+        const nw = vv.some(v => v.requires_shipping !== false && !v.grams);
+        if (nd || nt || ns || nw) { prods.push(p); if (prods.length >= limit) break; }
       }
     }
 
-    for (const p of products) {
-      results.scanned++;
-      const variants = p.variants || [];
-      const skuVar = variants.find(v => (v.sku || '').trim()) || variants[0];
-      const sku = (skuVar?.sku || '').trim();
-      if (!sku) { results.missing_cj++; continue; }
+    for (const p of prods) {
+      R.sc++;
+      const vv = p.variants || [];
+      const skuV = vv.find(v => (v.sku || '').trim()) || vv[0];
+      const sku = (skuV?.sku || '').trim();
+      if (!sku) { R.noCJ++; continue; }
 
-      // CJ lookup by productSku (NOT queryByVid — different ID space)
-      await sleep(1000); // CJ rate limit: 1 req/sec
+      // CJ lookup ─ use productSku search (recognizes Shopify SKU format)
+      await sleep(1000);
       const cjList = await cj(`/product/list?pageNum=1&pageSize=1&productSku=${encodeURIComponent(sku)}`);
       const cjProd = cjList?.data?.list?.[0];
-      if (!cjProd) { results.missing_cj++; continue; }
-      results.matched_cj++;
+      if (!cjProd) { R.noCJ++; continue; }
+      R.ok++;
 
-      const cjWeight = Number(cjProd.productWeight) || 500;
-      const cjType = (cjProd.categoryName || '').trim();
-      const cjDesc = (cjProd.remark || '').replace(/<[^>]+>/g, '').trim();
-      const cjSku = cjProd.productSku;
-      const cjPid = cjProd.pid;
+      const cjW = Number(cjProd.productWeight) || 500;
+      const cjT = (cjProd.categoryName || '').trim();
+      const cjD = (cjProd.remark || '').replace(/<[^>]+>/g, '').trim();
 
-      // Get stock via product stock endpoint
+      // Stock via variant
       let cjStock = null;
       await sleep(500);
-      if (cjPid) {
+      if (cjProd.pid) {
         try {
-          const stockR = await cj(`/product/stock/queryByVid?vid=${encodeURIComponent(cjPid)}`);
-          cjStock = stockR?.data?.[0] || stockR?.data;
-        } catch {}
+          const sr = await cj(`/product/stock/queryByVid?vid=${encodeURIComponent(cjProd.pid)}`);
+          cjStock = sr?.data?[0] || sr?.data || null;
+        } catch(e) {}
       }
 
-      // Update variants: weight, SKU, stock
-      for (const v of variants) {
+      for (const v of vv) {
         if (v.requires_shipping !== false && !v.grams) {
           await sf(`/variants/${v.id}.json`, {
-            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: cjWeight, weight: cjWeight / 1000, weight_unit: 'kg' } }),
-          });
-          results.weight++;
-          await sleep(150);
+            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, grams: cjW, weight: cjW / 1000, weight_unit: 'kg' } }),
+          }); R.w++; await sleep(150);
         }
-        if (!(v.sku || '').trim() && cjSku) {
+        if (!(v.sku || '').trim() && cjProd.productSku) {
           await sf(`/variants/${v.id}.json`, {
-            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, sku: cjSku } }),
-          });
-          results.sku++;
-          await sleep(150);
+            method: 'PUT', body: JSON.stringify({ variant: { id: v.id, sku: cjProd.productSku } }),
+          }); R.sk++; await sleep(150);
         }
         if (v.inventory_item_id && cjStock?.stockNum != null) {
-          const qty = Math.max(0, Math.min(9999, Number(cjStock.stockNum)));
           await sf('/inventory_levels/set.json', {
-            method: 'POST', body: JSON.stringify({ location_id: locId, inventory_item_id: v.inventory_item_id, available: qty }),
-          });
-          results.stock++;
-          await sleep(250);
+            method: 'POST', body: JSON.stringify({ location_id: locId, inventory_item_id: v.inventory_item_id, available: Math.max(0, Math.min(9999, Number(cjStock.stockNum))) }),
+          }); R.s++; await sleep(250);
         }
       }
 
-      // Product-level: description, type
-      const pUpd = {};
-      const curBody = (p.body_html || '').replace(/<[^>]+>/g, '').trim();
-      if (cjDesc && (!curBody || curBody.length < 30)) {
-        pUpd.body_html = `<p>${cjDesc}</p>`;
-        results.desc++;
-      }
-      if (cjType && !(p.product_type || '').trim()) {
-        pUpd.product_type = cjType;
-        results.type++;
-      }
-      if (Object.keys(pUpd).length) {
+      if (cjD && !(p.body_html || '').trim()) {
         await sf(`/products/${p.id}.json`, {
-          method: 'PUT', body: JSON.stringify({ product: { id: p.id, ...pUpd } }),
-        });
-        await sleep(150);
+          method: 'PUT', body: JSON.stringify({ product: { id: p.id, body_html: `<p>${cjD}</p>` } }),
+        }); R.d++; await sleep(150);
+      }
+      if (cjT && !(p.product_type || '').trim()) {
+        await sf(`/products/${p.id}.json`, {
+          method: 'PUT', body: JSON.stringify({ product: { id: p.id, product_type: cjT } }),
+        }); R.t++; await sleep(150);
       }
       await sleep(500);
     }
 
-    const elapsed = ((Date.now() - start) / 1000).toFixed(1);
-    res.status(200).json({ success: true, results, elapsed_sec: elapsed });
+    const sec = ((Date.now() - start) / 1000).toFixed(1);
+    res.status(200).json({ success: true, results: R, elapsed_sec: sec });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message, results });
+    res.status(500).json({ success: false, error: e.message, results: R });
   }
 }
