@@ -32,21 +32,35 @@
 <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
 <script>
-var C={};
-// Dynamically load categories
-(function(){
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+(function loadCats(){
+  var g=document.getElementById('cat-grid');
+  if(!g)return;
+  g.innerHTML='<div class="loading-text">Loading categories...</div>';
+  
   var x=new XMLHttpRequest();
   x.open("GET","/categories-index.json",true);
+  x.timeout=15000;
   x.onload=function(){
-    if(x.status>=200&&x.status<400){
-      var cats=JSON.parse(x.responseText);
-      for(var slug in cats){C[cats[slug].name]=cats[slug].count;}
-      buildCatList();
+    if(x.status<200||x.status>=400){g.innerHTML='<div class="loading-text">Categories unavailable</div>';return}
+    var cats=JSON.parse(x.responseText);
+    g.innerHTML='';
+    var slugs=Object.keys(cats);
+    if(!slugs.length){g.innerHTML='<div class="loading-text">No categories found</div>';return}
+    for(var i=0;i<slugs.length;i++){
+      var s=slugs[i],c=cats[s];
+      var a=document.createElement('a');
+      a.className='category-card fade-in';
+      a.href='category.html?cat='+encodeURIComponent(s)+'&name='+encodeURIComponent(c.name||s);
+      a.innerHTML='<div class="category-icon">📦</div><div class="category-name">'+esc(c.name||s)+'</div><div class="category-count">'+c.count+' products</div>';
+      g.appendChild(a);
     }
   };
+  x.onerror=function(){g.innerHTML='<div class="loading-text">Categories unavailable</div>'};
   x.send();
 })();
-</script>
+
 <script>(function(){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
 </body></html>
