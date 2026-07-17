@@ -115,5 +115,15 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/sync-products.js": {
+      "memory": 1024,
+      "maxDuration": 300
+    },
+    "api/sync-product-data.js": {
+      "memory": 1024,
+      "maxDuration": 300
+    }
+  }
 }
