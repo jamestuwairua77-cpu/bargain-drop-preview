@@ -59,50 +59,71 @@ export default async function handler(req, res) {
           .slice(0, 10)
           .map(src => ({ src }));
 
-        // Variants: CJ productName is a JSON array of Chinese variant names
-        // Parse them to get variant options (usually: [full_name, medium_name, short_name])
-        let variantNames = [];
-        try { 
-          const pn = JSON.parse(cp.productName || '[]');
-          if (Array.isArray(pn)) variantNames = pn;
-        } catch {}
-        // If no variant names found, use a single default
-        if (!variantNames.length) variantNames = ['Default'];
+
+        // CJ productName is a JSON array of variant names (e.g. ["Full Title","Short","Size Option"])
+        // The CJ list API doesn't give per-variant prices, so we use the single sellPrice
+        // For variants, parse the productName and create options
+        let cjVariants = [];
+        try {
+          if (typeof cp.productName === 'string' && cp.productName.startsWith('[')) {
+            cjVariants = JSON.parse(cp.productName);
+          }
+        } catch(e) { /* not JSON, that's OK */ }
+
+        // If we got variant names, create multiple variants with proper option names
+        const useVariants = cjVariants.length > 1;
+        const options = useVariants ? [{ name: 'Option' }] : [{ name: 'Variant' }];
         
-        // Use the CJ product SKU as base for variant SKUs
-        const baseSku = cp.productSku || cp.pid || '';
-        const basePrice = cp.sellPrice || '0';
-        const weightRange = (cp.productWeight || '').split('-');
-        const minWeight = parseFloat(weightRange[0] || '0');
-        const maxWeight = parseFloat(weightRange[1] || weightRange[0] || '0');
-        const weightStep = variantNames.length > 1 ? (maxWeight - minWeight) / (variantNames.length - 1) : 0;
-        
-        // Generate variants from parsed names
-        const variants = variantNames.map((vn, i) => ({
-          sku: variantNames.length > 1 ? (baseSku + '-' + (i+1)) : baseSku,
-          price: String(basePrice),
-          option1: String(vn).substring(0, 255),
-          inventory_management: 'shopify',
-          inventory_policy: 'deny',
-          requires_shipping: true,
-          weight: Number((minWeight + (weightStep * i)).toFixed(0)),
-          weight_unit: 'g',
-        }));
-        
-        // Also check for CJ variantList if it exists (some products have real SKUs)
-        const cjVariantList = (cp.variants || cp.variantList || []).length
-          ? (cp.variants || cp.variantList).map(vv => ({
-              sku: (vv.variantSku || vv.sku || vv.vid || '').trim(),
-              price: String(vv.variantSellPrice || vv.sellPrice || vv.price || cp.sellPrice || 0),
-              option1: vv.variantNameEn || vv.variantName || 'Default',
+        const variants = useVariants
+          ? cjVariants.map((name, i) => ({
+              sku: ((cp.productSku || cp.pid || '') + (i > 0 ? '-' + (i+1) : '')).trim().substring(0, 80),
+              price: String(cp.sellPrice || 0),
+              option1: String(name).substring(0, 80) || ('Option ' + (i+1)),
               inventory_management: 'shopify',
               inventory_policy: 'deny',
               requires_shipping: true,
-              weight: Number(vv.variantWeight || cp.productWeight || 0),
+              weight: Number(cp.productWeight || 0),
               weight_unit: 'g',
             }))
-          : variants;
-        // Match by ANY variant SKU present in the Shopify index.
+          : [{
+              sku: (cp.productSku || cp.pid || cp.vid || '').trim().substring(0, 80),
+              price: String(cp.sellPrice || cp.price || 0),
+              option1: 'Default',
+              inventory_management: 'shopify',
+              inventory_policy: 'deny',
+              requires_shipping: true,
+              weight: Number(cp.productWeight || 0),
+              weight_unit: 'g',
+            }];
+
+        // Images: use productImage as primary, extract from remark HTML as secondary
+        const images = [];
+        if (cp.productImage) {
+          images.push({ src: cp.productImage });
+        }
+        // Parse remark HTML for additional images
+        try {
+          const imgMatches = (cp.remark || '').match(/<img[^>]+src="([^"]+)"/g);
+          if (imgMatches) {
+            for (const match of imgMatches) {
+              const src = match.match(/src="([^"]+)"/)[1];
+              if (src && !images.some(i => i.src === src)) {
+                images.push({ src });
+              }
+            }
+          }
+        } catch(e) { /* ignore remark parsing errors */ }
+        // Fallback to existing image fields
+        const extraImages = (cp.productImageSet || cp.productImageList || cp.images || [])
+          .map(x => typeof x === 'string' ? x : (x?.url || x?.image)).filter(Boolean);
+        for (const src of extraImages) {
+          if (src && !images.some(i => i.src === src)) {
+            images.push({ src });
+          }
+        }
+        images.slice(0, 10);
+
+                // Match by ANY variant SKU present in the Shopify index.
         const match = variants.map(v => shopIndex.get(v.sku)).find(Boolean);
         if (dry) { results.skipped++; continue; }
 
@@ -149,7 +170,7 @@ export default async function handler(req, res) {
           });
           if (crRes.ok || crRes.status === 201) results.created++; else results.errors.push({ product: title.substring(0,30), error: 'Create failed: ' + crRes.status, details: JSON.stringify(crRes.body).substring(0,200) });
         }
-        await sleep(600); // Shopify rate limit (2 req/sec)
+        await sleep(200); // Shopify rate limit
       } catch (e) {
         results.errors.push({ product: cp.productNameEn || cp.pid, error: e.message });
       }
