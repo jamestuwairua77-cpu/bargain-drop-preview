@@ -53,7 +53,7 @@
       ]
     },
     {
-      "source": "/(categories-index|products-index)\\\\.json",
+      "source": "/(.*).json$",
       "headers": [
         {
           "key": "Cache-Control",
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "source": "/sitemap\\\\.xml",
+      "source": "/sitemap.xml",
       "headers": [
         {
           "key": "Cache-Control",
@@ -71,11 +71,47 @@
       ]
     },
     {
-      "source": "/robots\\\\.txt",
+      "source": "/robots.txt",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/favicon.svg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/homepage.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/homepage.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
         }
       ]
     }
