@@ -113,7 +113,7 @@ export default async function handler(req, res) {
                 variants,
                 ...(images.length ? { images } : {}),
                 metafields: [
-                  { namespace: 'cj', key: 'pid', value: String(cp.pid || cp.productId || ''), type: 'single_line_text_field' },
+                  { namespace: 'cjdropship', key: 'pid', value: String(cp.pid || cp.productId || ''), type: 'single_line_text_field' },
                 ],
               },
             }),
