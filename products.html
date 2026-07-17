@@ -72,7 +72,7 @@ var cats=Object.keys(catFiles),loaded=0,failed=[];
   var g=document.getElementById('product-grid');
   cats.forEach(function(c){
     var x=new XMLHttpRequest();
-    x.open('GET','https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@main/data/'+catFiles[c],true);
+    x.open('GET','/data/'+catFiles[c],true);
     x.timeout=20000;
     x.onload=function(){
       loaded++;
