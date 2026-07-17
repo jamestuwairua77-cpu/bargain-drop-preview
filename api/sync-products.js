@@ -121,7 +121,7 @@ export default async function handler(req, res) {
             images.push({ src });
           }
         }
-        const finalImages = images.slice(0, 10);
+        images.slice(0, 10);
 
                 // Match by ANY variant SKU present in the Shopify index.
         const match = variants.map(v => shopIndex.get(v.sku)).find(Boolean);
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
                   price: v.price,
                   sku: v.sku,
                 })).filter(v => v.id),
-                ...(finalImages.length ? { images: finalImages } : {}),
+                ...(images.length ? { images } : {}),
               },
             }),
           });
@@ -161,7 +161,7 @@ export default async function handler(req, res) {
                 status: 'active',
                 options: [{ name: 'Variant' }],
                 variants,
-                ...(finalImages.length ? { images: finalImages } : {}),
+                ...(images.length ? { images } : {}),
                 metafields: [
                   { namespace: 'cjdropship', key: 'pid', value: String(cp.pid || cp.productId || ''), type: 'single_line_text_field' },
                 ],
@@ -170,7 +170,7 @@ export default async function handler(req, res) {
           });
           if (crRes.ok || crRes.status === 201) results.created++; else results.errors.push({ product: title.substring(0,30), error: 'Create failed: ' + crRes.status, details: JSON.stringify(crRes.body).substring(0,200) });
         }
-        await sleep(200); // Shopify rate limit
+        await sleep(600); // Shopify rate limit
       } catch (e) {
         results.errors.push({ product: cp.productNameEn || cp.pid, error: e.message });
       }
