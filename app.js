@@ -21,10 +21,12 @@ if(typeof BD!="undefined")BD.initCurrency();var C={"Women's Clothing":"[dress]",
   slugs.sort(function(a,b){return (catData[b].count||0)-(catData[a].count||0)});
   for(var i=0;i<slugs.length;i++){
     var s=slugs[i],c=catData[s];
+    var img=c.image||"";
+    var imgHtml=img?'<div class="cat-card-img"><img src="'+img+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=cat-card-placeholder>📦</div>\'"></div>':'<div class="cat-card-placeholder">📦</div>';
     var a=document.createElement("a");
-    a.className="category-card fade-in";
+    a.className="category-card-new fade-in";
     a.href="category.html?cat="+encodeURIComponent(s)+"&name="+encodeURIComponent(c.name||s);
-    a.innerHTML='<div class="category-icon">📦</div><div class="category-name">'+esc(c.name||s)+'</div><div class="category-count">'+(c.count||0)+' products</div>';
+    a.innerHTML=imgHtml+'<div class="cat-card-info"><div class="cat-card-name">'+esc(c.name||s)+'</div><div class="cat-card-count">'+(c.count||0)+' products →</div></div>';
     g.appendChild(a);
   }
 }
