@@ -121,7 +121,7 @@ export default async function handler(req, res) {
             images.push({ src });
           }
         }
-        images.slice(0, 10);
+        const finalImages = images.slice(0, 10);
 
                 // Match by ANY variant SKU present in the Shopify index.
         const match = variants.map(v => shopIndex.get(v.sku)).find(Boolean);
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
                   price: v.price,
                   sku: v.sku,
                 })).filter(v => v.id),
-                ...(images.length ? { images } : {}),
+                ...(finalImages.length ? { images: finalImages } : {}),
               },
             }),
           });
@@ -161,7 +161,7 @@ export default async function handler(req, res) {
                 status: 'active',
                 options: [{ name: 'Variant' }],
                 variants,
-                ...(images.length ? { images } : {}),
+                ...(finalImages.length ? { images: finalImages } : {}),
                 metafields: [
                   { namespace: 'cjdropship', key: 'pid', value: String(cp.pid || cp.productId || ''), type: 'single_line_text_field' },
                 ],
