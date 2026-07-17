@@ -54,10 +54,7 @@ export default async function handler(req, res) {
           while ((m = imgRegex.exec(cp.remark)) !== null) remarkImgs.push(m[1]);
         }
         const mainImg = cp.productImage || '';
-        const images = [mainImg, ...remarkImgs]
-          .filter(Boolean)
-          .slice(0, 10)
-          .map(src => ({ src }));
+        
 
 
         // CJ productName is a JSON array of variant names (e.g. ["Full Title","Short","Size Option"])
@@ -170,7 +167,7 @@ export default async function handler(req, res) {
           });
           if (crRes.ok || crRes.status === 201) results.created++; else results.errors.push({ product: title.substring(0,30), error: 'Create failed: ' + crRes.status, details: JSON.stringify(crRes.body).substring(0,200) });
         }
-        await sleep(600); // Shopify rate limit
+        await sleep(200); // Shopify rate limit
       } catch (e) {
         results.errors.push({ product: cp.productNameEn || cp.pid, error: e.message });
       }
