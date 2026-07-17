@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>Category — Bargain Drop</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>Products — Bargain Drop</title>
 <style>:root{--bg:#fafaf8;--fg:#1A1A1A;--muted:#6B6B6B;--meta:#9B9B9B;--line:#F0F0F0;--line2:#f5f5f5;--lilac:#B8A9E8;--amber:#F5A623;--teal:#4ECDC4;--coral:#FF6B6B;--green:#4ADE80;--radius:16px;--pill:9999px}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-bottom:100px;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .top-bar{display:flex;align-items:center;padding:12px 16px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--line);gap:14px}
 .top-bar a.back{font-size:.82rem;font-weight:700;color:var(--fg);display:flex;align-items:center;gap:4px}
@@ -52,127 +52,69 @@
 <a href="cart.html" style="position:relative"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:var(--coral);color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
 <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
-<script>
-function esc(t){return(t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-function fmtPrice(p){return typeof BD!=="undefined"?BD.formatMoneyCompact(p||0):"A$"+(p||0).toFixed(2)}
 
-var all=[],display=[],pageSize=50,current=1,cat="",sub="",catIndex=null;
-var p=new URLSearchParams(location.search);cat=p.get("cat")||"";
 
-// Category name -> data file mapping
-var catFiles={"Home, Garden & Furniture":"home-garden-furniture.json","Jewelry & Watches":"jewelry-watches.json","Health, Beauty & Hair":"health-beauty-hair.json","Consumer Electronics":"consumer-electronics.json","Automobiles & Motorcycles":"automobiles-motorcycles.json","Home Improvement":"home-improvement.json","Sports & Outdoors":"sports-outdoors.json","Pet Supplies":"pet-supplies.json","Women's Clothing":"womens-clothing.json","Toys, Kids & Babies":"toys-kids-babies.json","Bags & Shoes":"bags-shoes.json","Phones & Accessories":"phones-accessories.json","Men's Clothing":"mens-clothing.json","Other":"other.json"};
-
-function loadCategory(){
-  // First load the category index for subcategory images
-  var idxReq=new XMLHttpRequest();
-  idxReq.open("GET","/categories-index.json",true);
-  idxReq.timeout=10000;
-  idxReq.onload=function(){
-    try{
-      if(idxReq.status>=200&&idxReq.status<400){
-        catIndex=JSON.parse(idxReq.responseText);
-        loadProducts();
-      }else{loadProducts()}
-    }catch(e){loadProducts()}
-  };
-  idxReq.onerror=function(){loadProducts()};
-  idxReq.send();
-}
-
-function loadProducts(){
-  var url=catFiles[cat]?"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@312d8650f66b8587f14173ab7ab23c4fb0c4f9b6/data/"+catFiles[cat]:"https://cdn.jsdelivr.net/gh/jamestuwairua77-cpu/bargain-drop-preview@312d8650f66b8587f14173ab7ab23c4fb0c4f9b6/categories-data.json";
-  var x=new XMLHttpRequest();x.open("GET",url,true);x.timeout=20000;
-  x.onload=function(){
-    if(x.status>=200&&x.status<400){
-      try{
-        var d=JSON.parse(x.responseText);
-        if(catFiles[cat]){all=d.products||[]}else{all=[];for(var k in d)all=all.concat(d[k].products||[])}
-      }catch(e){all=d.products||[]}
-      display=all.slice();buildSubcats();filterSub("")
-    }else{document.getElementById("product-grid").innerHTML="<div class=\"loading-text\">Failed to load category</div>"}
-  };
-  x.onerror=function(){document.getElementById("product-grid").innerHTML="<div class=\"loading-text\">Connection error. Please refresh.</div>"};
-  x.send();
-}
-
-function buildSubcats(){
-  var bar=document.getElementById("subcat-bar"),subs={},subImages={};
-  // Collect subcategory info from catIndex
-  if(catIndex&&catIndex[cat]){
-    var scList=catIndex[cat].subcategories||[];
-    scList.forEach(function(sc){
-      subs[sc.title]=sc.count||0;
-      if(sc.image)subImages[sc.title]=sc.image;
-    });
-  }
-  // Also collect from actual products in case index is stale
-  all.forEach(function(p){
-    var s=p.subcategory||"All";
-    if(!subs[s])subs[s]=0;
-    subs[s]=(subs[s]||0)+1;
-    if(!subImages[s]){
-      var rawImg = p.image || (p.images || [])[0] || "";
-      subImages[s] = typeof rawImg === "object" ? (rawImg.src || "") : rawImg;
-    }
-  });
-  
-  var keys=Object.keys(subs).sort(function(a,b){return subs[b]-subs[a]});
-  bar.innerHTML="";
-  // All button
-  var ab=document.createElement("button");ab.className="subcat-chip active";
-  ab.innerHTML="<div class=\"subcat-chip-placeholder\">📋</div><div class=\"subcat-chip-label\">All ("+display.length+")</div>";
-  ab.onclick=function(){filterSub("")};bar.appendChild(ab);
-  
-  keys.forEach(function(k){
-    var b=document.createElement("button");b.className="subcat-chip";
-    var img=subImages[k]||"";
-    var ih=img?"<img class=\"subcat-chip-img\" src=\""+esc(img)+"\" loading=\"lazy\" onerror=\"this.style.display='none'\" alt=\"\">":"<div class=\"subcat-chip-placeholder\">📦</div>";
-    b.innerHTML=ih+"<div class=\"subcat-chip-label\">"+esc(k)+" ("+subs[k]+")</div>";
-    b.onclick=function(){filterSub(k)};bar.appendChild(b);
-  });
-  document.getElementById("cat-name").textContent=cat||"All Categories";
-  document.getElementById("cat-title").textContent=cat||"All Categories";
-}
-
-function filterSub(s){sub=s;current=1;display=s?all.filter(function(p){return p.subcategory===s}):all.slice();renderPage(1);renderPagination();highlightActiveChip()}
-function highlightActiveChip(){
-  document.querySelectorAll(".subcat-chip").forEach(function(b,i){
-    b.classList.toggle("active",i===0?!sub:b.querySelector(".subcat-chip-label")&&b.querySelector(".subcat-chip-label").textContent.startsWith(sub+" ("));
-  });
-}
-
-function renderPage(pn){
-  var g=document.getElementById("product-grid");g.innerHTML="";
-  var start=(pn-1)*pageSize,slice=display.slice(start,start+pageSize);
-  document.getElementById("result-count").textContent=display.length.toLocaleString()+" products";
-  if(!slice.length){g.innerHTML="<div class=\"loading-text\">No products found.</div>";return}
-  slice.forEach(function(p){
-    var a=document.createElement("a");a.className="product-card fade-in";a.href="product.html?id="+p.id;
-    var rawImg = p.image || (p.images || [])[0] || "";
-    var ci = typeof rawImg === "object" ? (rawImg.src || "") : rawImg;
-    var ih=ci?"<img src=\""+esc(ci)+"\" loading=\"lazy\" onerror=\"this.parentElement.innerHTML='<div class=prod-img-placeholder>📦</div>'\" alt=\"\">":"<div class=\"prod-img-placeholder\">📦</div>";
-    var pc=p.compare_at_price&&p.compare_at_price>p.price?"<span class=\"prod-compare\">"+fmtPrice(p.compare_at_price)+"</span>":"";
-    a.innerHTML="<div class=\"prod-img\">"+ih+"</div><div class=\"prod-info\"><div class=\"prod-title\">"+esc(p.title)+"</div><div class=\"prod-price-row\"><span class=\"prod-price\">"+fmtPrice(p.price)+"</span>"+pc+"</div></div>";
-    g.appendChild(a);
-  });
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function renderPagination(){
-  var el=document.getElementById("pagination"),tp=Math.ceil(display.length/pageSize);
-  if(tp<=1){el.innerHTML="";return}
-  var h="";h+="<button onclick=\"goPage("+(current-1)+")\" "+(current===1?"disabled":"")+">Prev</button>";
-  var s=Math.max(1,current-2),e=Math.min(tp,current+2);
-  if(s>1){h+="<button onclick=\"goPage(1)\">1</button>";if(s>2)h+="<span>...</span>"}
-  for(var p=s;p<=e;p++)h+="<button class=\""+(p===current?"active":"")+"\" onclick=\"goPage("+p+")\">"+p+"</button>";
-  if(e<tp){if(e<tp-1)h+="<span>...</span>";h+="<button onclick=\"goPage("+tp+")\">"+tp+"</button>"}
-  h+="<button onclick=\"goPage("+(current+1)+")\" "+(current===tp?"disabled":"")+">Next</button>";el.innerHTML=h;
-}
-
-function goPage(n){var tp=Math.ceil(display.length/pageSize);if(n<1||n>tp||n===current)return;current=n;renderPage(n);renderPagination()}
-
-loadCategory();
-</script>
-<script>(function(){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
+<script>
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function fmtPrice(p){return 'A$'+Number(p||0).toFixed(2)}
+
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get('cat') || '';
+  var name = params.get('name') || params.get('sub') || slug || 'Category';
+  document.getElementById('cat-title').textContent = name;
+  
+  var grid = document.getElementById('product-grid');
+  if(!grid) return;
+  
+  if(!slug){
+    grid.innerHTML = '<div class="loading-text">No category specified</div>';
+    return;
+  }
+  
+  grid.innerHTML = '<div class="loading-text">Loading products...</div>';
+  
+  var x = new XMLHttpRequest();
+  x.open('GET', '/data/' + encodeURIComponent(slug) + '.json', true);
+  x.timeout = 15000;
+  x.onload = function(){
+    if(x.status < 200 || x.status >= 400){
+      grid.innerHTML = '<div class="loading-text">Failed to load category</div>';
+      return;
+    }
+    try {
+      var prods = JSON.parse(x.responseText);
+      if(!prods || !prods.length){
+        grid.innerHTML = '<div class="loading-text">No products in this category</div>';
+        document.getElementById('total-display').textContent = '0 products';
+        return;
+      }
+      document.getElementById('total-display').textContent = prods.length + ' products';
+      grid.innerHTML = '';
+      prods.forEach(function(p, i){
+        var a = document.createElement('a');
+        a.className = 'product-card fade-in';
+        a.href = 'product.html?id=' + p.id;
+        a.style.animationDelay = (i * 0.03) + 's';
+        var imgHtml = p.image
+          ? '<img src="' + p.image + '" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=product-placeholder>📦</div>\'">'
+          : '<div class="product-placeholder">📦</div>';
+        a.innerHTML = imgHtml + '<div class="product-info"><div class="product-title">' + esc(p.title) + '</div><div class="product-price">' + fmtPrice(p.price) + '</div></div>';
+        grid.appendChild(a);
+      });
+    } catch(e) {
+      grid.innerHTML = '<div class="loading-text">Error loading products</div>';
+    }
+  };
+  x.onerror = function(){
+    grid.innerHTML = '<div class="loading-text">Failed to load category</div>';
+  };
+  x.send();
+})();
+</script>
+<script>
+(function(){try{var c=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=c.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();
+</script>
+
 </body></html>
