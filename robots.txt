@@ -2,10 +2,35 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /checkout.html
-Disallow: /settings.html
-Disallow: /profile.html
-Disallow: /orders.html
+Disallow: /cart.html
+Disallow: /auth.html
 Disallow: /sign-in.html
 Disallow: /register.html
-Disallow: /auth.html
+Disallow: /profile.html
+Disallow: /settings.html
+Disallow: /wishlist.html
+Disallow: /orders.html
+Disallow: /payment-methods.html
+Disallow: /addresses.html
+Disallow: /account-info.html
+Disallow: /security.html
+Disallow: /returns.html
+Disallow: /deactivate.html
+Disallow: /forgot-password.html
+Disallow: /order-tracking.html
+Disallow: /order-success.html
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: FacebookBot
+Allow: /
+Disallow: /api/
+
 Sitemap: https://bargain-drop.online/sitemap.xml
