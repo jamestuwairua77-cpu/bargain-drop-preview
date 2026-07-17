@@ -149,7 +149,7 @@ export default async function handler(req, res) {
           });
           if (crRes.ok || crRes.status === 201) results.created++; else results.errors.push({ product: title.substring(0,30), error: 'Create failed: ' + crRes.status, details: JSON.stringify(crRes.body).substring(0,200) });
         }
-        await sleep(200); // Shopify rate limit
+        await sleep(600); // Shopify rate limit (2 req/sec)
       } catch (e) {
         results.errors.push({ product: cp.productNameEn || cp.pid, error: e.message });
       }
