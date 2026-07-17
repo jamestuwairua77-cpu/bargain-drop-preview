@@ -23,6 +23,37 @@
 </style></head><body>
 <div class="header"><a class="back" href="/">← Home</a><span class="title"><h1>All Categories</h1></span></div>
 <div class="cat-grid" id="cat-grid"><div class="loading-text">Loading...</div></div>
+<script>
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+(function(){
+  var g=document.getElementById('cat-grid');
+  if(!g){console.log('no cat-grid');return;}
+  g.innerHTML='<div class="loading-text">Loading categories...</div>';
+  
+  var x=new XMLHttpRequest();
+  x.open('GET','/categories-index.json',true);
+  x.timeout=15000;
+  x.onload=function(){
+    if(x.status<200||x.status>=400){g.innerHTML='<div class="loading-text">Failed to load</div>';return}
+    try{
+      var cats=JSON.parse(x.responseText);
+      g.innerHTML='';
+      var slugs=Object.keys(cats);
+      for(var i=0;i<slugs.length;i++){
+        var s=slugs[i],c=cats[s];
+        var a=document.createElement('a');
+        a.className='category-card';
+        a.href='category.html?cat='+encodeURIComponent(s);
+        a.innerHTML='<div class="category-icon">📦</div><div class="category-name">'+esc(c.name||s)+'</div><div class="category-count">'+c.count+' products</div>';
+        g.appendChild(a);
+      }
+    }catch(e){g.innerHTML='<div class="loading-text">Error: '+e.message+'</div>'}
+  };
+  x.onerror=function(){g.innerHTML='<div class="loading-text">Network error</div>';};
+  x.send();
+})();
+</script>
 <nav class="bottom-nav">
 <a href="/"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3" stroke="#777" stroke-width="2" fill="none"/></svg>Home</a>
 <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#777" stroke-width="1.5" fill="none"/></svg>Products</a>
@@ -31,36 +62,9 @@
 <a href="cart.html" style="position:relative"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" fill="#777"/><circle cx="20" cy="21" r="1" fill="#777"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#777" stroke-width="1.8" fill="none"/></svg><span id="nav-cart-count" style="position:absolute;top:-2px;right:-2px;background:var(--coral);color:#fff;font-size:.55rem;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700">0</span></a>
 <a href="profile.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="#777" stroke-width="2" fill="none"/></svg>Me</a>
 </nav>
-<script>
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-(function loadCats(){
-  var g=document.getElementById('cat-grid');
-  if(!g)return;
-  g.innerHTML='<div class="loading-text">Loading categories...</div>';
-  
-  var x=new XMLHttpRequest();
-  x.open("GET","/categories-index.json",true);
-  x.timeout=15000;
-  x.onload=function(){
-    if(x.status<200||x.status>=400){g.innerHTML='<div class="loading-text">Categories unavailable</div>';return}
-    var cats=JSON.parse(x.responseText);
-    g.innerHTML='';
-    var slugs=Object.keys(cats);
-    if(!slugs.length){g.innerHTML='<div class="loading-text">No categories found</div>';return}
-    for(var i=0;i<slugs.length;i++){
-      var s=slugs[i],c=cats[s];
-      var a=document.createElement('a');
-      a.className='category-card fade-in';
-      a.href='category.html?cat='+encodeURIComponent(s)+'&name='+encodeURIComponent(c.name||s);
-      a.innerHTML='<div class="category-icon">📦</div><div class="category-name">'+esc(c.name||s)+'</div><div class="category-count">'+c.count+' products</div>';
-      g.appendChild(a);
-    }
-  };
-  x.onerror=function(){g.innerHTML='<div class="loading-text">Categories unavailable</div>'};
-  x.send();
-})();
-
-<script>(function(){try{var cart=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=cart.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
+<script>
+(function(){try{var c=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=c.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();
+</script>
 </body></html>
