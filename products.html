@@ -40,7 +40,9 @@
 .fade-in{animation:fadeIn .35s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .loading-text{text-align:center;padding:48px;color:var(--meta);grid-column:1/-1;font-size:.85rem}
 .error-text{text-align:center;padding:48px;color:var(--coral);grid-column:1/-1;font-size:.85rem}
-</style></head><body>
+</style>
+<link rel="stylesheet" href="homepage.css?v=2">
+</head><body>
 <div class="top-bar"><a class="back" href="javascript:history.back()">← Back</a><span id="total-display"></span></div>
 <div class="page-header"><h1><h1>All Products</h1></h1><p id="result-count">Loading...</p></div>
 <div class="search-wrap"><div class="search-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="search-input" type="text" placeholder="Search products..." oninput="doSearch()"></div></div>
@@ -136,4 +138,5 @@ function doSearch(){
 </script>
 <script>(function(){try{var c=JSON.parse(localStorage.getItem("bd_cart")||"[]");var n=c.reduce(function(s,i){return s+(i.qty||1)},0);var b=document.getElementById("nav-cart-count");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}})();</script>
 <script src="js/nav-icons.js"></script>
+<script src="homepage.js?v=2"></script>
 </body></html>
