@@ -2,6 +2,10 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /checkout.html
-Disallow: /cart.html
-
+Disallow: /settings.html
+Disallow: /profile.html
+Disallow: /orders.html
+Disallow: /sign-in.html
+Disallow: /register.html
+Disallow: /auth.html
 Sitemap: https://bargain-drop.online/sitemap.xml
