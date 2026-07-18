@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sync — Bargain Drop</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fafaf8;color:#1A1A1A;padding:20px;max-width:600px;margin:0 auto}
+h1{font-size:1.5rem;margin-bottom:16px}
+.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+button{display:block;width:100%;padding:14px;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:10px}
+.btn-sync{background:#1A1A1A;color:#fff}
+.btn-sync:hover{opacity:.9}
+.btn-rebuild{background:#B8A9E8;color:#1A1A1A}
+.status{font-size:.85rem;color:#6B6B6B;margin-top:10px;min-height:20px}
+.success{color:#2e7d32}
+.error{color:#c62828}
+</style>
+</head>
+<body>
+<h1>🔧 Bargain Drop Sync Panel</h1>
+
+<div class="card">
+  <h2>Product Sync</h2>
+  <p style="font-size:.85rem;color:#6B6B6B;margin-bottom:12px">Pull new/updated products from Shopify and rebuild the website data files.</p>
+  <button class="btn-sync" onclick="triggerSync()">🔄 Sync Products from Shopify</button>
+  <div id="sync-status" class="status"></div>
+</div>
+
+<div class="card">
+  <h2>Shopify Webhooks</h2>
+  <p style="font-size:.85rem;color:#6B6B6B;margin-bottom:12px">Registered webhook endpoints. Product creates/updates trigger automatic rebuilds.</p>
+  <button class="btn-rebuild" onclick="checkWebhooks()">📡 Check Webhooks</button>
+  <div id="webhook-status" class="status"></div>
+</div>
+
+<div class="card">
+  <h2>Manual Command</h2>
+  <p style="font-size:.75rem;color:#6B6B6B">
+    <strong>Sync trigger:</strong><br>
+    <code>curl -X POST https://bargain-drop.online/api/product-sync-webhook</code><br>
+    <code>-H "X-Shopify-Topic: products/create"</code><br>
+    <code>-d '{"id":1,"title":"test"}'</code>
+  </p>
+</div>
+
+<script>
+function triggerSync() {
+  var st = document.getElementById('sync-status');
+  st.textContent = 'Syncing...';
+  st.className = 'status';
+  
+  fetch('/api/sync-full?action=sync')
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) {
+        st.textContent = '✓ Done! ' + d.total_products + ' products, ' + d.categories + ' categories rebuilt.';
+        st.className = 'status success';
+      } else {
+        st.textContent = '✗ ' + (d.error || 'Unknown error');
+        st.className = 'status error';
+      }
+    })
+    .catch(e => {
+      st.textContent = '✗ ' + e.message;
+      st.className = 'status error';
+    });
+}
+
+function checkWebhooks() {
+  var st = document.getElementById('webhook-status');
+  st.textContent = 'Checking...';
+  st.className = 'status';
+  
+  fetch('/api/register-shopify-webhooks')
+    .then(r => r.json())
+    .then(d => {
+      st.textContent = 'Registered: ' + (d.registered || []).join(', ');
+      st.className = 'status success';
+    })
+    .catch(e => {
+      st.textContent = '✗ ' + e.message;
+      st.className = 'status error';
+    });
+}
+</script>
+</body>
+</html>
