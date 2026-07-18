@@ -1,1 +1,82 @@
-{"9193046737027":{"idx":0,"category":"home-office-storage"}, "9193046966403":{"idx":1,"category":"home-office-storage"}, "9193047457923":{"idx":2,"category":"home-office-storage"}, "9193047949443":{"idx":3,"category":"home-office-storage"}, "9193048539267":{"idx":4,"category":"home-office-storage"}, "9193048637571":{"idx":5,"category":"home-office-storage"}, "9193055715459":{"idx":6,"category":"home-office-storage"}, "9193057026179":{"idx":7,"category":"home-office-storage"}, "9193057190019":{"idx":8,"category":"home-office-storage"}, "9193057255555":{"idx":9,"category":"home-office-storage"}, "9193058369667":{"idx":10,"category":"home-office-storage"}, "9193059156099":{"idx":11,"category":"home-office-storage"}, "9193059909763":{"idx":12,"category":"home-office-storage"}, "9193060073603":{"idx":13,"category":"home-office-storage"}, "9193060368515":{"idx":14,"category":"home-office-storage"}, "9193060268109":{"idx":15,"category":"home-office-storage"}, "9193063383171":{"idx":16,"category":"home-office-storage"}, "9193061580931":{"idx":17,"category":"home-office-storage"}, "9193062203523":{"idx":18,"category":"home-office-storage"}, "9193064398979":{"idx":19,"category":"home-office-storage"}, "9193064071299":{"idx":20,"category":"home-office-storage"}, "9193064595587":{"idx":21,"category":"home-office-storage"}, "9193065215363":{"idx":22,"category":"home-office-storage"}, "9193065087107":{"idx":23,"category":"home-office-storage"}, "9193065906307":{"idx":24,"category":"home-office-storage"}, "9193066070147":{"idx":25,"category":"home-office-storage"}, "9193068658819":{"idx":26,"category":"home-office-storage"}, "9193068789891":{"idx":27,"category":"home-office-storage"}, "9193069215875":{"idx":28,"category":"home-office-storage"}, "9193069117571":{"idx":29,"category":"home-office-storage"}, "9193071116419":{"idx":30,"category":"home-office-storage"}, "9193074131075":{"idx":31,"category":"home-office-storage"}, "9193076031619":{"idx":32,"category":"home-office-storage"}, "9193078653059":{"idx":33,"category":"home-office-storage"}, "9193081667715":{"idx":34,"category":"home-office-storage"}, "9193126002819":{"idx":35,"category":"home-office-storage"}}
+{
+  "9193046737027": {
+    "idx": 0,
+    "category": "home-office-storage"
+  },
+  "9193046769795": {
+    "idx": 0,
+    "category": "flats"
+  },
+  "9193046835331": {
+    "idx": 0,
+    "category": "blazers"
+  },
+  "9193046900867": {
+    "idx": 0,
+    "category": "bikini-sets"
+  },
+  "9193046966403": {
+    "idx": 1,
+    "category": "home-office-storage"
+  },
+  "9193047031939": {
+    "idx": 0,
+    "category": "woman-sandals"
+  },
+  "9193047097475": {
+    "idx": 1,
+    "category": "blazers"
+  },
+  "9193047163011": {
+    "idx": 0,
+    "category": "woman-dresses"
+  },
+  "9193047228547": {
+    "idx": 2,
+    "category": "blazers"
+  },
+  "9193047294083": {
+    "idx": 2,
+    "category": "home-office-storage"
+  },
+  "9193047359619": {
+    "idx": 3,
+    "category": "home-office-storage"
+  },
+  "9193047457923": {
+    "idx": 4,
+    "category": "home-office-storage"
+  },
+  "9193047523459": {
+    "idx": 1,
+    "category": "woman-dresses"
+  },
+  "9193047588995": {
+    "idx": 2,
+    "category": "woman-dresses"
+  },
+  "9193047654431": {
+    "idx": 5,
+    "category": "home-office-storage"
+  },
+  "9193047720967": {
+    "idx": 2,
+    "category": "blinki-sets"
+  },
+  "9193047786503": {
+    "idx": 3,
+    "category": "woman-dresses"
+  },
+  "9193047949443": {
+    "idx": 6,
+    "category": "home-office-storage"
+  },
+  "9193047998179": {
+    "idx": 4,
+    "category": "woman-dresses"
+  },
+  "9193048065315": {
+    "idx": 1,
+    "category": "woman-sandals"
+  }
+}
