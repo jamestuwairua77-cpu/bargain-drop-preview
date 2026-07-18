@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   if (!CJ_API_KEY || !SHOPIFY_TOKEN) return res.status(500).json({ error: 'CJ or Shopify not configured' });
 
   const { category, page = 1, limit = 50, dry = false } = (req.body || {});
-  const results = { page, cj_products: 0, created: 0, updated: 0, skipped: 0, errors: [] };
+  const results = { page, cj_products: 0, created: 0, updated: 0, skipped: 0, dupes: 0, errors: [] };
 
   try {
     const params = new URLSearchParams({ pageNum: String(page), pageSize: String(Math.min(limit, 50)) });
@@ -31,14 +31,30 @@ export default async function handler(req, res) {
     const cjProducts = cj.data?.list || [];
     results.cj_products = cjProducts.length;
 
-    // Prefetch a page of Shopify products to build a SKU index for this batch.
-    // Cheap heuristic: pull the same-size Shopify page; matches on SKU below regardless.
+    // Two-index lookup: SKU + CJ PID metafield -- BOTH catch duplicates
     const shopIndex = new Map(); // sku → { product, variant }
-    const { body: shopBody } = await shopifyFetch(`/products.json?limit=250&fields=id,title,variants,handle`);
-    for (const p of (shopBody.products || [])) {
-      for (const v of (p.variants || [])) {
-        if (v.sku) shopIndex.set(v.sku.trim(), { product: p, variant: v });
+    const pidIndex = new Map();  // cj pid → { product }
+    
+    // Page through all Shopify products to build both indexes
+    let shopifyPage = 1;
+    let done = false;
+    while (!done) {
+      const { body: shopBody } = await shopifyFetch(`/products.json?limit=250&page=${shopifyPage}&feldsc=id,title,variants,handle,metafields`);
+      const products = shopBody.products || [];
+      if (products.length === 0) break;
+      
+      for (const p of products) {
+        // SKU index
+        for (const v of (p.variants || [])) {
+          if (v.sku) shopIndex.set(v.sku.trim(), { product: p, variant: v });
+        }
+        // PID index (from cjdropship metafield)
+        const pid = p.metafields?.find(m => m.namespace === 'cjdropship' && m.key === 'pid')?.value;
+        if (pid) pidIndex.set(String(pid).trim(), { product: p });
       }
+      
+      shopifyPage++;
+      if (products.length < 250) done = true;
     }
 
     for (const cp of cjProducts) {
@@ -56,6 +72,7 @@ export default async function handler(req, res) {
         const mainImg = cp.productImage || '';
         
 
+        const cjPid = String(cp.pid || cp.productId || '').trim();
 
         // CJ productName is a JSON array of variant names (e.g. ["Full Title","Short","Size Option"])
         // The CJ list API doesn't give per-variant prices, so we use the single sellPrice
@@ -120,8 +137,20 @@ export default async function handler(req, res) {
         }
         images.slice(0, 10);
 
-                // Match by ANY variant SKU present in the Shopify index.
-        const match = variants.map(v => shopIndex.get(v.sku)).find(Boolean);
+                // DUPLICATE CHECK: 1) PID match, 2) SKU match, otherwise create
+        let match = null;
+        
+        // 1. CJ PID metafield match (strongest -- works even when SKUs change)
+        if (cjPid) {
+          match = pidIndex.get(cjPid);
+          if (match) results.dupes++;
+        }
+        
+        // 2. SKU match (secondary fallback)
+        if (!match) {
+          match = variants.map(v => shopIndex.get(v.sku)).find(Boolean);
+        }
+        
         if (dry) { results.skipped++; continue; }
 
         if (match) {
@@ -160,7 +189,7 @@ export default async function handler(req, res) {
                 variants,
                 ...(images.length ? { images } : {}),
                 metafields: [
-                  { namespace: 'cjdropship', key: 'pid', value: String(cp.pid || cp.productId || ''), type: 'single_line_text_field' },
+                  { namespace: 'cjdropship', key: 'pid', value: cjPid || String(cp.productId || ''), type: 'single_line_text_field' },
                 ],
               },
             }),
@@ -174,7 +203,7 @@ export default async function handler(req, res) {
     }
 
     appendSyncLog({ kind: 'product-sync', ok: true, ...results });
-    res.status(200).json({ success: true, results, message: `Synced page ${page}: +${results.created} new, ~${results.updated} updated` });
+    res.status(200).json({ success: true, results, message: `Synced page ${page}: +${results.created} new, ~${results.updated} updated, ${results.dupes} dupe scanned` });
   } catch (e) {
     appendSyncLog({ kind: 'product-sync', ok: false, error: e.message });
     res.status(500).json({ success: false, error: e.message });
