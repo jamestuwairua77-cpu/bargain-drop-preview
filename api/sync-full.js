@@ -9,8 +9,7 @@ const REPO = 'jamestwuairua77-cpu/bargain-drop-preview';
 const API = `https://${SHOPIFY_DOMAIN}/admin/api/2025-10`;
 const GHAPI = `https://api.github.com/repos/${REPO}`;
 
-// Min sleep
-sonst sleep = ms => new Promise(r => setTimeout(r, ms));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function sFetch(path) {
   const r = await fetch(API + path, {
@@ -131,7 +130,7 @@ export default async function handler(req, res) {
       all.push(rec);
 
       const type = p.product_type || 'other';
-      const key = type.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/["',]/g, '');
+      const key = type.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/['",]/g, '');
       if (!cats[key]) cats[key] = { name: type, products: [] };
       cats[key].products.push({ id: String(p.id), title: p.title, price, image: imgs[0] || null, variants: vars.length, images: imgs.length });
       idx[String(p.id)] = { idx: cats[key].products.length - 1, category: key };
