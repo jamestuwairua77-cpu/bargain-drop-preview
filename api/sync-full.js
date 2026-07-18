@@ -3,11 +3,11 @@
 // Sync: Pulls all products with full details, writes JSON data files to GitHub
 
 const TOKEN = process.env.SHOPIFY_TOKEN || process.env.SHOPIFY_ACCESS_TOKEN || '';
-const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
+const SD = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
 const GHTOKEN = process.env.GITHUB_TOKEN || '';
-const REPO = 'jamestwuairua77-cpu/bargain-drop-preview';
-const API = `https://${SHOPIFY_DOMAIN}/admin/api/2025-10`;
-const GHAPI = `https://api.github.com/repos/${REPO}`;
+const REPO = 'jamestuwairua77-cpu/bargain-drop-preview';
+const API = 'https://' + SD + '/admin/api/2025-10';
+const GHAPI = 'https://api.github.com/repos/' + REPO;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -20,8 +20,8 @@ async function sFetch(path) {
 }
 
 async function ghRead(path) {
-  const r = await fetch(`${GHAPI}/contents/${path}`, {
-    headers: { 'Authorization': `Bearer ${GHTOKEN}`, 'Accept': 'application/vnd.github+json' },
+  const r = await fetch(GHAPI + '/contents/' + path, {
+    headers: { 'Authorization': 'Bearer ' + GHTOKEN, 'Accept': 'application/vnd.github+json' },
   });
   if (!r.ok) return null;
   const d = await r.json();
@@ -35,12 +35,12 @@ async function ghWrite(path, content, msg, existingSha) {
     branch: 'main',
   };
   if (existingSha) body.sha = existingSha;
-  const r = await fetch(`${GHAPI}/contents/${path}`, {
+  const r = await fetch(GHAPI + '/contents/' + path, {
     method: 'PUT',
-    headers: { 'Authorization': `Bearer ${GHTOKEN}`, 'Content-Type': 'application/json' },
+    headers: { 'Authorization': 'Bearer ' + GHTOKEN, 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if (!r.ok) { const d = await r.text(); throw new Error(`GH write ${r.status}: ${d.slice(0,200)}`); }
+  if (!r.ok) { const d = await r.text(); throw new Error('GH write ' + r.status + ': ' + d.slice(0,200)); }
   return await r.json();
 }
 
@@ -82,23 +82,17 @@ export default async function handler(req, res) {
 
   const start = Date.now();
   try {
-    let prods = [], since_id = 0, done = false, retries = 0;
+    let prods = [], since_id = 0;
 
-    while (!done) {
-      const r = await sFetch(`/products.json?limit=250&fields=id,title,body_html,vendor,product_type,tags,variants,images,image,status&since_id=${since_id}`);
-      if (!r.ok) {
-        await sleep(3000);
-        retries++;
-        if (retries > 3) break;
-        continue;
-      }
-      retries = 0;
-      const batch = r.body.products || [];
+    while (true) {
+      const r = await sFetch('/products.json?limit=250&fields=id,title,body_html,vendor,product_type,tags,variants,images,image,status&since_id=' + since_id);
+      if (!r.ok) break;
+      const batch = (r.body.products || []).filter(p => p.status === 'active' && p.title);
       if (batch.length === 0) break;
-      prods.push(...batch.filter(p => p.status === 'active' && p.title));
+      prods.push(...batch);
       since_id = batch[batch.length - 1].id;
-      if (batch.length < 250) done = true;
-      await sleep(750);
+      if (batch.length < 250) break;
+      await sleep(500);
     }
 
     if (!prods.length) return res.json({ ok: false, error: 'No active products' });
@@ -109,30 +103,32 @@ export default async function handler(req, res) {
       const imgs = getImages(p);
       const price = Number(p.variants?.[0]?.price || 0);
       const comp = Number(p.variants?.[0]?.compare_at_price || 0);
-      const vars = p.variants?.map(v => ({
+      const vars = (p.variants || []).map(v => ({
         option1: v.option1, option2: v.option2, option3: v.option3,
         price: Number(v.price || 0), sku: v.sku,
         available: v.inventory_quantity > 0,
-      })) || [];
-      const opt = p.options ? p.options.map(o => ({ name: o.name, values: o.values })) : [];
+      }));
 
-      const rec = {
+      all.push({
         id: String(p.id), title: p.title, price,
         compare_at_price: comp > price ? comp : undefined,
         image: imgs[0] || null, images: imgs,
         body_html: p.body_html || '', vendor: p.vendor,
-        product_type: p.product_type, tags: p.tags, status: p.status,
-        variants: vars, options: opt,
-        published_at: p.published_at,
-        variant_count: vars.length, image_count: imgs.length,
-      };
+        product_type: p.product_type, tags: p.tags,
+        variants: vars,
+      });
 
-      all.push(rec);
-
-      const type = p.product_type || 'other';
-      const key = type.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/['",]/g, '');
-      if (!cats[key]) cats[key] = { name: type, products: [] };
-      cats[key].products.push({ id: String(p.id), title: p.title, price, image: imgs[0] || null, variants: vars.length, images: imgs.length });
+      const ptype = p.product_type || 'other';
+      const key = ptype.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/["',]/g, '');
+      if (!cats[key]) cats[key] = { name: ptype, products: [] };
+      cats[key].products.push({
+        id: String(p.id), title: p.title, price,
+        image: imgs[0] || null,
+        body_html: p.body_html || '',
+        vendor: p.vendor,
+        product_type: p.product_type,
+        variants: vars.length, images: imgs.length,
+      });
       idx[String(p.id)] = { idx: cats[key].products.length - 1, category: key };
     }
 
@@ -159,14 +155,12 @@ export default async function handler(req, res) {
     return res.json({
       ok: true,
       shopify_total: prods.length, unique: all.length,
-      dedup_removed: prods.length - all.length,
-      with_descriptions: withDesc,
-      with_images: withImg,
+      with_descriptions: withDesc, with_images: withImg,
       categories: Object.keys(cats).length,
       files_written: written,
       errors: err.length ? err : undefined,
       elapsed_sec: sec,
-      note: 'JSON data files rebuilt. Vercel is auto-deploying.',
+      note: 'JSON data files rebuilt with descriptions. Vercel auto-deploys.',
     });
   } catch (e) {
     return res.status(500).json({ ok: false, error: e.message });
