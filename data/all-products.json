@@ -127764,5 +127764,126 @@
         "available": true
       }
     ]
+  },
+  {
+    "id": "9196127027331",
+    "title": "Desktop USB Mini Desk Fan",
+    "price": 6.15,
+    "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/547f153c-94b9-4ca5-b69e-6b4005e75ca0_trans.jpg?v=1784402481",
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/547f153c-94b9-4ca5-b69e-6b4005e75ca0_trans.jpg?v=1784402481",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/e82ac966-571a-4f40-9726-fd7e09fafe78.jpg?v=1784402481",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/cf8d6941-76ee-4e66-bfac-aa3b3c8988f5.jpg?v=1784402481"
+    ],
+    "body_html": "",
+    "vendor": "CJ Dropshipping",
+    "product_type": "Home Office Storage",
+    "tags": "Home Office Storage",
+    "variants": [
+      {
+        "option1": "萌趣小猫咪桌面风扇6寸台式家用办公USB小大风力学生礼品电池迷你",
+        "option2": null,
+        "option3": null,
+        "price": 6.15,
+        "sku": "CJJT2992852",
+        "available": false
+      },
+      {
+        "option1": "萌趣小猫咪桌面风扇",
+        "option2": null,
+        "option3": null,
+        "price": 6.15,
+        "sku": "CJJT2992852-2",
+        "available": false
+      },
+      {
+        "option1": "6寸台式家用办公usb小",
+        "option2": null,
+        "option3": null,
+        "price": 6.15,
+        "sku": "CJJT2992852-3",
+        "available": false
+      }
+    ]
+  },
+  {
+    "id": "9196127060099",
+    "title": "Mens Cowhide Shoulder Crossbody Bag",
+    "price": 13.5,
+    "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/02d8c2ec-cbdc-4bb9-97c5-f3a9a6ce239c.jpg?v=1784402485",
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/02d8c2ec-cbdc-4bb9-97c5-f3a9a6ce239c.jpg?v=1784402485",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/1cb52839-5189-439d-bf99-3a381d5a1fc7.jpg?v=1784402485"
+    ],
+    "body_html": "",
+    "vendor": "CJ Dropshipping",
+    "product_type": "Crossbody Bags",
+    "tags": "Crossbody Bags",
+    "variants": [
+      {
+        "option1": "牛船长大容量真皮胸包头层牛皮单肩斜挎男手提平板ipad休闲手机包",
+        "option2": null,
+        "option3": null,
+        "price": 13.5,
+        "sku": "CJYD2992830",
+        "available": false
+      },
+      {
+        "option1": "牛船长大容量真皮胸",
+        "option2": null,
+        "option3": null,
+        "price": 13.5,
+        "sku": "CJYD2992830-2",
+        "available": false
+      },
+      {
+        "option1": "包头层牛皮单肩斜",
+        "option2": null,
+        "option3": null,
+        "price": 13.5,
+        "sku": "CJYD2992830-3",
+        "available": false
+      }
+    ]
+  },
+  {
+    "id": "9196127092867",
+    "title": "Large-size Top With Ribbon Splicing",
+    "price": 10.6,
+    "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/89122ee8-972e-44e0-a405-80b46bcc4018.jpg?v=1784402490",
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/89122ee8-972e-44e0-a405-80b46bcc4018.jpg?v=1784402490",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/6974076d-df87-4328-ba02-822041d95d40.jpg?v=1784402490"
+    ],
+    "body_html": "",
+    "vendor": "CJ Dropshipping",
+    "product_type": "Blouses & Shirts",
+    "tags": "Blouses & Shirts",
+    "variants": [
+      {
+        "option1": "欧美跨境女装2026春季新款休闲逛街飘带拼接衬衫非洲外贸大码上衣",
+        "option2": null,
+        "option3": null,
+        "price": 10.6,
+        "sku": "CJYD2992827",
+        "available": false
+      },
+      {
+        "option1": "欧美跨境女装2026春季",
+        "option2": null,
+        "option3": null,
+        "price": 10.6,
+        "sku": "CJYD2992827-2",
+        "available": false
+      },
+      {
+        "option1": "新款休闲逛街飘带拼接",
+        "option2": null,
+        "option3": null,
+        "price": 10.6,
+        "sku": "CJYD2992827-3",
+        "available": false
+      }
+    ]
   }
 ]
