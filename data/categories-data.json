@@ -386,6 +386,17 @@
         "product_type": "Home Office Storage",
         "variants": 3,
         "images": 1
+      },
+      {
+        "id": "9196127027331",
+        "title": "Desktop USB Mini Desk Fan",
+        "price": 6.15,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/547f153c-94b9-4ca5-b69e-6b4005e75ca0_trans.jpg?v=1784402481",
+        "body_html": "",
+        "vendor": "CJ Dropshipping",
+        "product_type": "Home Office Storage",
+        "variants": 3,
+        "images": 3
       }
     ]
   },
@@ -1614,6 +1625,17 @@
         "product_type": "Blouses & Shirts",
         "variants": 3,
         "images": 3
+      },
+      {
+        "id": "9196127092867",
+        "title": "Large-size Top With Ribbon Splicing",
+        "price": 10.6,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/89122ee8-972e-44e0-a405-80b46bcc4018.jpg?v=1784402490",
+        "body_html": "",
+        "vendor": "CJ Dropshipping",
+        "product_type": "Blouses & Shirts",
+        "variants": 3,
+        "images": 2
       }
     ]
   },
@@ -21857,6 +21879,22 @@
         "product_type": "Automobiles & Motorcycles",
         "variants": 10,
         "images": 5
+      }
+    ]
+  },
+  "crossbody-bags": {
+    "name": "Crossbody Bags",
+    "products": [
+      {
+        "id": "9196127060099",
+        "title": "Mens Cowhide Shoulder Crossbody Bag",
+        "price": 13.5,
+        "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/02d8c2ec-cbdc-4bb9-97c5-f3a9a6ce239c.jpg?v=1784402485",
+        "body_html": "",
+        "vendor": "CJ Dropshipping",
+        "product_type": "Crossbody Bags",
+        "variants": 3,
+        "images": 2
       }
     ]
   }
