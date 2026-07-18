@@ -1,11 +1,61 @@
-// Direct Shopify → GitHub sync script
-// Token is injected via Vercel env SHOPIFY_TOKEN (plaintext) or falls back
+// Full Shopify → Json data rebuild
+// GET /api/sync-full?action=status | sync
+// Sync: Pulls all products with full details, writes JSON data files to GitHub
 
-let SHOPIFY_TOKEN = '';
-let SHOPIFY_DOMAIN = 'bargain-drop-8194.myshopify.com';
+const TOKEN = process.env.SHOPIFY_TOKEN || process.env.SHOPIFY_ACCESS_TOKEN || '';
+const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
+const GHTOKEN = process.env.GITHUB_TOKEN || '';
+const REPO = 'jamestwuairua77-cpu/bargain-drop-preview';
+const API = `https://${SHOPIFY_DOMAIN}/admin/api/2024-01`;
+const GHAPI = `https://api.github.com/repos/${REPO}`;
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
-const GITHUB_REPO = 'jamestuwairua77-cpu/bargain-drop-preview';
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function sFetch(path) {
+  const r = await fetch(API + path, {
+    headers: { 'X-Shopify-Access-Token': TOKEN, 'Content-Type': 'application/json' },
+  });
+  const t = await r.text();
+  try { return { ok: r.ok, status: r.status, body: JSON.parse(t) }; } catch { return { ok: false, status: r.status, body: { raw: t } }; }
+}
+
+async function ghRead(path) {
+  const r = await fetch(`${GHAPI]/contents/${path}`, {
+    headers: { 'Authorization': `Bearer ${GHTOKEN}`, 'Accept': 'application/vnd.github+json' },
+  });
+  if (!r.ok) return null;
+  const d = await r.json();
+  return { sha: d.sha, path: d.path };
+}
+
+async function ghWrite(path, content, msg, existingSha) {
+  const body = {
+    message: msg,
+    content: Buffer.from(content, 'utf-8').toString('base64'),
+    branch: 'main',
+  };
+  if (existingSha) body.sha = existingSha;
+  const r = await fetch(`${GHAPI]/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${GHTOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) { const d = await r.text(); throw new Error(`GH ${r.status}: ${d.slice(0,150)}`); }
+  return await r.json();
+}
+
+function getImages(prod) {
+  const out = [];
+  if (prod.image && prod.image.src) out.push(prod.image.src);
+  else if (typeof prod.image === 'string') out.push(prod.image);
+  if (Array.isArray(prod.images)) {
+    for (const img of prod.images) {
+      if (img.src && !out.includes(img.src)) out.push(img.src);
+      else if (typeof img === 'string' && !out.includes(img)) out.push(img);
+    }
+  }
+  return out;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,50 +63,113 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const action = req.query?.action || req.body?.action || 'sync';
-  const t = req.query?.token || req.body?.token || '';
-  
-  // Allow token to be passed in request or from env
-  if (t) SHOPIFY_TOKEN = t;
-  else if (process.env.SHOPIFY_TOKEN) SHOPIFY_TOKEN = process.env.SHOPIFY_TOKEN;
-  
+  const action = req.query?.action || 'status';
+
+  if (!TOKEN) return res.status(400).json({ ok: false, error: 'Shopify token not configured' });
+
   if (action === 'status') {
-    if (!SHOPIFY_TOKEN) return res.json({ success: false, error: 'No SHOPIFY_TOKEN configured. Pass ?token=... or set Vercel env.' });
     try {
-      const resp = await fetch(`https://${SHOPIFY_DOMAIN}/admin/api/2024-01/products/count.json`, {
-        headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN }
-      });
-      const data = await resp.json();
-      return res.json({ success: true, shopify_count: data.count });
-    } catch(e) {
-      return res.json({ success: false, error: e.message });
+      const r = await sFetch('/products/count.json');
+      return res.json({ ok: true, count: r.body.count });
+    } catch (e) {
+      return res.status(500).json({ ok: false, error: e.message });
     }
   }
-  
-  if (!SHOPIFY_TOKEN) return res.json({ success: false, error: 'No SHOPIFY_TOKEN configured' });
-  
-  const page = parseInt(req.query?.page || req.body?.page || '1');
-  
+
+  if (action !== 'sync') return res.status(400).json({ error: 'Add ?action=status || sync' });
+
+  if (!GHTOKEN) return res.status(400).json({ ok: false, error: 'GITHUB_TOKEN not set' });
+
+  const start = Date.now();
   try {
-    const url = `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/products.json?limit=250&fields=id,title,body_html,vendor,product_type,tags,variants,images,image,status&page=${page}`;
-    const resp = await fetch(url, { headers: { 'X-Shopify-Access-Token': SHOPIFY_TOKEN } });
-    
-    if (!resp.ok) return res.json({ success: false, error: `Shopify ${resp.status}`, page });
-    
-    const data = await resp.json();
-    const products = (data.products || []).filter(p => p.title && !p.title.startsWith('$p'));
-    
-    // Just return the products - let the caller handle saving
-    // For now just report what we got
-    return res.json({ 
-      success: true, 
-      page, 
-      total_products: products.length,
-      products: products.slice(0, 3).map(p => ({ id: p.id, title: p.title, image: p.image?.src || null, price: p.variants?.[0]?.price })),
-      note: 'Full sync requires calling all pages. Use page=N parameter.'
+    let prods = [], page = 1, done = false, retries = 0;
+
+    while (!done) {
+      const r = await sFetch(`/products.json?limit=250&page=${page}&feldsc=id,title,body_html,vendor,product_type,tags,variants,images,image,status,published_at` );
+      if (!r.ok) {
+        await sleep(3000);
+        retries++;
+        if (retries > 3) break;
+        continue;
+      }
+      retries = 0;
+      const batch = r.body.products || [];
+      if (batch.length === 0) break;
+      prods.push(...batch.filter(p => p.status === 'active' && p.title));
+      page++;
+      if (batch.length < 250) done = true;
+      await sleep(750);
+    }
+
+    if (!prods.length) return res.json({ ok: false, error: 'No active products' });
+
+    const cats = {}, idx = {}, all = [];
+
+    for (const p of prods) {
+      const imgs = getImages(p);
+      const price = Number(p.variants?.[0]?.price || 0);
+      const comp = Number(p.variants?.[0]?.compare_at_price || 0);
+      const vars = p.variants?.map(v => ({
+        option1: v.option1, option2: v.option2, option3: v.option3,
+        price: Number(v.price || 0), sku: v.sku,
+        available: v.inventory_quantity > 0,
+      })) || [];
+      const opt = p.options ? p.options.map(o => ({ name: o.name, values: o.values })) : [];
+
+      const rec = {
+        id: String(p.id), title: p.title, price,
+        compare_at_price: comp > price ? comp : undefined,
+        image: imgs[0] || null, images: imgs,
+        body_html: p.body_html || '', vendor: p.vendor,
+        product_type: p.product_type, tags: p.tags, status: p.status,
+        variants: vars, options: opt,
+        published_at: p.published_at,
+        variant_count: vars.length, image_count: imgs.length,
+      };
+
+      all.push(rec);
+
+      const type = p.product_type || 'other';
+      const key = type.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/[',]/g, '');
+      if (!cats[key]) cats[key] = { name: type, products: [] };
+      cats[key].products.push({ id: String(p.id), title: p.title, price, image: imgs[0] || null, variants: vars.length, images: imgs.length });
+      idx[String(p.id)] = { idx: cats[key].products.length - 1, category: key };
+    }
+
+    const dedup = prods.length - all.length;
+    const withDesc = all.filter(p => p.body_html && p.body_html.length > 20).length;
+    const withImg = all.filter(p => p.image).length;
+
+    const files = [
+      { path: 'categories-data.json', data: JSON.stringify(cats, null, 2), msg: 'data: rebuild all products from Shopify' },
+      { path: 'all-products.json', data: JSON.stringify(all, null, 2), msg: 'data: rebuild all products from Shopify' },
+      { path: 'products-index.json', data: JSON.stringify(idx, null ), msg: 'data: rebuild all products from Shopify' },
+    ];
+
+    let written = 0, err = [];
+    for (const f of files) {
+      try {
+        const e = await ghRead(f.path);
+        await ghWrite(f.path, f.data, f.msg, e?.sha);
+        written++;
+        await sleep(1500);
+      } catch (e) { err.push({ file: f.path, error: e.message }); }
+    }
+
+    const sec = ((Date.now() - start) / 1000).toFixed(1);
+    return res.json({
+      ok: true,
+      shopify_total: prods.length, unique: all.length,
+      dedup_removed: dedup,
+      with_descriptions: withDesc,
+      with_images: withImg,
+      categories: Object.keys(cats).length,
+      files_written: written,
+      errors: err.length ? err : undefined,
+      elapsed_sec: sec,
+      note: 'JSON data files rebuilt. Vercel is auto-deploying.',
     });
-    
-  } catch(e) {
-    return res.json({ success: false, error: e.message, page });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
   }
 }
