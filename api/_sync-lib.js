@@ -4,7 +4,7 @@
 export const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
 export const SHOPIFY_TOKEN  = process.env.SHOPIFY_ACCESS_TOKEN || '';
 export const CJ_API_KEY     = process.env.CJ_ACCESS_TOKEN || '';
-export const SHOPIFY_API    = `https://${SHOPIFY_DOMAIN}/admin/api/2024-01`;
+export const SHOPIFY_API    = `https://${SHOPIFY_DOMAIN}/admin/api/2025-10`;
 export const CJ_BASE        = 'https://developers.cjdropshipping.com/api2.0/v1';
 
 // ─── CJ auth (cache token in-memory across warm invocations) ───────────
