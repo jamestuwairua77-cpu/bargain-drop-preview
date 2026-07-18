@@ -1,6 +1,5 @@
 // GET /api/rebuild-data : {@action: status | sync}
 // One-shot data rebuild: pulls All products from Shopify, writes JSON files to GitHub
-// Designed to run cerver-side where there are no size limits
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,7 +26,7 @@ export default async function handler(req, res) {
   }
   if (action !== 'sync') return res.status(400).json({ error: 'Use ?action=status|sync' });
 
-  // FULL REEULD
+  // BUILD DATA
   const start = Date.now();
   try {
     // 1. Pull all Shopify products
@@ -88,20 +87,17 @@ export default async function handler(req, res) {
 
     // 3. Push to GitHub
     const headers = { 'Authorization': `Bearer ${GHTOKEN}`, 'Content-Type': 'application/json' };
-    const base = `${GHAPI}/contents/%{`;
 
-    // Function to read and upsert a file
     async function putFile(path, content, cmsg) {
-      // Get existing SHA
       let sha = null;
       try {
-        const ra = await fetch(GHAPI + '/contents/' + path, { headers });
+        const ra = await fetch(`${GHAPI}/contents/${path}`, { headers });
         if (ra.ok) { const jd = await ra.json(); sha = jd.sha; }
       } catch {}
 
       const body = { message: cmsg, content: Buffer.from(content).toString('base64'), branch: 'main' };
       if (sha) body.sha = sha;
-      const wb = await fetch(GHAPI + '/contents/' + path, { 
+      const wb = await fetch(`${GHAPI}/contents/${path}`, { 
         method: 'PUT', body: JSON.stringify(body), headers 
       });
       if (!wb.ok) { const err = await wb.text(); throw new Error(`GH put ${path}: ${wb.status} ${err.slice(0,100)}`); }
