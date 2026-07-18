@@ -127885,5 +127885,85 @@
         "available": false
       }
     ]
+  },
+  {
+    "id": "9196127125635",
+    "title": "Transmission-chain Rotary Exercise Equipment Wrist Strength Trainer",
+    "price": 5.98,
+    "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/479dd591-0c0a-4a74-a81b-0194196b1931.jpg?v=1784402494",
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/479dd591-0c0a-4a74-a81b-0194196b1931.jpg?v=1784402494",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/61394892-9b40-4bb2-8d91-472bedbaf704.jpg?v=1784402494"
+    ],
+    "body_html": "",
+    "vendor": "CJ Dropshipping",
+    "product_type": "Sports Accessories",
+    "tags": "Sports Accessories",
+    "variants": [
+      {
+        "option1": "腕力训练器传动链腕力器手腕旋转训练扳手腕训练手腕硬度锻炼器材",
+        "option2": null,
+        "option3": null,
+        "price": 5.98,
+        "sku": "CJYD2992473",
+        "available": false
+      },
+      {
+        "option1": "腕力训练器传动链",
+        "option2": null,
+        "option3": null,
+        "price": 5.98,
+        "sku": "CJYD2992473-2",
+        "available": false
+      },
+      {
+        "option1": "腕力器手腕旋转训练",
+        "option2": null,
+        "option3": null,
+        "price": 5.98,
+        "sku": "CJYD2992473-3",
+        "available": false
+      }
+    ]
+  },
+  {
+    "id": "9196127158403",
+    "title": "Natural Stone Stainless Steel Open Ring",
+    "price": 1.9,
+    "image": "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/942dbad3-aa03-40eb-94ac-e102f906dbd2.jpg?v=1784402497",
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/942dbad3-aa03-40eb-94ac-e102f906dbd2.jpg?v=1784402497",
+      "https://cdn.shopify.com/s/files/1/0735/9404/4547/files/c67f17ca-926e-43c0-a5d9-d626553966bc.jpg?v=1784402498"
+    ],
+    "body_html": "",
+    "vendor": "CJ Dropshipping",
+    "product_type": "Rings",
+    "tags": "Rings",
+    "variants": [
+      {
+        "option1": "进晨跨境饰品天然石不锈钢开口戒指高级感指环钛钢手饰欧美rings",
+        "option2": null,
+        "option3": null,
+        "price": 1.9,
+        "sku": "CJLX2992825",
+        "available": false
+      },
+      {
+        "option1": "进晨跨境饰品天然石",
+        "option2": null,
+        "option3": null,
+        "price": 1.9,
+        "sku": "CJLX2992825-2",
+        "available": false
+      },
+      {
+        "option1": "不锈钢开口戒指高级感指环",
+        "option2": null,
+        "option3": null,
+        "price": 1.9,
+        "sku": "CJLX2992825-3",
+        "available": false
+      }
+    ]
   }
 ]
