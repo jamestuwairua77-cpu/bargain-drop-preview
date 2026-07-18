@@ -3,11 +3,11 @@
 // Sync: Pulls all products with full details, writes JSON data files to GitHub
 
 const TOKEN = process.env.SHOPIFY_TOKEN || process.env.SHOPIFY_ACCESS_TOKEN || '';
-const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
+const SDOMAIN = process.env.SHOPIFY_DOMAIN || 'bargain-drop-8194.myshopify.com';
 const GHTOKEN = process.env.GITHUB_TOKEN || '';
 const REPO = 'jamestwuairua77-cpu/bargain-drop-preview';
-const API = `https://${SHOPIFY_DOMAIN}/admin/api/2024-10\6;
-const GHAPI = `https://api.github.com/repos/${REPO}`;
+const API = "https://" + SDOMAIN + "/admin/api/2024-10";
+const GHAPI = "https://api.github.com/repos/" + REPO;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -20,8 +20,8 @@ async function sFetch(path) {
 }
 
 async function ghRead(path) {
-  const r = await fetch(`${GHAPI}/contents/${path}`, {
-    headers: { 'Authorization': `Bearer ${GHTOKEN}`, 'Accept': 'application/vnd.github+json' },
+  const r = await fetch(GHAPI + "/contents/" + path, {
+    headers: { 'Authorization': "Bearer " + GHTOKEN, 'Accept': 'application/vnd.github+json' },
   });
   if (!r.ok) return null;
   const d = await r.json();
@@ -35,9 +35,9 @@ async function ghWrite(path, content, msg, existingSha) {
     branch: 'main',
   };
   if (existingSha) body.sha = existingSha;
-  const r = await fetch(`${GHAPI}/contents/${path}`, {
+  const r = await fetch(GHAPI + "/contents/" + path, {
     method: 'PUT',
-    headers: { 'Authorization': `Bearer ${GHTOKEN}`, 'Content-Type': 'application/json' },
+    headers: { 'Authorization': "Bearer " + GHTOKEN, 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
   if (!r.ok) { const d = await r.text(); throw new Error(`GH ${r.status}: ${d.slice(0,150)}`); }
@@ -85,7 +85,7 @@ export default async function handler(req, res) {
     let prods = [], page = 1, done = false, retries = 0;
 
     while (!done) {
-      const r = await sFetch(`/products.json?limit=250&page=${page}&fields=id,title,body_html,vendor,product_type,tags,variants,images,image,status,published_at`);
+      const r = await sFetch("/products.json?limit=250&page=" + page + "&fields=id,title,body_html,vendor,product_type,tags,variants,images,image,status,published_at");
       if (!r.ok) {
         await sleep(3000);
         retries++;
@@ -141,9 +141,9 @@ export default async function handler(req, res) {
     const withImg = all.filter(p => p.image).length;
 
     const files = [
-      { path: 'categories-data.json', data: JSON.stringify(cats, null, 2), msg: 'data: rebuild all products from Shopify' },
-      { path: 'all-products.json', data: JSON.stringify(all, null, 2), msg: 'data: rebuild all products from Shopify' },
-      { path: 'products-index.json', data: JSON.stringify(idx, null, 2), msg: 'data: rebuild all products from Shopify' },
+      { path: 'categories-data.json', data: JSON.stringify(cats, null, 2), msg: 'data: rebuild from Shopify full sync' },
+      { path: 'all-products.json', data: JSON.stringify(all, null, 2), msg: 'data: rebuild from Shopify full sync' },
+      { path: 'products-index.json', data: JSON.stringify(idx, null, 2), msg: 'data: rebuild from Shopify full sync' },
     ];
 
     let written = 0, err = [];
