@@ -55,9 +55,11 @@ export default async function handler(req, res) {
       const entry = index[String(id)];
       if (entry) {
         const idx = entry.idx !== undefined ? entry.idx : entry.index;
-        const category = data[entry.category];
-        if (category && idx !== undefined) {
-          const product = category[idx];
+        const catData = data[entry.category];
+        if (catData && idx !== undefined) {
+          // Support both flat array and nested { products: [...] } format
+          const products = Array.isArray(catData) ? catData : (catData.products || []);
+          const product = products[idx];
           if (product && String(product.id || product.id) === String(id)) {
             // Normalize tags: convert array to comma-separated string for frontend compatibility
             if (Array.isArray(product.tags)) product.tags = product.tags.join(',');
@@ -74,8 +76,8 @@ export default async function handler(req, res) {
         const product = products.find(p => String(p.id) === String(id));
         if (product) {
           // Normalize tags
-            if (Array.isArray(product.tags)) product.tags = product.tags.join(',');
-            return res.status(200).json({ product, category: catName });
+          if (Array.isArray(product.tags)) product.tags = product.tags.join(',');
+          return res.status(200).json({ product, category: catName });
         }
       }
     }
