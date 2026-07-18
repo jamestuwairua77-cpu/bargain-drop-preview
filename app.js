@@ -1,6 +1,6 @@
 if(typeof BD!="undefined")BD.initCurrency();var C={"Women's Clothing":"[dress]","Home,Garden&Furniture":"[home]","Jewelry&Watches":"[ring]","Automobiles&Motorcycles":"[car]","Health,Beauty&Hair":"[makeup]","Men's Clothing":"[shirt]","Bags&Shoes":"[bag]","Pet Supplies":"[paw]","Toys,Kids&Babies":"[toy]","Home Improvement":"[wrench]","Sports&Outdoors":"[ball]","Phones&Accessories":"[phone]","Consumer Electronics":"[headphones]","Other":"[box]"};function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}var ALL=[];(function loadCats(){var x=new XMLHttpRequest();x.open("GET","/categories-index.json",true);x.timeout=10000;x.onload=function(){if(x.status>=200&&x.status<400){var d=JSON.parse(x.responseText);var cats=Object.keys(d);renderSubcatSlider(cats,d);renderSubcatGrid(cats,d);}};x.onerror=function(){document.getElementById("subcat-slider").innerHTML="<div class=\"loading-text\">Subcategories loading...</div>";document.getElementById("subcat-scroll-wrap").innerHTML="<div class=\"loading-text\">Categories loading...</div>";};x.send();})();(function loadProds(){
   var x=new XMLHttpRequest();
-  x.open("GET","/data/all-products.json",true);
+  x.open("GET","https://raw.githubusercontent.com/jamestuwairua77-cpu/bargain-drop-preview/main/data/all-products.json",true);
   x.timeout=15000;
   x.onload=function(){
     if(x.status>=200&&x.status<400){
