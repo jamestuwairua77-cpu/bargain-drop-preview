@@ -9,5 +9,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/sync-full.js": {
+      "maxDuration": 300
+    }
+  }
 }
