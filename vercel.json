@@ -13,7 +13,9 @@
   "functions": {
     "api/sync-full.js": {
       "maxDuration": 300
+    },
+    "api/product-sync-webhook.js": {
+      "maxDuration": 300
     }
-  },
-  "_deploy_trigger": "data-sync-20260718"
+  }
 }
