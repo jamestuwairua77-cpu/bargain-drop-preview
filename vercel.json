@@ -1,1 +1,1 @@
-{"rewrites":[{"source":"/profile","destination":"/api/profile-page"},{"source":"/profile.html","destination":"/api/profile-page"}]}
+{"functions":{"api/profile-page.js":{"memory":128,"maxDuration":10}},"rewrites":[{"source":"/profile","destination":"/api/profile-page"},{"source":"/profile.html","destination":"/api/profile-page"}]}
