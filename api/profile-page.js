@@ -1,4 +1,11 @@
-export default function handler(req, res) {
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
-  res.status(200).send(`<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"><title>My Account — Bargain Drop</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="theme-color" content="#0F0F0F"><style>:root{--bg:#fafaf8;--fg:#1A1A1A;--muted:#6B6B6B;--meta:#9B9B9B;--line:#F0F0F0;--lilac:#B8A9E8;--accent:#e60023;--gold:#F5A623;--teal:#4ECDC4;--dark:#0F0F0F;--nav-h:54px;--promo-h:28px;--radius:16px;--pill:9999px}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);padding-top:calc(var(--nav-h) + var(--promo-h));padding-bottom:88px;-webkit-font-smoothing:antialiased;overflow-x:hidden}a{color:inherit;text-decoration:none}.ps{position:fixed;top:0;left:0;right:0;height:var(--promo-h);background:linear-gradient(90deg,var(--accent),#c0392b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;letter-spacing:.3px;z-index:300;overflow:hidden;white-space:nowrap}.ps span{display:flex;align-items:center;gap:4px;animation:marq 20s linear infinite}.ps .sp{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.5)}@keyframes marq{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}.nb{position:fixed;top:var(--promo-h);left:0;right:0;height:var(--nav-h);background:rgba(15,15,15,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;padding:0 16px;z-index:299;transition:transform .3s;box-shadow:0 1px 0 rgba(2
+export default async function handler(req, res) {
+  try {
+    const r = await fetch('https://backupv2-o8atc4n1n-jamestuwairua77-7116s-projects.vercel.app/profile.html');
+    const html = await r.text();
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.status(200).send(html);
+  } catch(e) {
+    res.status(502).send('Profile page temporarily unavailable');
+  }
+}
