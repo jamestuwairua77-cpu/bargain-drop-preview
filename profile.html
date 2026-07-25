@@ -1,3 +1,100 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>My Account — Bargain Drop</title><style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fafaf8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;color:#1A1A1A}@keyframes spin{to{transform:rotate(360deg)}}.loader{width:32px;height:32px;border:3px solid #eee;border-top-color:#e60023;border-radius:50%;animation:spin .7s linear infinite}</style></head><body><div><div class="loader"></div></body><script>
-fetch('https://backupv2-eta.vercel.app/profile.html').then(r=>r.text()).then(html=>{document.open();document.write(html);document.close()}).catch(()=>{location.replace('https://backupv2-eta.vercel.app/profile.html')});
-</script></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>My Account — Bargain Drop</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="theme-color" content="#0F0F0F">
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f8f7f4;--fg:#111;--muted:#666;--meta:#999;--line:#e8e5e0;--accent:#d90429;--dark:#0F0F0F;--white:#fff;--green:#059669;--nav-h:54px;--promo-h:28px;--radius:14px;--pill:9999px;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;background:var(--bg);color:var(--fg);padding-top:calc(var(--nav-h)+var(--promo-h));-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit;text-decoration:none}button{font-family:inherit}
+.promo-strip{position:fixed;top:0;left:0;right:0;height:var(--promo-h);background:linear-gradient(90deg,var(--accent),#a0021a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:600;letter-spacing:.5px;z-index:300}
+.navbar{position:fixed;top:var(--promo-h);left:0;right:0;height:var(--nav-h);background:rgba(15,15,15,.97);backdrop-filter:blur(14px);display:flex;align-items:center;padding:0 14px;z-index:299}
+.nav-logo{display:flex;align-items:center;gap:6px;margin-right:auto}
+.nav-logo .li{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),#a0021a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;color:#fff}
+.nav-logo .lt{font-size:.78rem;font-weight:800;color:#fff;letter-spacing:-.3px}
+.nav-actions{display:flex;align-items:center;gap:4px}
+.nav-btn{position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:rgba(255,255,255,.7);background:none;border:none;cursor:pointer;font-size:1.05rem;text-decoration:none}
+.nav-btn:active,.nav-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+.nav-btn .badge{position:absolute;top:3px;right:3px;min-width:15px;height:15px;background:var(--accent);color:#fff;border-radius:8px;font-size:.5rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px}
+.container{max-width:650px;margin:0 auto;padding:14px 14px 100px}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:12px;border:1px solid var(--line)}
+.card-title{font-size:.78rem;font-weight:700;margin-bottom:4px}
+.card-sub{font-size:.68rem;color:var(--meta)}
+.mi-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer;text-decoration:none}
+.mi-item:last-child{border-bottom:none}
+.mi-icon{width:36px;height:36px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.mi-info{flex:1;min-width:0}
+.mi-label{font-size:.75rem;font-weight:700}
+.mi-sub{font-size:.68rem;color:var(--meta);margin-top:1px}
+.mi-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;background:var(--dark);color:#fff;border-radius:11px;font-size:.6rem;font-weight:800;padding:0 6px}
+.mi-arrow{color:var(--meta);font-size:.75rem}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:#fff;padding:12px 28px;border-radius:var(--pill);font-size:.75rem;font-weight:700;z-index:999;transition:transform .3s ease}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="promo-strip">Free Shipping A$29+ • SSL Encrypted • Verified Seller • 30-Day Returns</div>
+<nav class="navbar">
+<a href="/" class="nav-logo"><div class="li">BD</div><div class="lt">BARGAIN DROP</div></a>
+<div class="nav-actions">
+<a href="wishlist.html" class="nav-btn" title="Wishlist">♥</a>
+<a href="cart.html" class="nav-btn" title="Cart">🛒<span class="badge" id="ncb" style="display:none">0</span></a>
+<a href="profile.html" class="nav-btn" title="Account">👤</a>
+</div></nav>
+<div class="container">
+<div style="text-align:center;margin-bottom:18px;padding:10px 0">
+<h1 style="font-size:1.1rem;font-weight:800;margin-bottom:4px">My Account</h1>
+<p style="font-size:.7rem;color:var(--meta)">Welcome back! Manage your account, orders, and preferences.</p>
+</div>
+
+<div class="card"><div class="card-title" style="margin-bottom:8px">📦 My Orders</div>
+<a href="orders.html" class="mi-item"><div class="mi-icon">📋</div><div class="mi-info"><div class="mi-label">Order History</div><div class="mi-sub">View all your past orders</div></div><div class="mi-badge" id="order-count-badge">0</div><span class="mi-arrow">→</span></a>
+<a href="orders.html?status=processing" class="mi-item"><div class="mi-icon">🚚</div><div class="mi-info"><div class="mi-label">Track Order</div><div class="mi-sub">See where your package is</div></div><span class="mi-arrow">→</span></a>
+<a href="returns.html" class="mi-item"><div class="mi-icon">🔄</div><div class="mi-info"><div class="mi-label">Returns & Exchanges</div><div class="mi-sub">Start or view a return request</div></div><span class="mi-arrow">→</span></a>
+</div>
+
+<div class="card"><div class="card-title" style="margin-bottom:8px">👤 Personal Info</div>
+<a href="addresses.html" class="mi-item"><div class="mi-icon">📍</div><div class="mi-info"><div class="mi-label">Address Book</div><div class="mi-sub">Manage shipping & billing addresses</div></div><div class="mi-badge" id="addr-count-badge">0</div><span class="mi-arrow">→</span></a>
+<a href="payments.html" class="mi-item"><div class="mi-icon">💳</div><div class="mi-info"><div class="mi-label">Payment Methods</div><div class="mi-sub">Cards, Shop Pay & more</div></div><span class="mi-arrow">→</span></a>
+<a href="wallet.html" class="mi-item"><div class="mi-icon">💰</div><div class="mi-info"><div class="mi-label">Wallet & Store Credit</div><div class="mi-sub">A$0.00 available</div></div><span class="mi-arrow">→</span></a>
+<a href="gift-cards.html" class="mi-item"><div class="mi-icon">🎁</div><div class="mi-info"><div class="mi-label">Gift Cards</div><div class="mi-sub">Redeem or check balance</div></div><span class="mi-arrow">→</span></a>
+</div>
+
+<div class="card"><div class="card-title" style="margin-bottom:8px">⚙️ Settings</div>
+<a href="preferences.html" class="mi-item"><div class="mi-icon">📬</div><div class="mi-info"><div class="mi-label">Communication Preferences</div><div class="mi-sub">Email, SMS & push notifications</div></div><span class="mi-arrow">→</span></a>
+<a href="security.html" class="mi-item"><div class="mi-icon">🔒</div><div class="mi-info"><div class="mi-label">Login & Security</div><div class="mi-sub">Password, 2FA, sessions</div></div><span class="mi-arrow">→</span></a>
+</div>
+
+<div class="card"><div class="card-title" style="margin-bottom:8px">💬 Support</div>
+<a href="customer-service.html" class="mi-item"><div class="mi-icon">💁</div><div class="mi-info"><div class="mi-label">Customer Service</div><div class="mi-sub">Get help with an order</div></div><span class="mi-arrow">→</span></a>
+<a href="policy.html" class="mi-item"><div class="mi-icon">📜</div><div class="mi-info"><div class="mi-label">Policies</div><div class="mi-sub">Privacy, terms & more</div></div><span class="mi-arrow">→</span></a>
+</div>
+
+<div style="text-align:center;margin-top:20px">
+<button onclick="signOut()" style="padding:12px 40px;background:transparent;border:1.5px solid var(--accent);color:var(--accent);border-radius:var(--pill);font-size:.73rem;font-weight:700;cursor:pointer">Sign Out</button>
+</div>
+</div>
+<div class="toast" id="to"></div>
+<script src="js/account.js"></script>
+<script src="js/currency.js"></script>
+<script src="js/profile-v2.js"></script>
+<script>
+(function(){
+  try{var c=JSON.parse(localStorage.getItem("bd_cart")||"[]"),n=c.reduce(function(s,i){return s+(i.qty||1)},0),b=document.getElementById("ncb");if(b){b.textContent=n;b.style.display=n>0?"":"none"}}catch(e){}
+  try{
+    var s=JSON.parse(localStorage.getItem("bd_session")||"null"),em=(s&&s.email)?s.email.toLowerCase():"guest";
+    var orders=JSON.parse(localStorage.getItem("bd_orders::"+em)||"[]");
+    if(!orders.length)orders=JSON.parse(localStorage.getItem("bd_orders")||"[]");
+    var ob=document.getElementById("order-count-badge");if(ob)ob.textContent=orders.length;
+    var addrs=JSON.parse(localStorage.getItem("bd_addresses::"+em)||"[]");
+    var ab=document.getElementById("addr-count-badge");if(ab)ab.textContent=addrs.length;
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
