@@ -1,1 +1,27 @@
-{"redirects":[{"source":"/profile.html","destination":"https://backupv2-eta.vercel.app/profile.html","permanent":false},{"source":"/profile","destination":"https://backupv2-eta.vercel.app/profile.html","permanent":false}]}
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/sync",  "destination": "/sync.html" }
+  ],
+  "functions": {
+    "api/sync-full.js":            { "maxDuration": 300 },
+    "api/product-sync-webhook.js": { "maxDuration": 300 },
+    "api/cj-import.js":            { "maxDuration": 300 },
+    "api/cron-sync-cj.js":         { "maxDuration": 300 },
+    "api/cj-search.js":            { "maxDuration": 60 }
+  },
+  "crons": [
+    {
+      "path": "/api/cron-sync-cj",
+      "schedule": "0 */12 * * *"
+    }
+  ]
+}
