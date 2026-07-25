@@ -96,5 +96,14 @@ a{color:inherit;text-decoration:none}button{font-family:inherit}
   }catch(e){}
 })();
 </script>
+<script>
+window.addEventListener("storage",function(e){
+  if(!e.key||!e.key.startsWith("bd_"))return;
+  try{var c=JSON.parse(localStorage.getItem("bd_cart")||"[]"),n=c.reduce(function(s,i){return s+(i.qty||1)},0),cb=document.getElementById("ncb");if(cb){cb.textContent=n;cb.style.display=n>0?"":"none"}}catch(e){}
+  try{var wl=JSON.parse(localStorage.getItem("bd_wishlists_v2")||"null"),wlb=document.getElementById("wl-badge");if(wlb){if(wl&&wl.items)wlb.textContent=wl.items.length+" items";else wlb.textContent="0 items"}}catch(e){}
+  try{var s=JSON.parse(localStorage.getItem("bd_session")||"null"),em=(s&&s.email)?s.email.toLowerCase():"guest",ords=JSON.parse(localStorage.getItem("bd_orders::"+em)||"[]");if(!ords.length)ords=JSON.parse(localStorage.getItem("bd_orders")||"[]");var oc=document.getElementById("order-count");if(oc)oc.textContent=ords.length;var ocb=document.getElementById("order-count-badge");if(ocb)ocb.textContent=ords.length}catch(e){}
+  try{var s2=JSON.parse(localStorage.getItem("bd_session")||"null"),em2=(s2&&s2.email)?s2.email.toLowerCase():"guest",addr=JSON.parse(localStorage.getItem("bd_addresses::"+em2)||"[]");var ac=document.getElementById("addr-count");if(ac)ac.textContent=addr.length;var acb=document.getElementById("addr-count-badge");if(acb)acb.textContent=addr.length}catch(e){}
+});
+</script>
 </body>
 </html>
